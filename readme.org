@@ -1,0 +1,151 @@
+#+TITLE: codygman's HCI
+* What is this?
+** This is my personal human computer interaction interface based on:
+*** Emacs
+*** [[https://orgmode.org/][Org-mode]] for literate config management, life planning, and so much more
+*** Reproducible system level builds with [[https://nixos.org/nix/][Nix]]
+*** Reproducible Emacs package builds with [[https://github.com/raxod502/straight.el][straight.el]]
+*** [[https://github.com/hlissner/doom-emacs/][doom-emacs]] for modal editing
+* Core values:
+** ALWAYS be reproducible
+:PROPERTIES:
+:ID:       2bed02e1-aa52-4332-a4eb-b213ce1b3468
+:END:
+
+The way you interact with your computer must be rock-solid, have the ability to rollback to any meaningful point in history in case of regressions, and be solid down to the theory behind it.
+
+Nix provides this guarantee, but sadly the syntax isn't the most pleasing and the documentation can be non-existent.
+
+If you're willing to "use the source" though, you can attain these guarantees that are necessary in constructing a reliable HCI system that doesn't make you want to pull your hair out.
+** Performance over features
+I've wavered on this one over the years, but hindering the perceptive feeling of something as important as your interface with your computer causes lots of issues and personally led to me not even using it.
+
+I learned some good lessons about minimalism and the necessity of "just my editor config" that was truly a partial HCI being a full-blown software project with feature-branches, user testing, performance regression testing, etc.
+** Easy to extend
+One thing that makes emacs great is the ability to just change things on the fly.
+
+This also hurts reproducibility and predictable performance if you aren't careful though.
+** Fuzzy-search and incremental narrowing everywhere
+I'm currently using ivy since doom defaults to it, but in the past I've used and made significant add-ons for helm. I may well start using helm again unless ivy is even easier to customize somehow.
+
+I would like to make *all* navigation for anything I do on a computer to be done from a common narrowing framework with state of the art fuzzy finding (which I don't recall getting easily with emacs, but see 'flx' for a good start).
+
+*** Navigation for anything I do including but not limited to
+**** TODO fuzzy omni-search for everything listed below
+I'd expect this to be slow without lots of work and probably a backing sqlite database, but something similar to [[https://beepb00p.xyz/pkm-search.html][Building personal search infrastructure for your knowledge and code]]. Perhaps that's even exactly what I want. See the [[https://news.ycombinator.com/item?id=22160572][HackerNews discussion]] as well.
+
+Having things like apple's finder which shows filenames and tons of other stuff would also be nice
+**** TODO Github [0/2]
+***** TODO general github search/navigation
+=M-x helm-github= would bring up sections
+
+- notifications
+- repos
+
+Selecting a notification would open that link in the browser (in the future maybe relevant content and contextual actions via =helm-github-action= or similar. Think things like an action for a PR like =setup branch locally= that opens new perspective, clones the repo, checks out the given branch, open dired, and if supported start up repl that splits below the dired buffer
+***** TODO searching github for code snippets
+Frequently I look for examples of how to do things in home-manager in github. One situation is where I don't know how to setup xmonad and configure it with home-manager I can just search github for others configurations like:
+
+#+begin_example
+filename:home.nix xmonad
+#+end_example
+
+It's okay to use Github's interface for this, but I'd prefer to stay in emacs and even open the linked results in a temporary buffer. Another nicety would be optional actions to clone the repo somewhere like ~/code or even somewhere contextually relevant like ~/code/nix-configs. All along the way using incremental narrowing.
+**** TODO searching email
+I'd like something like =helm-email= which searches all of my emails with fuzzy search. If I transition to something like notmuch again or mu4e then this is a lot more easily possible on my desktop machines, not so sure about mobile however.
+**** TODO browsing issue and bug tracking software
+***** TODO clubhouse
+****** listing "dashboard view" in sections with fuzzy searching
+****** contextual opening based on templates
+This one requires much more
+***** SOMEDAY (maybe) jira and others
+** Be nice to use
+If it's not subjectively nice for me to use, then I probably won't use it as much as I should.
+* Quickstart (warning: not idempotent, don't run more than once)
+** Assumes =codygman/hci= repo cloned and setup
+*** start emacs in a nix shell
+#+BEGIN_SRC sh
+nix-shell --pure -I nixpkgs=https://github.com/NixOS/nixpkgs-channels/archive/d5291756487d70bc336e33512a9baf9fa1788faf.tar.gz -p emacs git
+#+END_SRC
+*** =C-x C-f= your way to ~/hci/readme.org
+*** come back to this specific spot from emacs, then tangle or evaluate the source code blocks as appropriate
+*** clone =codygman/hci=
+  #+begin_src sh :dir ~
+  git clone git@github.com:codygman/codygman/hci.git
+  #+end_src
+*** setup
+:PROPERTIES:
+:ID:       51d79bf3-53bd-4fc4-83d0-8616c0718d65
+:END:
+#+begin_src sh :tangle /tmp/setup.sh
+# mv current emacs somewhere else (or remove if you don't need it)
+mv ~/.emacs.d ~/.bak.emacs.d
+git clone -b develop git://github.com/hlissner/doom-emacs ~/.emacs.d
+ln -rs ~/codygman/hci/doom.d ~/doom.d
+# assuming "personal" env
+cd ~/.emacs.d
+cd MYENV="personal" ./bootstrap.hs
+~/.emacs.d/bin/doom install
+#+end_src
+
+#+RESULTS:
+
+*** tangle the above like
+**** navigate into the block
+**** =SPC u C-c C-v t=
+**** =SPC o t= to popup a terminal
+**** from within the terminal
+#+BEGIN_SRC sh
+cd /tmp/
+sh setup.sh
+#+END_SRC
+*** common issues
+**** "'X' and 'Y' have the same priority; use nix-env --set-flag..."
+***** python for instance
+****** error
+#+begin_example
+error: packages '/nix/store/ghcaj8k1psh6z93pdzajcy9r1337is9j-home-manager-path/lib/python3.7/site-packages/nox/__pycache__/search.cpython-37.pyc' and '/nix/store/7qnzacibiapc2wl49lckh0y7sl6q5hpy-nox-0.0.6/lib/python3.7/site-packages/nox/__pycache__/search.cpython-37.pyc' have the same priority 5; use 'nix-env --set-flag priority NUMBER INSTALLED_PKGNAME' to change the priority of one of the conflicting packages (0 being the highest priority)
+#+end_example
+****** =NOTE= the library name immediately after =/store/= is =nox= so it is what is causing the clash
+****** resolution
+#+begin_src sh
+nix-env --uninstall nox
+#+end_src
+
+#+RESULTS:
+***** why does this happen?
+****** when you start using [[https://github.com/rycee/home-manager.git][home-manager]] you'll likely already have installed things you want home-manager to install
+****** That means since nix at the system level installed them and now home-manager is installing them, they clash because there is no answer to "which is higher priority"
+****** the message is technically correct here, but a little misleading for the home-manager centric case where we'd the ideal message would be:
+"Please uninstall the system level version of 'nox' if you want home-manager to manage it, otherwise remove it from your home-manager configuration"
+** TODO make running this a no-op if already installed
+* Getting Help
+
+With a many systems on top of systems, complexity abound, and the stakes sometimes high for not being able to figure something out for a given piece of that system seeking out help in the best places and getting it quickly is paramount.
+
+The following sections are ordered by how often I need to seek out help for that section. This is subject to change, so if doom becomes the thing I seek help out for the least then it will get moved down.
+
+Within each section, help resources should be ordered mostly according to typical time required to get an answer.
+
+** Doom
+*** [[https://discord.gg/qvGgnVx][doom-emacs Discord]]
+
+Very active, very helpful. I hear you can use [[https://www.reddit.com/r/emacs/comments/7poez4/emacs_and_discord/dsiyr8n/][Bitlbee, and Bitlbee-Discord to connect with your irc client]]
+
+** Nix
+*** https://discourse.nixos.org/
+*** #nix on freenode
+**** TODO make this a link to your irc client!
+*** [[https://nixos.org/nixpkgs/manual/][Nixpkgs Users and Contributors Guide]]
+*** https://nixos.wiki/
+
+** Emacs
+*** [[https://emacs.stackexchange.com/][Emacs stack exchange]]
+
+** org-mode
+*** [[https://www.reddit.com/r/orgmode/][r/orgmode/]]
+*** [[https://emacs.stackexchange.com/][Emacs stack exchange]] using the org mode tag
+    You should use [[https://github.com/vermiculus/sx.el][stack exchange for emacs]]!
+
+** straight.el
+*** https://github.com/raxod502/straight.el/issues
