@@ -41,8 +41,8 @@ configDoomExists :: IO Bool
 configDoomExists = do
   userHome <- home
 
-  testdir (userHome </> ".config" </> "doom") >>= \cde -> do
-    when cde $ echo "A ~/.config/doom folder exists, assuming it's the right one"
+  testdir (userHome </> ".doom.d") >>= \cde -> do
+    when cde $ echo "A ~/.doom.d folder exists, assuming it's the right one"
     pure cde
 
 emacsDExists :: Shell Bool
@@ -58,8 +58,8 @@ cloneDoomEmacsD = do
 
 linkConfigDoom userHome hciDir = do
   let myDoomDir = hciDir </> decodeString "doom"
-      doomConfigDir = userHome </> decodeString ".config" </> decodeString "doom"
-  notExistOrFail doomConfigDir "~/.config/doom already exists, exiting. Back up or remove it then run ./bootstrap.hs again"
+      doomConfigDir = userHome </> decodeString ".doom.d"
+  notExistOrFail doomConfigDir "~/.doom.d already exists, exiting. Back up or remove it then run ./bootstrap.hs again"
   symlink myDoomDir doomConfigDir
 
 doomSetup userHome hciDir = do
