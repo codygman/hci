@@ -40,7 +40,6 @@ doomInstalled = pure False
 configDoomExists :: IO Bool
 configDoomExists = do
   userHome <- home
-
   testdir (userHome </> ".doom.d") >>= \cde -> do
     when cde $ echo "A ~/.doom.d folder exists, assuming it's the right one"
     pure cde
@@ -63,7 +62,7 @@ linkConfigDoom userHome hciDir = do
   symlink myDoomDir doomConfigDir
 
 doomSetup userHome hciDir = do
-  notExistOrFail (userHome </> ".emacs.d")  "~/.config/.emacs.d already exists, exiting. Back up or remove it then run ./bootstrap.hs again"
+  notExistOrFail (userHome </> ".emacs.d")  "~/.emacs.d already exists, exiting. Back up or remove it then run ./bootstrap.hs again"
   doomInstalled >>= \di -> when (not di) $ do
     echo "doom setup"
     view $ cloneDoomEmacsD
