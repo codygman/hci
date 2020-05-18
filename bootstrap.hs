@@ -9,33 +9,48 @@ import qualified Data.Text                     as T
 import           Turtle
 import           Data.Time
 import           Control.Monad
+import System.IO.Temp
+import Control.Monad.Catch
 
 main = do
   userHome <- home
   hciDir  <- pwd
-  let myNixPkgs   = hciDir </> decodeString "nixpkgs"
+  let myNixPkgs = hciDir </> decodeString "nixpkgs"
       nixpkgConfigPath = userHome </> decodeString ".config/nixpkgs"
   initialSetup userHome myNixPkgs nixpkgConfigPath hciDir
 
-initialSetup userHome myNixPkgs nixPkgConfigPath hciDir = do
-  homeManagerSetup nixPkgConfigPath myNixPkgs
-  doomSetup userHome hciDir
+initialSetup userHome myNixPkgs nixpkgConfigPath hciDir = do
+  sh $ homeManagerSetupSwitch nixpkgConfigPath myNixPkgs
+  sh $ doomSetupOrSync userHome hciDir
 
-homeManagerSetup nixPkgConfigPath myNixPkgs = do
+homeManagerSetupSwitch :: Turtle.FilePath -> Turtle.FilePath -> Shell Line
+homeManagerSetupSwitch nixpkgConfigPath myNixPkgs = do
   userHome <- home
-  notExistOrFail nixPkgConfigPath "Nix pkg config path already exists, exiting"
-  echo . unsafeTextToLine $ format ("homeManagerSetup: " % fp) myNixPkgs
-  echo . unsafeTextToLine $ format ("homeManagerSetup: " % fp) nixPkgConfigPath
-  symlink myNixPkgs nixPkgConfigPath
+  isSymbolicLink <$> lstat nixpkgConfigPath >>= \symlinkedNixpkgs -> do
+    if symlinkedNixpkgs then do
+      echoTxt $ format ("homeManagerSetupSwitch: removing current symlink to " % w) nixpkgConfigPath
+      rm nixpkgConfigPath
+    else
+      -- if for some reason this isn't a symlink, let's go ahead and do an ephemeral backup to /tmp and print it out
+      liftIO $ ephemeralBackup nixpkgConfigPath
+  echoTxt $ format ("homeManagerSetupSwitch: creating symlink from " % fp % " to " % fp) myNixPkgs nixpkgConfigPath
+  symlink myNixPkgs nixpkgConfigPath
 
   which "home-manager" >>= \hm -> case hm of
-    Just _ -> pure ()
+    Just _ -> echo "homeManagerSetupSwitch: already installed" >> pure ()
     Nothing -> installHomeManager
-  view $ homeManager ["switch"]
 
+  echo "homeManagerSetupSwitch: switching"
+  homeManager ["switch"]
 
-doomInstalled :: IO Bool
-doomInstalled = pure False
+doomInstalled :: Shell Bool
+doomInstalled = do
+  userHome <- home
+  let doomInstalledTests = [testdir (userHome </> ".doom.d")]
+  doomInstalled <- fmap (all (== True)) . sequenceA $ doomInstalledTests
+  case doomInstalled of
+    True -> stdout "doom is installed" >> pure True
+    False -> stdout "doom is not installed" >> pure False
 
 configDoomExists :: IO Bool
 configDoomExists = do
@@ -50,7 +65,9 @@ emacsDExists = do
   echo "An emacs.d folder exists, assuming it's the right one"
   testdir (userHome </> ".emacs.d")
 
+cloneDoomEmacsD :: Shell Line
 cloneDoomEmacsD = do
+   echo "cloneDoomEmacsD"
    userHome <- home
    testdir (userHome </> ".emacs.d") >>= \there -> if there then empty else
      git ["clone","-b","develop", "git://github.com/hlissner/doom-emacs", format fp (userHome </> ".emacs.d")]
@@ -61,12 +78,20 @@ linkConfigDoom userHome hciDir = do
   notExistOrFail doomConfigDir "~/.doom.d already exists, exiting. Back up or remove it then run ./bootstrap.hs again"
   symlink myDoomDir doomConfigDir
 
-doomSetup userHome hciDir = do
-  notExistOrFail (userHome </> ".emacs.d")  "~/.emacs.d already exists, exiting. Back up or remove it then run ./bootstrap.hs again"
+doomSetupOrSync :: Turtle.FilePath -> Turtle.FilePath -> Shell Line
+doomSetupOrSync userHome hciDir = do
   doomInstalled >>= \di -> when (not di) $ do
-    echo "doom setup"
-    view $ cloneDoomEmacsD
-  view $ doom ["install"]
+    echo "doomSetupOrSync: doom not installed"
+    stdout cloneDoomEmacsD
+    echo "doomSetupOrSync: doom install"
+    stdout $ doom ["install"]
+  echo "doomSetupOrSync: doom sync"
+  doom ["sync"]
+
+ephemeralBackup :: (MonadIO m, MonadMask m) => Turtle.FilePath -> m ()
+ephemeralBackup dir = withSystemTempDirectory (encodeString $ filename dir) $ \tmpFilePath -> do
+  echoTxt $ format ("ephemeralBackup of directory: " % fp % " to " % w) dir tmpFilePath
+  mv dir (decodeString tmpFilePath)
 
 notExistOrFail dir msg = do
   exists <- testdir dir
@@ -75,15 +100,17 @@ notExistOrFail dir msg = do
     else
     pure ()
 
+installHomeManager :: Shell ()
 installHomeManager = do
-  view $ proc
+  echo "installing home manager"
+  proc
       "nix-channel"
       [ "--add"
       , "https://github.com/rycee/home-manager/archive/master.tar.gz"
       , "home-manager"
       ]
     empty
-  view $ proc "nix-channel" ["--update"] empty
+  proc "nix-channel" ["--update"] empty
   view $ shell "nix-shell '<home-manager>' -A install" empty
 
 homeManager opts = inproc "home-manager" opts empty
@@ -92,5 +119,5 @@ git opts = inproc "git" opts empty
 
 doom opts = home >>= \uh -> inproc (format fp (uh </> ".emacs.d" </> "bin" </> "doom")) opts empty
 
-echoTxt :: Text -> IO ()
+echoTxt :: MonadIO io => Text -> io ()
 echoTxt = echo . unsafeTextToLine
