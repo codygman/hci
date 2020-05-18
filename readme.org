@@ -84,7 +84,7 @@ git clone -b develop git://github.com/hlissner/doom-emacs ~/.emacs.d
 ln -rs ~/codygman/hci/doom.d ~/doom.d
 # assuming "personal" env
 cd ~/.emacs.d
-cd MYENV="personal" ./bootstrap.hs
+cd MYENV="personal" ./switch.hs
 ~/.emacs.d/bin/doom install
 #+end_src
 
