@@ -80,8 +80,11 @@ linkConfigDoom userHome hciDir = do
   notExistOrFail doomConfigDir "~/.doom.d already exists, exiting. Back up or remove it then run ./bootstrap.hs again"
   symlink myDoomDir doomConfigDir
 
+-- TODO actually use this; similar to homeManagerSetupSwitch testPath branches
 doomSetupOrSync :: Turtle.FilePath -> Turtle.FilePath -> Shell Line
 doomSetupOrSync userHome hciDir = do
+  let doomConfigDir = userHome </> decodeString ".doom.d"
+  rm doomConfigDir >> linkConfigDoom userHome hciDir -- NOTE this is brittle, but it works for now
   doomInstalled >>= \di -> when (not di) $ do
     echo "doomSetupOrSync: doom not installed"
     stdout cloneDoomEmacsD
