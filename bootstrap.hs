@@ -67,7 +67,7 @@ doomSetup userHome hciDir = do
   doomInstalled >>= \di -> when (not di) $ do
     echo "doom setup"
     view $ cloneDoomEmacsD
-  doom ["install"]
+  view $ doom ["install"]
 
 notExistOrFail dir msg = do
   exists <- testdir dir
