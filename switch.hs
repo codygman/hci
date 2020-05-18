@@ -26,11 +26,11 @@ initialSetup userHome myNixPkgs nixpkgConfigPath hciDir = do
 homeManagerSetupSwitch :: Turtle.FilePath -> Turtle.FilePath -> Shell Line
 homeManagerSetupSwitch nixpkgConfigPath myNixPkgs = do
   userHome <- home
-  isSymbolicLink <$> lstat nixpkgConfigPath >>= \symlinkedNixpkgs -> do
-    if symlinkedNixpkgs then do
+  testpath nixpkgConfigPath >>= \pathExist -> when pathExist $ do
+    testfile nixpkgConfigPath >>= \isFile -> when isFile $ do
       echoTxt $ format ("homeManagerSetupSwitch: removing current symlink to " % w) nixpkgConfigPath
-      rm nixpkgConfigPath
-    else
+      rm nixpkgConfigPath -- just assume it's a symlink here
+    testdir nixpkgConfigPath >>= \isdir -> when isdir $
       -- if for some reason this isn't a symlink, let's go ahead and do an ephemeral backup to /tmp and print it out
       liftIO $ ephemeralBackup nixpkgConfigPath
   echoTxt $ format ("homeManagerSetupSwitch: creating symlink from " % fp % " to " % fp) myNixPkgs nixpkgConfigPath
