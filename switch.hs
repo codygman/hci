@@ -46,7 +46,9 @@ homeManagerSetupSwitch nixpkgConfigPath myNixPkgs = do
 doomInstalled :: Shell Bool
 doomInstalled = do
   userHome <- home
-  let doomInstalledTests = [testdir (userHome </> ".doom.d")]
+  let doomInstalledTests = [ testdir (userHome </> ".doom.d")
+                           , testdir (userHome </> ".emacs.d") -- TODO improve this by checking it's a doom repo, perhaps right revision, etc
+                           ]
   doomInstalled <- fmap (all (== True)) . sequenceA $ doomInstalledTests
   case doomInstalled of
     True -> stdout "doom is installed" >> pure True
