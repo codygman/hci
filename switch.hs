@@ -94,15 +94,16 @@ doomSetupOrSync userHome hciDir = do
   doom ["sync"]
 
 ephemeralBackup :: (MonadIO m, MonadMask m) => Turtle.FilePath -> m ()
-ephemeralBackup dir = withSystemTempDirectory (encodeString $ filename dir) $ \tmpFilePath -> do
-  echoTxt $ format ("ephemeralBackup of directory: " % fp % " to " % w) dir tmpFilePath
-  -- TOOD fix bug
-  {-
-MYENV="personal" ./switch.hs
-ephemeralBackup of directory: /home/cody/.config/nixpkgs to "/run/user/1000/nixpkgs-f4feaebfe80a80dc"
-switch.hs: /home/cody/.config/nixpkgs: openBinaryFile: inappropriate type (is a directory)
--}
-  mv dir (decodeString tmpFilePath)
+ephemeralBackup dir = do
+  let tmpDirTemplate = encodeString $ filename dir
+  echoTxt $ format ("creating tmp dir with template" % w) tmpDirTemplate
+  withSystemTempDirectory tmpDirTemplate $ \tmpFilePath -> do
+    echoTxt $ format ("ephemeralBackup of directory: " % fp % " to " % w) dir tmpFilePath
+    let tmpFilePathFp = decodeString tmpFilePath
+    echoTxt $ format ("copying directory " % fp % " to " % fp) dir tmpFilePathFp
+    cptree dir tmpFilePathFp
+    echoTxt $ format ("rm directory " % fp) dir
+    rmtree dir
   echo "finished with ephemeral backup"
 
 notExistOrFail dir msg = do
