@@ -51,10 +51,9 @@ in
 
   services = {
     lorri.enable = true;
-    # syncthing = {
-    #   enable = true;
-    #   openDefaultPorts = true;
-    # };
+    syncthing = {
+      enable = true;
+    };
   };
 
 }
