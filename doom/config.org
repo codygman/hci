@@ -177,7 +177,7 @@ TODO: Doom doesn't seem to make =org-download-screenshot= available to us by def
 
 #+begin_src emacs-lisp :tangle yes
 (setq org-download-screenshot-method
-              (case system-type (gnu/linux "import %s") (darwin "screencapture -i %s")))
+              (pcase system-type (gnu/linux "import %s") (darwin "screencapture -i %s")))
 #+end_src
 
 For some reason doom makes these "attach://" protocol links by default which don't
