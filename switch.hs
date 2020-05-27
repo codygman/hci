@@ -89,7 +89,7 @@ doomSetupOrSync userHome hciDir = do
     echo "doomSetupOrSync: doom not installed"
     stdout cloneDoomEmacsD
     echo "doomSetupOrSync: doom install"
-    stdout $ doom ["install"]
+    stdout $ doom ["install", "--yes"]
   echo "doomSetupOrSync: doom sync"
   doom ["sync"]
 
