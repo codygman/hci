@@ -48,8 +48,6 @@ are near the top of the file. Perhaps that's a bad habit or reinforces not
 curating or refiling things enough though.
 *** Load Personal Or Work Capture Templates And Agendas
 #+begin_src emacs-lisp :tangle yes
-;; TODO hardcode hack
-(setenv "EMACSFOR" "PERSONAL")
 (when (string-equal nil (getenv "TRAVIS_OS_NAME"))
     (pcase (getenv "EMACSFOR")
       ("WORK" (load (expand-file-name "work.el" "~")))
