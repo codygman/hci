@@ -18,6 +18,9 @@ the relevant hierarchical [[id:bc892078-e21e-4f4e-885c-44c0ade78420][Configurati
 with the mixed approach since [[https://github.com/alhassy/emacs.d/blob/master/README.org#a-life-configuring-emacs][that style can be very nice]].
 * Managing Life With Org Mode
 ** Keep org files updated and avoid sync conficts
+:PROPERTIES:
+:ID:       47a0eda4-37ac-4d69-ab79-ec381df862d7
+:END:
 Doom doesn't turn on auto-revert mode by default, meaning a change made on my
 phone that gets synced to my computer won't appear until I manually revert the
 buffer with =revert-buffer=.
@@ -47,21 +50,37 @@ I find it's a good idea to prepend these tasks by default so your freshest ideas
 are near the top of the file. Perhaps that's a bad habit or reinforces not
 curating or refiling things enough though.
 *** Load Personal Or Work Capture Templates And Agendas
+:PROPERTIES:
+:ID:       a2ced50d-6899-495e-83ed-afbbe78600ab
+:END:
 TODO: rewrite this to check that both personal and work don't exist, load the one that does, otherwise print out a warning that no custom environment will be loaded.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
+(setq work-el (expand-file-name "Sync/nix-home-manager-config/work.el" "~"))
+(setq personal-el (expand-file-name "Sync/nix-home-manager-config/personal.el" "~"))
+
 (when (string-equal nil (getenv "TRAVIS_OS_NAME"))
-    (pcase (getenv "EMACSFOR")
-      ("WORK" (load (expand-file-name "work.el" "~")))
-      ("PERSONAL"
-       (ignore-errors (load (expand-file-name "bsab/personal.el" "~")))
-       )
-      (_ (error "Please set the EMACSFOR variable to WORK or PERSONAL"))))
+  (cond (
+
+         (and (not (file-exists-p work-el)) (not (file-exists-p personal-el))
+              (error "both personal.el and work.el shouldn't exist"))
+
+         (and (file-exists-p work-el) (file-exists-p personal-el)
+              (alert "WARNING: neither personal.el nor work.el file exist"))
+
+         ((file-exists-p work-el)
+                        (message "loading work.el")
+                        (load work-el))
+
+         ((file-exists-p personal-el)
+                        (message "loading personal.el")
+                        (load personal-el))
+         )))
 #+end_src
 *** Oh Crap I Need To Drop Everything And Do X
 
 Example: Stop configuring org for hours on end and clock in to "Go get dinner" :)
 
-#+begin_src emacs-lisp :noweb-ref simple-todo-clocking-capture-template :tangle no :noweb yes
+#+begin_src emacs-lisp :noweb-ref simple-todo-clocking-capture-template :noweb yes :tangle no
 ;; TODO don't use for GTD?
 ("T" "Todo" entry (file+headline "~/bsab/misc.org" "Misc")
              "* TODO %?
@@ -87,6 +106,9 @@ Instead I'd like an =Note In Active Project= capture template where I could just
 =SPC X a= (or using ivy to select that capture template text), type my note, and
 then refile into any realistic level within =Projects.org -> Active Projects=
 *** Projects
+:PROPERTIES:
+:ID:       9dddb646-664f-4c64-9925-e290b7691423
+:END:
 Projects may be created by from [[id:783fc72a-92d9-4ee1-9d58-9e77486cc544][Ideas/Notes]] I quickly captured
 
 #+begin_src emacs-lisp :noweb-ref project-capture-template :tangle no :noweb yes
@@ -172,6 +194,9 @@ I notice that =cw= is slower in my org files in doom emacs than in my vanilla
 config and note that down, I call =org-insert-link= and find the most recent
 commit to the relevant doom emacs config project.
 *** TODO Quick screenshot ability is absolutely necessary
+:PROPERTIES:
+:ID:       f08ba0b3-4f47-4751-8a4c-2898676b8973
+:END:
 TODO: Doom doesn't seem to make =org-download-screenshot= available to us by default.
 
 #+begin_src emacs-lisp :tangle yes
@@ -207,6 +232,9 @@ Agenda look nicer]], it's well worth the effort.
 *** Additions To Default Org Mode View
 **** TODO hide properties by default
 ** Archiving
+:PROPERTIES:
+:ID:       47515f85-cae9-47b8-b661-968390dcd7c5
+:END:
 For a long time, I didn't even archive things out of fear I couldn't search
 them. That changes today, and I'll do it by archiving into an
 =archives/datetree.org=.
@@ -224,6 +252,9 @@ archives by using the magic =agenda-archives= symbol:
 (setq org-agenda-text-search-extra-files (list 'agenda-archives))
 #+end_src
 ** Clocking
+:PROPERTIES:
+:ID:       ff9c0437-3918-49f7-baf1-1d73420d53d5
+:END:
 I like to clock things sometimes to get an idea where my day went. Clocks in
 doom seem to not be in the property drawer by default, so let's fix that:
 
@@ -235,6 +266,9 @@ doom seem to not be in the property drawer by default, so let's fix that:
 *** https://github.com/alhassy/emacs.d/blob/master/README.org
 ** Org-roam (experimental)
 *** Org-mode version of [[https://roamresearch.com/][Roam: A note-taking tool for networked thought.]]
+:PROPERTIES:
+:ID:       0544dc6f-f218-4f79-a59e-399632a18202
+:END:
 this only seems to work from [[file:packages.el::package! org-roam]] so disabling by not tangling for now
 #+begin_src emacs-lisp :tangle no
 (package! org-roam)
@@ -254,32 +288,50 @@ Want to put it in here by default, hopefully this works since above didn't:
 :header-args: :noweb-ref personal-info
 :END:
 *** Set full name
-#+BEGIN_SRC emacs-lisp :tangle yes
+:PROPERTIES:
+:ID:       026f9167-7dc6-4202-ac76-5767ced069d5
+:END:
+#+BEGIN_SRC emacs-lisp
 (setq user-full-name "Cody Goodman")
 #+END_SRC
 *** Set email address
-#+BEGIN_SRC emacs-lisp :tangle yes
+:PROPERTIES:
+:ID:       4683a42c-d9cb-4582-8176-598f581e56ac
+:END:
+#+BEGIN_SRC emacs-lisp
 (setq user-mail-address "cody@codygman.dev")
 #+END_SRC
 ** Spell checking
 *** load my personal dictionary
-#+begin_src emacs-lisp :tangle yes
+:PROPERTIES:
+:ID:       17c5713a-90df-4370-9c6c-890367cf342a
+:END:
+#+begin_src emacs-lisp
 (setq ispell-personal-dictionary "~/gtd/files/ispell/personal/ispell_english")
 #+end_src
 ** Doom Core
 Here I setup my config for the =doom-emacs= [[doom:core/][core]]
 *** [[doom:core/core.el][Core]]
 **** Use =jf= instead of default doom =jk=
-#+BEGIN_SRC emacs-lisp :tangle yes
+:PROPERTIES:
+:ID:       91a7125d-1cc2-459d-a2c5-4cfecef832d3
+:END:
+#+BEGIN_SRC emacs-lisp
 (setq-default evil-escape-key-sequence "jf")
 #+END_SRC
 **** disable line numbers
-#+begin_src emacs-lisp :tangle yes
+:PROPERTIES:
+:ID:       b4e9aea2-9060-469d-baa2-b82d1dc8f7a4
+:END:
+#+begin_src emacs-lisp
 (setq display-line-numbers-type nil)
 #+end_src
 ** Doom Visual
 *** font
-#+begin_src emacs-lisp :tangle yes
+:PROPERTIES:
+:ID:       6450ce60-5608-458f-92f2-5556af3fee88
+:END:
+#+begin_src emacs-lisp
 (setq doom-font (font-spec :family "Source Code Pro" :size 17))
 #+end_src
 ** Org Mode
@@ -287,11 +339,14 @@ Here I setup my config for the =doom-emacs= [[doom:core/][core]]
 :PROPERTIES:
 :ID:       0c10ce60-0d6a-4317-9469-cf7f45651a84
 :END:
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
 (after! org
 #+end_src
 *** Enable linking with org uuid
-#+begin_src emacs-lisp :tangle yes
+:PROPERTIES:
+:ID:       5c19ec70-719e-48f6-8734-eafe874293bd
+:END:
+#+begin_src emacs-lisp
 (require 'org-id)
 (setq org-id-link-to-org-use-id t)
 #+end_src
@@ -299,19 +354,19 @@ Here I setup my config for the =doom-emacs= [[doom:core/][core]]
 :PROPERTIES:
 :ID:       95e44ec7-c44b-4444-8b92-754330024e3e
 :END:
-#+begin_src emacs-lisp :tangle yes :noweb yes
+#+begin_src emacs-lisp :noweb yes
 (setq org-capture-templates
       '(
-<<simple-todo-capture-template>>
-<<project-capture-template>>
-<<simple-todo-clocking-capture-template>>
-<<grocery-capture-template>>
-<<dinner-history-capture-template>>
+         <<simple-todo-capture-template>>
+         <<project-capture-template>>
+         <<simple-todo-clocking-capture-template>>
+         <<grocery-capture-template>>
+         <<dinner-history-capture-template>>
         ))
 #+end_src
 *** default org capture heading properties
 #+name: default-capture-properties
-#+begin_src text
+#+begin_src text :tangle no
 :PROPERTIES:
 :ID:       %(org-id-uuid)
 :CREATED: %U
@@ -319,17 +374,26 @@ Here I setup my config for the =doom-emacs= [[doom:core/][core]]
 #+end_src
 *** basics
 **** Here is where my org files live
+:PROPERTIES:
+:ID:       519c042f-5609-44ea-ac0a-a33786459664
+:END:
 #+begin_src emacs-lisp
 (setq org-directory "~/gtd")
 (setq org-agenda-files '("~/gtd" "~/amicody"))
 #+end_src
 **** These are my todo states
+:PROPERTIES:
+:ID:       c256b709-1f4d-4820-9765-2c322b5076b7
+:END:
 #+name: set-org-todo-keywords
 #+begin_src emacs-lisp
   (setq org-todo-keywords
         '((sequence "TODO(t)" "STRT(s)" "IN-PROGRESS(i)" "NEXT(n)" "WAIT(w@/!)" "|" "DONE(d!)" "KILL(k@)")))
 #+end_src
 *** org-attach
+:PROPERTIES:
+:ID:       1f818269-430e-405d-a28a-88ecae2034bf
+:END:
 Org attach is required to make [[id:2f6b5dea-987b-4153-8dbd-07954c5d4777][Drag and drop support of images in org mode]] work
 #+begin_src emacs-lisp
 (after! org-attach
@@ -387,11 +451,17 @@ Org attach is required to make [[id:2f6b5dea-987b-4153-8dbd-07954c5d4777][Drag a
 :ID:       a09cbdef-c018-45ff-af40-bdd78c0d7edd
 :END:
 ***** remove =Scheduled: = text in front of org agenda items
+:PROPERTIES:
+:ID:       d99661a2-5181-4258-b2f7-85e8890a687a
+:END:
 It just takes up valuable space and doesn't have a use
 #+begin_src emacs-lisp
 (setq org-agenda-scheduled-leaders '("" ""))
 #+end_src
 *** end after org macro
+:PROPERTIES:
+:ID:       bcce1194-6f9b-4021-81b8-51f7302d6c93
+:END:
 #+begin_src emacs-lisp
 )
 #+end_src
