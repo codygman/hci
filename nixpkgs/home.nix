@@ -46,7 +46,7 @@ in
   };
 
   home = {
-    packages = with pkgs; [ emacs fd ripgrep source-code-pro sqlite gnumake nox gcc coreutils cmake graphviz niv ];
+    packages = with pkgs; [ emacs fd ripgrep source-code-pro sqlite gnumake nox gcc coreutils cmake graphviz niv libnotify];
   };
 
   services = {

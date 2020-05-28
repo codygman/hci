@@ -8,6 +8,10 @@
 #+STARTUP: inlineimages
 #+PROPERTY: header-args :cache yes :results silent :padline no
 
+#+BEGIN_SRC emacs-lisp
+(alert "loading doom config" :severity 'high)
+#+END_SRC
+
 * A Note On The Structure Of This Document
 This document attempts to motivate changes first by describing a workflow in
 prose and presenting examples inline or linking to headings such as [[id:a09cbdef-c018-45ff-af40-bdd78c0d7edd][Make Org
@@ -62,17 +66,17 @@ TODO: rewrite this to check that both personal and work don't exist, load the on
   (cond (
 
          (and (not (file-exists-p work-el)) (not (file-exists-p personal-el))
-              (error "both personal.el and work.el shouldn't exist"))
+              (alert "both personal.el and work.el shouldn't exist" :severity 'high))
 
          (and (file-exists-p work-el) (file-exists-p personal-el)
-              (alert "WARNING: neither personal.el nor work.el file exist"))
+              (alert "WARNING: neither personal.el nor work.el file exist" :severity 'high))
 
-         ((file-exists-p work-el)
-                        (message "loading work.el")
+         (file-exists-p work-el
+                        (alert "loading work.el" :severity 'high)
                         (load work-el))
 
-         ((file-exists-p personal-el)
-                        (message "loading personal.el")
+         (file-exists-p personal-el
+                        (alert "loading personal.el" :severity 'high)
                         (load personal-el))
          )))
 #+end_src
@@ -300,6 +304,13 @@ Want to put it in here by default, hopefully this works since above didn't:
 :END:
 #+BEGIN_SRC emacs-lisp
 (setq user-mail-address "cody@codygman.dev")
+#+END_SRC
+** Notifications with alert.el and inotify
+:PROPERTIES:
+:ID:       1c6bbf65-3465-43b9-89a6-4d6e0f4d2304
+:END:
+#+BEGIN_SRC emacs-lisp
+(setq alert-default-style 'libnotify)
 #+END_SRC
 ** Spell checking
 *** load my personal dictionary
