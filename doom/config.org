@@ -63,22 +63,22 @@ TODO: rewrite this to check that both personal and work don't exist, load the on
 (setq personal-el (expand-file-name "Sync/nix-home-manager-config/personal.el" "~"))
 
 (when (string-equal nil (getenv "TRAVIS_OS_NAME"))
-  (cond (
 
-         (and (not (file-exists-p work-el)) (not (file-exists-p personal-el))
+         (when (and (not (file-exists-p work-el)) (not (file-exists-p personal-el)))
               (alert "both personal.el and work.el shouldn't exist" :severity 'high))
 
-         (and (file-exists-p work-el) (file-exists-p personal-el)
-              (alert "WARNING: neither personal.el nor work.el file exist" :severity 'high))
+         (when (and (file-exists-p work-el) (file-exists-p personal-el)
+              (alert "WARNING: neither personal.el nor work.el file exist" :severity 'high)))
 
-         (file-exists-p work-el
-                        (alert "loading work.el" :severity 'high)
-                        (load work-el))
 
-         (file-exists-p personal-el
+         (when (file-exists-p personal-el)
                         (alert "loading personal.el" :severity 'high)
                         (load personal-el))
-         )))
+
+         (when (file-exists-p work-el)
+                        (alert "loading work.el" :severity 'high)
+                        (load work-el))
+         )
 #+end_src
 *** Oh Crap I Need To Drop Everything And Do X
 
