@@ -47,6 +47,7 @@ I find it's a good idea to prepend these tasks by default so your freshest ideas
 are near the top of the file. Perhaps that's a bad habit or reinforces not
 curating or refiling things enough though.
 *** Load Personal Or Work Capture Templates And Agendas
+TODO: rewrite this to check that both personal and work don't exist, load the one that does, otherwise print out a warning that no custom environment will be loaded.
 #+begin_src emacs-lisp :tangle yes
 (when (string-equal nil (getenv "TRAVIS_OS_NAME"))
     (pcase (getenv "EMACSFOR")
