@@ -85,9 +85,9 @@ doomSetupOrSync :: Turtle.FilePath -> Turtle.FilePath -> Shell Line
 doomSetupOrSync userHome hciDir = do
   let doomConfigDir = userHome </> decodeString ".doom.d"
   testdir doomConfigDir >>= \there -> if there then do
-        echoTxt "doom already there, removing and linking"
-      rm doomConfigDir
-      linkConfigDoom userHome hciDir
+    echoTxt "doom already there, removing and linking"
+    rm doomConfigDir
+    linkConfigDoom userHome hciDir
     else do
       echo "~/.doom.d not there linking ~/hci/doom to ~/.doom.d"
       -- NOTE this is brittle, but it works for now
