@@ -4,9 +4,17 @@ with import <nixpkgs> {};
 with lib;
 
 let
-  myEnv = builtins.getEnv "MYENV";
-  pkgs = import <nixpkgs> { overlays = [ (import emacs-overlay) ]; };
   emacs-overlay = builtins.fetchTarball "https://github.com/nix-community/emacs-overlay/archive/52b9fd468cd45f85c43f9b623ed2854971d8e1ad.tar.gz";
+  pkgs = import <nixpkgs> { overlays = [ (import emacs-overlay) ]; };
+  doom-emacs = with pkgs; callPackage (builtins.fetchTarball {
+    url = https://github.com/vlaci/nix-doom-emacs/archive/9337a8741ea79084642a430c4b01814377530424.tar.gz;
+  }) {
+    bundledPackages = false;
+    emacsPackages = emacsPackagesFor emacsGit;
+    doomPrivateDir = ./doom.d;  # Directory containing your config.el init.el
+    # and packages.el files
+  };
+  myEnv = builtins.getEnv "MYENV";
 in
 {
   imports = if myEnv != ""
@@ -46,7 +54,7 @@ in
   };
 
   home = {
-    packages = with pkgs; [ emacs fd ripgrep source-code-pro sqlite gnumake nox gcc coreutils cmake graphviz niv libnotify];
+    packages = with pkgs; [ doom-emacs fd ripgrep source-code-pro sqlite gnumake nox gcc coreutils cmake graphviz niv libnotify];
   };
 
   services = {
