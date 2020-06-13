@@ -4,16 +4,7 @@ with import <nixpkgs> {};
 with lib;
 
 let
-  emacs-overlay = builtins.fetchTarball "https://github.com/nix-community/emacs-overlay/archive/52b9fd468cd45f85c43f9b623ed2854971d8e1ad.tar.gz";
-  pkgs = import <nixpkgs> { overlays = [ (import emacs-overlay) ]; };
-  doom-emacs = with pkgs; callPackage (builtins.fetchTarball {
-    url = https://github.com/vlaci/nix-doom-emacs/archive/9337a8741ea79084642a430c4b01814377530424.tar.gz;
-  }) {
-    bundledPackages = false;
-    emacsPackages = emacsPackagesFor emacsGit;
-    doomPrivateDir = ./doom.d;  # Directory containing your config.el init.el
-    # and packages.el files
-  };
+  doom-emacs = import ./doomemacs.nix;
   myEnv = builtins.getEnv "MYENV";
 in
 {
