@@ -1,10 +1,11 @@
-{ pkgs, ... }:
+{ ... }:
 let
   sources = import ./nix/sources.nix;
-  pkgs = import sources.nixpkgs {};
+  emacs-overlay = sources.emacs-overlay;
+  pkgs = import sources.nixpkgs { overlays = [ (import emacs-overlay) ]; };
   nivpkg = import sources.niv {};
   home-manager = import sources.home-manager { pkgs = pkgs; };
-  doom-emacs = import ./doomemacs.nix { sources = sources; };
+  doom-emacs = import ./doomemacs.nix { sources = sources; pkgs = pkgs; };
   myEnv = builtins.getEnv "MYENV";
   lib = pkgs.lib;
 in
