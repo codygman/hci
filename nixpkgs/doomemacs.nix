@@ -6,5 +6,5 @@ in
   with pkgs; callPackage nix-doom-emacs {
     bundledPackages = false;
     emacsPackages = emacsPackagesFor emacsGit;
-    doomPrivateDir = ./doom.d;
+    doomPrivateDir = ./doom;
   }
