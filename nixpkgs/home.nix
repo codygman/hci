@@ -1,11 +1,12 @@
-{ config, pkgs, home, ... }:
-
-with import <nixpkgs> {};
-with lib;
-
+{ pkgs, ... }:
 let
-  doom-emacs = import ./doomemacs.nix;
+  sources = import ./nix/sources.nix;
+  pkgs = import sources.nixpkgs {};
+  nivpkg = import sources.niv {};
+  home-manager = import sources.home-manager { pkgs = pkgs; };
+  doom-emacs = import ./doomemacs.nix { sources = sources; };
   myEnv = builtins.getEnv "MYENV";
+  lib = pkgs.lib;
 in
 {
   imports = if myEnv != ""
@@ -45,7 +46,7 @@ in
   };
 
   home = {
-    packages = with pkgs; [ doom-emacs fd ripgrep source-code-pro sqlite gnumake nox gcc coreutils cmake graphviz niv libnotify];
+    packages = with pkgs; [ doom-emacs fd ripgrep source-code-pro sqlite gnumake nox gcc coreutils cmake graphviz nivpkg.niv libnotify];
   };
 
   services = {
