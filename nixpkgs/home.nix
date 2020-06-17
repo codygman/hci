@@ -47,7 +47,22 @@ in
   };
 
   home = {
-    packages = with pkgs; [ doom-emacs fd ripgrep source-code-pro sqlite gnumake nox gcc coreutils cmake graphviz nivpkg.niv libnotify];
+    packages = with pkgs; [ doom-emacs
+                            peek
+                            fd
+                            ripgrep
+                            source-code-pro
+                            sqlite
+                            gnumake
+                            nox
+                            gcc
+                            coreutils
+                            cmake
+                            graphviz
+                            nivpkg.niv
+                            libnotify
+                            cachix
+                          ];
   };
 
   services = {
