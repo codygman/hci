@@ -41,6 +41,10 @@ homeManagerPure installState = interpret \case
   HomeManagerInstall -> pure "HomeManagerInstall"
   HomeManagerInstalled -> pure installState
 
+-- TODO actually do the things and run the commands
+-- leave this til last, keep these super simple 1 to 1 mappings, and the pure versions of tests should guarantee the impure work
+-- homeManagerIO
+
 main :: IO ()
 main = do
   putStrLn "If we already installed home manager, it should say 'AlreadyInstalledHomeManager' below:"
