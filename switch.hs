@@ -46,14 +46,21 @@ homeManagerPure installState = interpret \case
     trace "home manager switch"
     pure ()
 
-hciPure :: (Member Trace r) => HCIInstallStatus -> Sem (HCI ': r) a -> Sem r a
+hciPure :: (Member Trace r, Member HCI r) => HCIInstallStatus -> Sem (HCI ': r) a -> Sem r a
 hciPure hciInstallState = interpret \case
   HCIInstall -> do
-    if hciInstallState == HCINotSymlinked then
-        trace "symlinking config to ~/.config/nixpkgs"
-      else pure ()
+    maybeInstallHci
     pure hciInstallState
   HCIInstalled -> pure hciInstallState
+
+maybeInstallHci :: (Member Trace r, Member HCI r) => Sem r ()
+maybeInstallHci =  do
+    trace "enter maybeInstallHci"
+    hciInstallStatus <- hCIInstalled
+    trace "what is hciInstallStatus"
+    if hciInstallStatus == HCINotSymlinked then
+        trace "symlinking config to ~/.config/nixpkgs"
+      else pure ()
 
 isHCISymlinked :: Shell HCIInstallStatus
 isHCISymlinked = pure HCINotSymlinked
@@ -119,8 +126,16 @@ installHomeManager = do
 homeManager opts = inproc "home-manager" opts empty
 
 -- TODO io interpreters
--- homeManagerIO :: (Member (Embed IO) r) => Sem (HomeManager ': r) a -> Sem r a
--- homeManagerIO = interpret \case
---   HomeManagerInstall -> pure "HomeManagerInstall"
---   HomeManagerInstalled -> embed . single $ isHomeManagerInstalled
---   HomeManagerSwitch -> embed . sh $ homeManager ["switch"]
+homeManagerIO :: (Member (Embed IO) r) => Sem (HomeManager ': r) a -> Sem r a
+homeManagerIO = interpret \case
+  HomeManagerInstall -> maybeInstallHci
+  HomeManagerInstalled -> embed . single $ isHomeManagerInstalled
+  HomeManagerSwitch -> embed . sh $ homeManager ["switch"]
+
+hciIO :: (Member (Embed IO) r) => Sem (HomeManager ': r) a -> Sem r a
+hciIO = interpret \case
+  HCIInstall -> do
+    hciInstallStatus <- hCIInstalled
+    if hciInstallStatus == HCINotSymlinked then
+        trace "symlinking config to ~/.config/nixpkgs"
+      else pure ()
