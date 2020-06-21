@@ -25,14 +25,13 @@ import Polysemy.Trace
 import           Turtle
 
 data HomeManagerInstallStatus = AlreadyInstalledHomeManager | NeedToInstallHomeManager deriving (Ord, Eq, Show)
+data HCIInstallStatus = HCISymlinked | HCINotSymlinked deriving (Ord, Eq, Show)
 
 data HomeManager m a where
   HomeManagerInstall :: HomeManager m String
   HomeManagerInstalled :: HomeManager m HomeManagerInstallStatus
   HomeManagerSwitch :: HomeManager m ()
 makeSem ''HomeManager
-
-data HCIInstallStatus = HCISymlinked | HCINotSymlinked
 
 data HCI m a where
   HCIInstall :: HCI m HCIInstallStatus
@@ -50,23 +49,14 @@ homeManagerPure installState = interpret \case
 hciPure :: (Member Trace r) => HCIInstallStatus -> Sem (HCI ': r) a -> Sem r a
 hciPure hciInstallState = interpret \case
   HCIInstall -> do
-    hciInstall
+    if hciInstallState == HCINotSymlinked then
+        trace "symlinking config to ~/.config/nixpkgs"
+      else pure ()
     pure hciInstallState
   HCIInstalled -> pure hciInstallState
 
-hciInstall :: (Member Trace r) => Sem r ()
-hciInstall =
-    trace "symlinking config to ~/.config/nixpkgs"
-
 isHCISymlinked :: Shell HCIInstallStatus
 isHCISymlinked = pure HCINotSymlinked
-
-homeManagerIO :: (Member (Embed IO) r) => Sem (HomeManager ': r) a -> Sem r a
-homeManagerIO = interpret \case
-  HomeManagerInstall -> pure "HomeManagerInstall"
-  HomeManagerInstalled -> embed . single $ isHomeManagerInstalled
-  HomeManagerSwitch -> embed . sh $ homeManager ["switch"]
-
 
 syncHci :: (Member HCI r, Member HomeManager r, Member Trace r) => Sem r ()
 syncHci = do
@@ -87,7 +77,7 @@ main = do
      1. HCISymlinked,AlreadyInstalledHomeManager -- Everything's good, should be this most of the time
      2. HCINotSymlinked,NeedToInstallHomeManager -- Nothing installed, needs to be installed
      3. HCINotSymlinked,AlreadyInstalledHomeManager -- Someone who is trying hci?
-     4. HCINotSymlinked,NeedToInstallHomeManager -- Weird case... maybe home-manager was uninstalled?
+     4. HCISymlinked,NeedToInstallHomeManager -- home-manager got uninstalled?
   -}
   putStrLn "Pure interpreters"
   putStrLn "1."
@@ -101,24 +91,36 @@ main = do
     runTraceList & run & ppTraceOutput
   putStrLn ""
   putStrLn ""
-  -- putStrLn "Actually sync hci"
-  -- syncHci & traceToIO & homeManagerIO & runM & (print =<<)
+  putStrLn "3."
+  syncHci & hciPure HCINotSymlinked & homeManagerPure AlreadyInstalledHomeManager &
+    runTraceList & run & ppTraceOutput
+  putStrLn ""
+  putStrLn ""
+  putStrLn "4."
+  syncHci & hciPure HCISymlinked & homeManagerPure NeedToInstallHomeManager &
+    runTraceList & run & ppTraceOutput
+  putStrLn ""
+  putStrLn ""
 
 maybeInstallHomeManager :: (Member HomeManager r, Member Trace r) => Sem r String
 maybeInstallHomeManager = do
   installStatus <- homeManagerInstalled
   case installStatus of
     AlreadyInstalledHomeManager -> do
-      trace "already installed home-manager"
       pure (show AlreadyInstalledHomeManager)
     NeedToInstallHomeManager -> do
       installHomeManager
 
 installHomeManager :: (Member Trace r) => Sem r String
 installHomeManager = do
-  trace "trying to install home-manager"
-  trace "(TODO implement) success installing home-manager"
+  trace "installed home-manager"
   pure "Success"
 
-
 homeManager opts = inproc "home-manager" opts empty
+
+-- TODO io interpreters
+-- homeManagerIO :: (Member (Embed IO) r) => Sem (HomeManager ': r) a -> Sem r a
+-- homeManagerIO = interpret \case
+--   HomeManagerInstall -> pure "HomeManagerInstall"
+--   HomeManagerInstalled -> embed . single $ isHomeManagerInstalled
+--   HomeManagerSwitch -> embed . sh $ homeManager ["switch"]
