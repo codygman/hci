@@ -21,44 +21,29 @@ import Polysemy.Output
 import Polysemy.Error
 import Polysemy.Resource
 
-data Teletype m a where
-  ReadTTY  :: Teletype m String
-  WriteTTY :: String -> Teletype m ()
+data HomeManagerInstalledStatus = AlreadyInstalledHomeManager | NeedToInstallHomeManager deriving (Ord, Eq, Show)
 
-makeSem ''Teletype
+data HomeManager m a where
+  HomeManagerInstall :: HomeManager m String
+  HomeManagerInstalled :: HomeManager m HomeManagerInstalledStatus
 
-data CustomException = ThisException | ThatException deriving Show
+makeSem ''HomeManager
 
-program :: Members '[Resource, Teletype, Error CustomException] r => Sem r ()
-program = catch @CustomException work $ \e -> writeTTY ("Caught " ++ show e)
-  where work = bracket (readTTY) (const $ writeTTY "exiting bracket") $ \input -> do
-          writeTTY "entering bracket"
-          case input of
-            "explode"     -> throw ThisException
-            "weird stuff" -> writeTTY input >> throw ThatException
-            _             -> writeTTY input >> writeTTY "no exceptions"
+installHomeManager :: Member HomeManager r => Sem r String
+installHomeManager = do
+  installStatus <- homeManagerInstalled
+  case installStatus of
+    AlreadyInstalledHomeManager -> pure (show AlreadyInstalledHomeManager)
+    NeedToInstallHomeManager -> pure "install home manager success"
 
-runTeletypePure :: [String] -> Sem (Teletype ': r) a -> Sem r ([String], a)
-runTeletypePure i
-  = runOutputMonoid pure  -- For each WriteTTY in our program, consume an output by appending it to the list in a ([String], a)
-  . runInputList i         -- Treat each element of our list of strings as a line of input
-  . reinterpret2 \case     -- Reinterpret our effect in terms of Input and Output
-      ReadTTY -> maybe "" id <$> input
-      WriteTTY msg -> output msg
+homeManagerPure :: HomeManagerInstalledStatus -> Sem (HomeManager ': r) a -> Sem r a
+homeManagerPure installState = interpret \case
+  HomeManagerInstall -> pure "HomeManagerInstall"
+  HomeManagerInstalled -> pure installState
 
-teletypeToIO :: Member (Embed IO) r => Sem (Teletype ': r) a -> Sem r a
-teletypeToIO = interpret $ \case
-  ReadTTY      -> embed getLine
-  WriteTTY msg -> embed $ putStrLn msg
-
-main :: IO (Either CustomException ())
+main :: IO ()
 main = do
-  putStrLn "run program purely"
-  print . run . runTeletypePure ["foo"] . runResource . runError $ program
-  putStrLn "run program in IO"
-  runFinal
-    . embedToFinal @IO
-    . resourceToIOFinal
-    . errorToIOFinal @CustomException
-    . teletypeToIO
-    $ program
+  putStrLn "If we already installed home manager, it should say 'AlreadyInstalledHomeManager' below:"
+  print . run . homeManagerPure AlreadyInstalledHomeManager $ installHomeManager
+  putStrLn "If we haven't installed home manager, it should say 'install home manager success' below:"
+  print . run . homeManagerPure NeedToInstallHomeManager $ installHomeManager
