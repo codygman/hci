@@ -29,47 +29,65 @@ data HomeManagerInstalledStatus = AlreadyInstalledHomeManager | NeedToInstallHom
 data HomeManager m a where
   HomeManagerInstall :: HomeManager m String
   HomeManagerInstalled :: HomeManager m HomeManagerInstalledStatus
+  HomeManagerSwitch :: HomeManager m ()
 
 makeSem ''HomeManager
 
-installHomeManager :: (Member HomeManager r, Member Trace r) => Sem r String
-installHomeManager = do
+maybeInstallHomeManager :: (Member HomeManager r, Member Trace r) => Sem r String
+maybeInstallHomeManager = do
   installStatus <- homeManagerInstalled
   case installStatus of
     AlreadyInstalledHomeManager -> do
       trace "already installed home-manager"
       pure (show AlreadyInstalledHomeManager)
     NeedToInstallHomeManager -> do
-      trace "installing home-manager"
-      pure "mock success installing home-manager"
+      installHomeManager
 
-homeManagerPure :: HomeManagerInstalledStatus -> Sem (HomeManager ': r) a -> Sem r a
+installHomeManager :: (Member Trace r) => Sem r String
+installHomeManager = do
+  trace "trying to install home-manager"
+  trace "(TODO implement) success installing home-manager"
+  pure "Success"
+
+homeManagerPure :: (Member Trace r) => HomeManagerInstalledStatus -> Sem (HomeManager ': r) a -> Sem r a
 homeManagerPure installState = interpret \case
   HomeManagerInstall -> pure "HomeManagerInstall"
   HomeManagerInstalled -> pure installState
+  HomeManagerSwitch -> do
+    trace "home manager switch"
+    pure ()
 
-homeManagerIO :: Member (Embed IO) r => Sem (HomeManager ': r) a -> Sem r a
+homeManagerIO :: (Member (Embed IO) r) => Sem (HomeManager ': r) a -> Sem r a
 homeManagerIO = interpret \case
   HomeManagerInstall -> pure "HomeManagerInstall"
   HomeManagerInstalled -> embed . single $ isHomeManagerInstalled
+  HomeManagerSwitch -> embed . sh $ homeManager ["switch"]
 
 isHomeManagerInstalled :: Shell HomeManagerInstalledStatus
 isHomeManagerInstalled = maybe NeedToInstallHomeManager (const AlreadyInstalledHomeManager) <$> which (fromString "home-manager")
 
-
--- TODO actually do the things and run the commands
--- leave this til last, keep these super simple 1 to 1 mappings, and the pure versions of tests should guarantee the impure work
--- homeManagerIO
+syncHci :: (Member HomeManager r, Member Trace r) => Sem r ()
+syncHci = do
+  maybeInstallHomeManager
+  homeManagerSwitch
 
 main :: IO ()
 main = do
-  -- putStrLn "If we already installed home manager, it should say 'AlreadyInstalledHomeManager' below:"
-  -- print . run . homeManagerPure AlreadyInstalledHomeManager $ installHomeManager
-  -- putStrLn "If we haven't installed home manager, it should say 'install home manager success' below:"
-  -- print . run . homeManagerPure NeedToInstallHomeManager $ installHomeManager
-  -- putStrLn "actually do the thing"
-  -- installHomeManager & homeManagerPure AlreadyInstalledHomeManager & runTraceList & run & fst & mapM_ print
-  installHomeManager & traceToIO & homeManagerIO & runM & (print =<<)
+  let ppTraceOutput = mapM putStrLn . fst
+  -- pure
+  putStrLn "Pure interpreters"
+  putStrLn "1. If home-manager is already installed"
+  syncHci & homeManagerPure AlreadyInstalledHomeManager &
+    runTraceList & run & ppTraceOutput
+  putStrLn ""
+  putStrLn ""
+  putStrLn "2. If home-manager isn't installed"
+  syncHci & homeManagerPure NeedToInstallHomeManager &
+    runTraceList & run & ppTraceOutput
+  putStrLn ""
+  putStrLn ""
+  -- putStrLn "Actually sync hci"
+  -- syncHci & traceToIO & homeManagerIO & runM & (print =<<)
 
 
 homeManager opts = inproc "home-manager" opts empty
