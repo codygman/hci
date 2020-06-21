@@ -51,10 +51,13 @@ program = catch @CustomException work $ \e -> writeTTY ("Caught " ++ show e)
             _             -> writeTTY input >> writeTTY "no exceptions"
 
 main :: IO (Either CustomException ())
-main =
-    runFinal
-  . embedToFinal @IO
-  . resourceToIOFinal
-  . errorToIOFinal @CustomException
-  . teletypeToIO
-  $ program
+main = do
+  putStrLn "run program purely"
+  print . run . runTeletypePure ["foo"] . runResource . runError $ program
+  putStrLn "run program in IO"
+  runFinal
+    . embedToFinal @IO
+    . resourceToIOFinal
+    . errorToIOFinal @CustomException
+    . teletypeToIO
+    $ program
