@@ -1,6 +1,7 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i runghc -p "haskellPackages.ghcWithPackages (ps: [ps.turtle ps.polysemy ps.polysemy-plugin])"
-#! nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs-channels/archive/d5291756487d70bc336e33512a9baf9fa1788faf.tar.gz
+#! nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs-channels/archive/a84cbb60f0296210be03c08d243670dd18a3f6eb.tar.gz
+-- TODO running actual script doesn't work because polysemy plugin broken in above revision, try a84cbb60f0296210be03c08d243670dd18a3f6eb
 {-# OPTIONS_GHC -fplugin=Polysemy.Plugin #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE DataKinds #-}
@@ -26,19 +27,6 @@ data Teletype m a where
 
 makeSem ''Teletype
 
-teletypeToIO :: Member (Embed IO) r => Sem (Teletype ': r) a -> Sem r a
-teletypeToIO = interpret $ \case
-  ReadTTY      -> embed getLine
-  WriteTTY msg -> embed $ putStrLn msg
-
-runTeletypePure :: [String] -> Sem (Teletype ': r) a -> Sem r ([String], a)
-runTeletypePure i
-  = runOutputMonoid pure  -- For each WriteTTY in our program, consume an output by appending it to the list in a ([String], a)
-  . runInputList i         -- Treat each element of our list of strings as a line of input
-  . reinterpret2 \case     -- Reinterpret our effect in terms of Input and Output
-      ReadTTY -> maybe "" id <$> input
-      WriteTTY msg -> output msg
-
 data CustomException = ThisException | ThatException deriving Show
 
 program :: Members '[Resource, Teletype, Error CustomException] r => Sem r ()
@@ -49,6 +37,19 @@ program = catch @CustomException work $ \e -> writeTTY ("Caught " ++ show e)
             "explode"     -> throw ThisException
             "weird stuff" -> writeTTY input >> throw ThatException
             _             -> writeTTY input >> writeTTY "no exceptions"
+
+runTeletypePure :: [String] -> Sem (Teletype ': r) a -> Sem r ([String], a)
+runTeletypePure i
+  = runOutputMonoid pure  -- For each WriteTTY in our program, consume an output by appending it to the list in a ([String], a)
+  . runInputList i         -- Treat each element of our list of strings as a line of input
+  . reinterpret2 \case     -- Reinterpret our effect in terms of Input and Output
+      ReadTTY -> maybe "" id <$> input
+      WriteTTY msg -> output msg
+
+teletypeToIO :: Member (Embed IO) r => Sem (Teletype ': r) a -> Sem r a
+teletypeToIO = interpret $ \case
+  ReadTTY      -> embed getLine
+  WriteTTY msg -> embed $ putStrLn msg
 
 main :: IO (Either CustomException ())
 main = do
