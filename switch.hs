@@ -50,9 +50,13 @@ homeManagerPure installState = interpret \case
 hciPure :: (Member Trace r) => HCIInstallStatus -> Sem (HCI ': r) a -> Sem r a
 hciPure hciInstallState = interpret \case
   HCIInstall -> do
-    trace "symlinking config to ~/.config/nixpkgs"
+    hciInstall
     pure hciInstallState
   HCIInstalled -> pure hciInstallState
+
+hciInstall :: (Member Trace r) => Sem r ()
+hciInstall =
+    trace "symlinking config to ~/.config/nixpkgs"
 
 isHCISymlinked :: Shell HCIInstallStatus
 isHCISymlinked = pure HCINotSymlinked
