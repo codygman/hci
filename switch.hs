@@ -24,20 +24,7 @@ import Polysemy.Resource
 import Polysemy.Trace
 import           Turtle
 
--- my human computing interface "installed" by symlinking /path/to/git/repo to ~/.config/nixpkgs
--- The part I want to have a pure/effectful version of is symlinking since I keep mucking up the logic for some reason and want to have a pure version to test against
-
-
--- Return Types
 data HomeManagerInstallStatus = AlreadyInstalledHomeManager | NeedToInstallHomeManager deriving (Ord, Eq, Show)
-data HCIInstallStatus = HCISymlinked | HCINotSymlinked deriving (Ord, Eq, Show)
-
-
--- GADTS
-data HCI m a where
-  HCIInstall :: HCI m HCIInstallStatus
-  HCIInstalled :: HCI m HCIInstallStatus
-makeSem ''HCI
 
 data HomeManager m a where
   HomeManagerInstall :: HomeManager m String
@@ -45,7 +32,13 @@ data HomeManager m a where
   HomeManagerSwitch :: HomeManager m ()
 makeSem ''HomeManager
 
--- interpreters
+data HCIInstallStatus = HCISymlinked | HCINotSymlinked
+
+data HCI m a where
+  HCIInstall :: HCI m HCIInstallStatus
+  HCIInstalled :: HCI m HCIInstallStatus
+makeSem ''HCI
+
 homeManagerPure :: (Member Trace r) => HomeManagerInstallStatus -> Sem (HomeManager ': r) a -> Sem r a
 homeManagerPure installState = interpret \case
   HomeManagerInstall -> pure "HomeManagerInstall"
@@ -57,24 +50,12 @@ homeManagerPure installState = interpret \case
 hciPure :: (Member Trace r) => HCIInstallStatus -> Sem (HCI ': r) a -> Sem r a
 hciPure hciInstallState = interpret \case
   HCIInstall -> do
-    -- installHCI
+    trace "symlinking config to ~/.config/nixpkgs"
     pure hciInstallState
   HCIInstalled -> pure hciInstallState
 
--- polysemy functions? Not sure what to call this one. It's an interpreter too?
-installHCI :: (Member Trace r, Member HCI r) => Sem r ()
-installHCI = do
-  status <- hCIInstalled
-  if (status == HCINotSymlinked) then do
-    trace "symlinking config to ~/.config/nixpkgs"
-    pure ()
-    else pure ()
-
-syncHci :: (Member HCI r, Member HomeManager r, Member Trace r) => Sem (HCI ': r) a -> Sem r ()
-syncHci = do
-  -- hCIInstall
-  maybeInstallHomeManager
-  homeManagerSwitch
+isHCISymlinked :: Shell HCIInstallStatus
+isHCISymlinked = pure HCINotSymlinked
 
 homeManagerIO :: (Member (Embed IO) r) => Sem (HomeManager ': r) a -> Sem r a
 homeManagerIO = interpret \case
@@ -83,8 +64,11 @@ homeManagerIO = interpret \case
   HomeManagerSwitch -> embed . sh $ homeManager ["switch"]
 
 
-isHCISymlinked :: Shell HCIInstallStatus
-isHCISymlinked = pure HCINotSymlinked
+syncHci :: (Member HCI r, Member HomeManager r, Member Trace r) => Sem r ()
+syncHci = do
+  hCIInstall
+  maybeInstallHomeManager
+  homeManagerSwitch
 
 isHomeManagerInstalled :: Shell HomeManagerInstallStatus
 isHomeManagerInstalled = maybe NeedToInstallHomeManager (const AlreadyInstalledHomeManager) <$> which (fromString "home-manager")
@@ -105,14 +89,14 @@ main = do
   putStrLn "1."
   -- syncHci & homeManagerPure AlreadyInstalledHomeManager & _ &
   --   runTraceList & run & ppTraceOutput
-  -- syncHci & homeManagerPure AlreadyInstalledHomeManager & hciPure HCISymlinked & runTraceList & run & ppTraceOutput
+  syncHci & hciPure HCISymlinked & homeManagerPure AlreadyInstalledHomeManager & runTraceList & run & ppTraceOutput
   putStrLn ""
   putStrLn ""
-  -- putStrLn "2."
+  putStrLn "2."
   syncHci & hciPure HCINotSymlinked & homeManagerPure NeedToInstallHomeManager &
     runTraceList & run & ppTraceOutput
-  -- putStrLn ""
-  -- putStrLn ""
+  putStrLn ""
+  putStrLn ""
   -- putStrLn "Actually sync hci"
   -- syncHci & traceToIO & homeManagerIO & runM & (print =<<)
 
