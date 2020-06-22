@@ -1,5 +1,0 @@
-language: nix
-os:
-  - linux
-script:
-  - bash install.sh
