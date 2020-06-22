@@ -5,7 +5,6 @@ let
   pkgs = import sources.nixpkgs { overlays = [ (import emacs-overlay) ]; };
   nivpkg = import sources.niv {};
   home-manager = import sources.home-manager { pkgs = pkgs; };
-  doom-emacs = import ./doomemacs.nix { sources = sources; pkgs = pkgs; };
   myEnv = builtins.getEnv "MYENV";
   lib = pkgs.lib;
 in
@@ -47,7 +46,7 @@ in
   };
 
   home = {
-    packages = with pkgs; [ doom-emacs
+    packages = with pkgs; [ emacs
                             peek
                             fd
                             ripgrep
