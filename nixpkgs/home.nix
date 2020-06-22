@@ -7,9 +7,7 @@ let
   home-manager = import sources.home-manager { pkgs = pkgs; };
   myEnv = builtins.getEnv "MYENV";
   lib = pkgs.lib;
-in
-{
-  imports = if myEnv != ""
+  extraConfigImports = if myEnv != ""
             then if myEnv == "personal" then
               lib.info "loading PERSONAL home manager environment"
                 [ ~/Sync/nix-home-manager-config/personal.nix ]
@@ -21,14 +19,44 @@ in
                      lib.warn "MYENV is not one of 'personal' or 'work', ONLY core home environment will be available!" []
             else
               lib.warn "MYENV not specified, ONLY core home environment will be available!" [];
+in
+{
+  imports = [
+    ./modules/emacs-init.nix
+    ./emacs.nix
+  ];
+
+  nixpkgs  = {
+    overlays = [
+       (import "${emacs-overlay}")
+    ];
+  };
 
   programs = {
     home-manager.enable = true;
+    git = {
+      enable = true;
+      userName = "codygman";
+      userEmail = lib.mkDefault "cody@codygman.dev";
+    };
+    direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      enableBashIntegration = true;
+    };
+    bash = {
+      enable = true;
+      shellAliases = {
+        new-haskell-project = "nix-shell -p cookiecutter git --run 'cookiecutter gh:codygman/hs-nix-template'";
+      };
+    };
+    ssh = {
+      enable = true;
+    };
   };
 
   home = {
-    packages = with pkgs; [ emacs
-                            fd
+    packages = with pkgs; [ fd
                             ripgrep
                             source-code-pro
                             sqlite
