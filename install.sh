@@ -6,9 +6,11 @@ export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 
 echo "home looks like this"
 ls -larth "$HOME"
-echo "is /nix there?"
-find /nix | head
-. "$HOME/.nix-profile/etc/profile.d/nix.sh"
+
+echo "find nix.sh in .nix-profile"
+find "$HOME/.nix-profile" -iname "nix.sh"
+
+echo "NIX_PATH: $NIX_PATH"
 
 # remove zshrc and bashrc so home-manager can overwrite them
 # TODO add this into bootstrap.hs and only do this on travis?
