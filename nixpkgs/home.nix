@@ -24,51 +24,19 @@ in
 
   programs = {
     home-manager.enable = true;
-    git = {
-      enable = true;
-      userName = "codygman";
-      userEmail = lib.mkDefault "cody@codygman.dev";
-    };
-    direnv = {
-      enable = true;
-      enableZshIntegration = true;
-      enableBashIntegration = true;
-    };
-    bash = {
-      enable = true;
-      shellAliases = {
-        new-haskell-project = "nix-shell -p cookiecutter git --run 'cookiecutter gh:codygman/hs-nix-template'";
-      };
-    };
-    ssh = {
-      enable = true;
-    };
   };
 
   home = {
     packages = with pkgs; [ emacs
-                            peek
                             fd
                             ripgrep
                             source-code-pro
                             sqlite
-                            gnumake
-                            nox
                             gcc
-                            coreutils
-                            cmake
-                            graphviz
-                            nivpkg.niv
-                            libnotify
-                            cachix
                           ];
   };
 
   services = {
-    lorri.enable = true;
-    syncthing = {
-      enable = true;
-    };
   };
 
 }
