@@ -10,4 +10,4 @@ export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 [[ -f ~/.bashrc ]] | rm -v ~/.bashrc
 [[ -f ~/.zshrc ]] | rm -v ~/.zshrc
 home-manager switch
-emacs -batch -L test -f buttercup-run-discover
+emacs -batch -f buttercup-run-discover
