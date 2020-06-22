@@ -10,7 +10,11 @@ ls -larth "$HOME"
 echo "find nix.sh in .nix-profile"
 find "$HOME/.nix-profile" -iname "nix.sh"
 
+echo "actually what's in ~/.nix-profile?"
+find "$HOME/.nix-profile"
+
 echo "NIX_PATH: $NIX_PATH"
+export PATH=$HOME/.nix-profile/bin:$PATH
 
 # remove zshrc and bashrc so home-manager can overwrite them
 # TODO add this into bootstrap.hs and only do this on travis?
