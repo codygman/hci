@@ -3,7 +3,7 @@
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
 nix-channel --update
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
-# export PATH=$HOME/.nix-profile/bin:$PATH
+export PATH=$HOME/.nix-profile/bin:$PATH
 cp -Rv "$HOME/hci/nixpkgs" "$HOME/.config/nixpkgs"
 nix-shell '<home-manager>' -A install
 . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
