@@ -2,18 +2,9 @@
 
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
 nix-channel --update
-
-if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-  echo "sourcing nix daemon"
-  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-fi
-
-echo "user home"
-ls -larth "$HOME"
-echo "nix profile"
-ls "$HOME/.nix-profile"
-echo "nix profile bin"
-ls "$HOME/.nix-profile/bin"
+export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
+nix-shell '<home-manager>' -A install
+. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
 # remove zshrc and bashrc so home-manager can overwrite them
 # TODO add this into bootstrap.hs and only do this on travis?
