@@ -3,6 +3,11 @@
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
 nix-channel --update
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
+
+echo "home looks like this"
+ls -larth "$HOME"
+echo "is /nix there?"
+find /nix | head
 . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 
 # remove zshrc and bashrc so home-manager can overwrite them
