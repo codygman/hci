@@ -48,3 +48,4 @@
 
 ;; (package! org-roam)
 ;; (package! alert)
+(package! buttercup)
