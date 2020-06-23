@@ -1,2 +1,2 @@
-(load init.el)
+(load "init.el")
 (buttercup-run-discover)
