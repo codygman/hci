@@ -25,10 +25,10 @@
   (should t))
 
 ;; duplicate in init.el
-;; (defun emacs-d-directory ()
-;;   (if (eq nil (getenv "TRAVIS_OS_NAME"))
-;;       "~/.emacs.d/"
-;;     (getenv "TRAVIS_BUILD_DIR")))
+(defun emacs-d-directory ()
+  (if (eq nil (getenv "TRAVIS_OS_NAME"))
+      (format "~/.emacs.d/%s")
+    (getenv "TRAVIS_BUILD_DIR")))
 
 ;; (ert-deftest version-check ()
 ;;   (should (string-equal "27.0.50" emacs-version)))
@@ -45,6 +45,6 @@
 ;; (ert-deftest magit-installed ()
 ;;   (should (fboundp 'magit-version)))
 
-;; (ert-deftest haskell-mode-enabled-opening-haskell-file ()
-;;   (find-file (format "%s/testdata/simple-haskell-project/Main.hs" (my-emacs-everywhere-directory)))
-;;   (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
+(ert-deftest haskell-mode-enabled-opening-haskell-file ()
+  (find-file (emacs-d-directory "testdata/simple-haskell-project/Main.hs"))
+  (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
