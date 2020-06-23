@@ -24,9 +24,6 @@
 (ert-deftest true-is-true ()
   (should t))
 
-(ert-deftest false-is-true ()
-  (should nil))
-
 ;; duplicate in init.el
 ;; (defun emacs-d-directory ()
 ;;   (if (eq nil (getenv "TRAVIS_OS_NAME"))
