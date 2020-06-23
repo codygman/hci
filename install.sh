@@ -4,14 +4,13 @@ set -o errexit
 # nix install
 # TODO use a pinned version
 curl -L https://nixos.org/nix/install | sh
-
+[ ! -f ~/.nix-profile/etc/profile.d/nix.sh ] || . ~/.nix-profile/etc/profile.d/nix.sh
 ln -rs ~/hci/nixpkgs ~/.config/nixpkgs
 
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
 nix-channel --update
 
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
-[ ! -f ~/.nix-profile/etc/profile.d/nix.sh ] || . ~/.nix-profile/etc/profile.d/nix.sh
 # remove zshrc and bashrc so home-manager can overwrite them
 # TODO add this into bootstrap.hs and only do this on travis?
 [ ! -f ~/.bashrc ] || rm -v ~/.bashrc
