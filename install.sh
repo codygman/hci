@@ -5,8 +5,7 @@ set -o errexit
 # TODO use a pinned version
 curl -L https://nixos.org/nix/install | sh
 [ ! -f ~/.nix-profile/etc/profile.d/nix.sh ] || . ~/.nix-profile/etc/profile.d/nix.sh
-ln -rs ~/hci/nixpkgs ~/.config/nixpkgs
-file ~/.config/nixpkgs
+ln -rs nixpkgs ~/.config/nixpkgs
 ls -larth ~/.config/nixpkgs
 
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
