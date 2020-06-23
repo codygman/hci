@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-set -o errexit
 
 # nix install
 # TODO use a pinned version
