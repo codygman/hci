@@ -6,11 +6,7 @@ curl -L https://nixos.org/nix/install | sh
 
 if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
     echo "sourcing nix.sh";
-    echo "PATH before:"
-    echo $PATH
     . ~/.nix-profile/etc/profile.d/nix.sh
-    echo "PATH after:"
-    echo $PATH
 else
     echo "nix.sh doesn't exist, not sourcing"
 fi
