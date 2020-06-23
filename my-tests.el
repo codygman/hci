@@ -41,3 +41,7 @@
 
 (ert-deftest magit-installed ()
   (should (fboundp 'magit-version)))
+
+(ert-deftest haskell-mode-enabled-opening-haskell-file ()
+  (find-file (format "%s/testdata/simple-haskell-project/Main.hs" (my-emacs-everywhere-directory)))
+  (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
