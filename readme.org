@@ -167,8 +167,3 @@ Package should already be there, to add a new one add it to home.nix
 #+begin_src emacs-lisp
 (require 'use-package)
 #+end_src
-*** buttercup
-#+begin_src emacs-lisp
- (use-package buttercup
-    :defer t)
-#+end_src

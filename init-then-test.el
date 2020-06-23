@@ -1,5 +1,3 @@
-(require 'buttercup)
-(buttercup-run-discover)
 
 ;; old tests I want to add some of
 ;; (defun tests-run ()

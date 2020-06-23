@@ -42,7 +42,7 @@ in
     emacs = {
       enable = true;
       package = pkgs.emacs26-nox;
-      extraPackages = epkgs: [ epkgs.buttercup epkgs.use-package ];
+      extraPackages = epkgs: [ epkgs.use-package ];
     };
     bash = {
       enable = true;
