@@ -2,8 +2,11 @@
 
 set -o errexit
 
-# nix install, TODO use
-curl -L https://nixos.org/nix/install | sh
+# nix install
+curl -Os https://nixos.org/releases/nix/nix-2.3.6/nix-2.3.6.tar.xz
+tar xfj nix-2.3.6.tar.xz
+cd nix-2.3.6
+./install
 
 ln -rs ~/hci/nixpkgs ~/.config/nixpkgs
 
