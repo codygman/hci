@@ -27,11 +27,11 @@
       "~/.emacs.d/"
     (getenv "TRAVIS_BUILD_DIR")))
 
-(ert-deftest version-check ()
-  (should (string-equal "27.0.50" emacs-version)))
+;; (ert-deftest version-check ()
+;;   (should (string-equal "27.0.50" emacs-version)))
 
-(ert-deftest straight-el-installed ()
-  (should (fboundp 'straight-use-package)))
+;; (ert-deftest straight-el-installed ()
+;;   (should (fboundp 'straight-use-package)))
 
 (ert-deftest evil-installed ()
   (should (fboundp 'evil-version)))
