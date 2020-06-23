@@ -13,6 +13,7 @@ if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
     echo $PATH
 else
     echo "nix.sh doesn't exist, not sourcing"
+fi
 
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
 
@@ -32,7 +33,11 @@ nix-shell '<home-manager>' -A install
 echo "done installing home manager"
 
 echo "checking we have home-manager"
-[ -x "$(command -v home-manager)" ] || echo "home-manager not installed or not in PATH"; exit 1;
+if [ -x "$(command -v home-manager)" ]; then
+    echo "home-manager not installed or not in PATH"; exit 1;
+else
+    echo "home-manager installed, moving on"
+fi
 
 nix-env -iA cachix -f https://cachix.org/api/v1/install
 
