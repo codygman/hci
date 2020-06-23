@@ -3,10 +3,8 @@
 set -o errexit
 
 # nix install
-curl --silent --remote-name --location https://nixos.org/releases/nix/nix-2.3.6/nix-2.3.6.tar.xz
-tar xf nix-2.3.6.tar.xz
-cd nix-2.3.6
-./install
+# TODO use a pinned version
+curl -L https://nixos.org/nix/install | sh
 
 ln -rs ~/hci/nixpkgs ~/.config/nixpkgs
 
