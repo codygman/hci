@@ -167,3 +167,13 @@ Package should already be there, to add a new one add it to home.nix
 #+begin_src emacs-lisp
 (require 'use-package)
 #+end_src
+*** haskell-mode
+#+begin_src emacs-lisp
+(use-package haskell-mode
+  :mode ("\\.hs\\'" . haskell-mode)
+  :init
+  (message "personal haskell-mode loading")
+  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  (add-hook 'haskell-mode-hook 'haskell-indentation-mode))
+#+end_src
+
