@@ -2,6 +2,9 @@
 
 set -o errexit
 
+# nix install, TODO use
+curl -L https://nixos.org/nix/install | sh
+
 ln -rs ~/hci/nixpkgs ~/.config/nixpkgs
 
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
