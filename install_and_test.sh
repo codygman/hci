@@ -1,5 +1,14 @@
 #!/usr/bin/env sh
 
+function check_installed() {
+    echo "checking we have $1"
+    if [ -x "$(command -v $1)" ]; then
+        echo "$1 installed, moving on"
+    else
+        echo "$1 not installed or not in PATH"; exit 1;
+    fi
+}
+
 # nix install
 # TODO use a pinned version
 curl -L https://nixos.org/nix/install | sh
@@ -28,20 +37,12 @@ echo "installing home manager"
 nix-shell '<home-manager>' -A install
 echo "done installing home manager"
 
-echo "checking we have home-manager"
-if [ -x "$(command -v home-manager)" ]; then
-    echo "home-manager installed, moving on"
-else
-    echo "home-manager not installed or not in PATH"; exit 1;
-fi
+check_installed("home-manager")
 
 nix-env -iA cachix -f https://cachix.org/api/v1/install
 
-echo "checking we have cachix"
-[ -x "$(command -v cachix)" ] && echo "cachix exists, moving on" || echo "cachix failed not installed or not in PATH";
-
-echo "checking we have emacs"
-[ -x "$(command -v emacs)" ] && echo "emacs exists, moving on" || echo "emacs failed not installed or not in PATH";
+check_installed("cachix")
+check_installed("emacs")
 
 echo "configure machine to use cachix"
 cachix use codygman5
