@@ -1,3 +1,4 @@
-(describe "A suite"
-  (it "contains a spec with an expectation"
-    (expect t :to-be t)))
+(describe "hci"
+  (describe "package installation"
+    (it "use package is installed"
+      (expect (fboundp 'use-packag) :to-be-truthy))))
