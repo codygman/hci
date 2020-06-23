@@ -61,7 +61,7 @@ This one requires much more
 ***** SOMEDAY (maybe) jira and others
 ** Be nice to use
 If it's not subjectively nice for me to use, then I probably won't use it as much as I should.
-* Quickstart (warning: not idempotent, don't run more than once)
+* TODO Reproducible Quickstart (warning: not idempotent, don't run more than once)
 ** Assumes =codygman/hci= repo cloned and setup
 *** start emacs in a nix shell
 #+BEGIN_SRC sh
