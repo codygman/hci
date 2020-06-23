@@ -2,3 +2,4 @@ os:
   - linux
 script:
   - bash install_and_test.sh
+  - bash test.sh
