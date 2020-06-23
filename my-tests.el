@@ -8,7 +8,7 @@
   ;; Instead, run the tests interactively, copy the results to a
   ;; text file, and then exit with an appropriate code.
   (setq attempt-stack-overflow-recovery nil
-	attempt-orderly-shutdown-on-fatal-signal nil)
+        attempt-orderly-shutdown-on-fatal-signal nil)
   (unwind-protect
       (progn
 	(ert-run-tests-interactively t)
@@ -21,7 +21,7 @@
 	  (append-to-file (backtrace-to-string (backtrace-get-frames 'backtrace)) nil "test-results.txt"))
       (when (not (getenv "DEBUG_TESTS")) (kill-emacs 2))))))
 
-(defun tests-run-orig
+(defun tests-run-orig ()
     ;; We would like to use `ert-run-tests-batch-and-exit'
     ;; Unfortunately it doesn't work outside of batch mode, and we
     ;; can't use batch mode because we have tests that need windows.
