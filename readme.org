@@ -149,3 +149,16 @@ Very active, very helpful. I hear you can use [[https://www.reddit.com/r/emacs/c
 
 ** straight.el
 *** https://github.com/raxod502/straight.el/issues
+* Configuration
+** load nix pre-installed libraries with use-package
+*** use-package
+#+begin_src emacs-lisp
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (require 'use-package))
+#+end_src
+*** buttercup
+#+begin_src emacs-lisp
+ (use-package buttercup
+    :defer t)
+#+end_src
