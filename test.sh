@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
-set -euo
+set -o errexit
 
 emacs -batch -f package-initialize -L . -f buttercup-run-discover
