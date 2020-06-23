@@ -6,7 +6,10 @@ set -o errexit
 curl -L https://nixos.org/nix/install | sh
 [ ! -f ~/.nix-profile/etc/profile.d/nix.sh ] || . ~/.nix-profile/etc/profile.d/nix.sh
 ln -rs nixpkgs ~/.config/nixpkgs
-ls -larth ~/.config/nixpkgs
+echo "home"
+ls -larth ~/
+echo "hci"
+ls -larth ~/hci
 
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
 nix-channel --update
