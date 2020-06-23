@@ -11,15 +11,15 @@
         attempt-orderly-shutdown-on-fatal-signal nil)
   (unwind-protect
       (progn
-	(ert-run-tests-interactively t)
-	(with-current-buffer "*ert*"
-	  (append-to-file (point-min) (point-max) "test-results.txt")
-	  (when (not (getenv "DEBUG_TESTS")) (kill-emacs (if (zerop (ert-stats-completed-unexpected ert--results-stats)) 0 1))))
-    (unwind-protect
-	(progn
-	  (append-to-file "Error running tests\n" nil "test-results.txt")
-	  (append-to-file (backtrace-to-string (backtrace-get-frames 'backtrace)) nil "test-results.txt"))
-      (when (not (getenv "DEBUG_TESTS")) (kill-emacs 2))))))
+        (ert-run-tests-interactively t)
+        (with-current-buffer "*ert*"
+          (append-to-file (point-min) (point-max) "test-results.txt")
+          (kill-emacs (if (zerop (ert-stats-completed-unexpected ert--results-stats)) 0 1)))
+        (unwind-protect
+            (progn
+              (append-to-file "Error running tests\n" nil "test-results.txt")
+              (append-to-file (backtrace-to-string (backtrace-get-frames 'backtrace)) nil "test-results.txt"))
+          (kill-emacs 2)))))
 
 (ert-deftest true-is-true ()
   (should t))
