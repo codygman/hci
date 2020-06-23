@@ -42,10 +42,10 @@ fi
 nix-env -iA cachix -f https://cachix.org/api/v1/install
 
 echo "checking we have cachix"
-[ -x "$(command -v cachix)" ] || echo "cachix failed not installed or not in PATH"; exit 1;
+[ -x "$(command -v cachix)" ] && echo "cachix exists, moving on" || echo "cachix failed not installed or not in PATH";
 
 echo "checking we have emacs"
-[ -x "$(command -v emacs)" ] || echo "emacs failed not installed or not in PATH"; exit 1;
+[ -x "$(command -v emacs)" ] && echo "emacs exists, moving on" || echo "emacs failed not installed or not in PATH";
 
 echo "configure machine to use cachix"
 cachix use codygman5
