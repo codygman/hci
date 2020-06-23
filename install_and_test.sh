@@ -3,7 +3,17 @@
 # nix install
 # TODO use a pinned version
 curl -L https://nixos.org/nix/install | sh
-[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ] && . ~/.nix-profile/etc/profile.d/nix.sh || echo "nix.sh doesn't exist, not sourcing"
+
+if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+    echo "sourcing nix.sh";
+    echo "PATH before:"
+    echo $PATH
+    . ~/.nix-profile/etc/profile.d/nix.sh
+    echo "PATH after:"
+    echo $PATH
+else
+    echo "nix.sh doesn't exist, not sourcing"
+
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
 
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
