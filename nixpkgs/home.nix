@@ -58,7 +58,8 @@ in
   home = {
     packages = with pkgs; [ fd
                             ripgrep
-                            cachix
+                            # will need to ensure cachix by ci and cachix version here match
+                            # cachix
                             source-code-pro
                             sqlite
                             gcc

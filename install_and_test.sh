@@ -24,6 +24,8 @@ echo "done installing home manager"
 echo "checking we have home-manager"
 [ -x "$(command -v home-manager)" ] || echo "home-manager not installed or not in PATH"; exit 1;
 
+nix-env -iA cachix -f https://cachix.org/api/v1/install
+
 echo "checking we have cachix"
 [ -x "$(command -v cachix)" ] || echo "cachix failed not installed or not in PATH"; exit 1;
 
