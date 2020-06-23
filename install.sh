@@ -18,8 +18,9 @@ export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 [ ! -f ~/.bashrc ] || rm -v ~/.bashrc
 nix-shell '<home-manager>' -A install
 
-[ -x "$(command -v home-manager)" ] || echo "home-manager failed to install"; exit 1;
-[ -x "$(command -v cachix)" ] || echo "cachix failed to install"; exit 1;
+[ -x "$(command -v home-manager)" ] || echo "home-manager not installed or not in PATH"; exit 1;
+[ -x "$(command -v cachix)" ] || echo "cachix failed not installed or not in PATH"; exit 1;
+[ -x "$(command -v emacs)" ] || echo "emacs failed not installed or not in PATH"; exit 1;
 
 echo "configure machine to use cachix"
 cachix use codygman5
