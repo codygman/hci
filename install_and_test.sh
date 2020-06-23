@@ -51,6 +51,5 @@ echo "linking emacs setup"
 ln -rs "$TRAVIS_BUILD_DIR/" "$HOME/.emacs.d"
 
 echo "now trying to run emacs"
-cd "$TRAVIS_BUILD_DIR" || return
-emacs -batch -l init-then-test.el
+emacs -batch -l init-then-test.el -L .
 echo "done trying to run emacs"
