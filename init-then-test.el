@@ -1,4 +1,4 @@
-(message (format "we are in %s" (pwd)))
+(message (format "before we are in %s" (pwd)))
 (load (format "%s/init.el" (getenv "TRAVIS_BUILD_DIR")))
 (message (format "now we are in %s" (pwd)))
 (require 'buttercup)
