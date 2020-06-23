@@ -41,7 +41,7 @@ in
     };
     emacs = {
       enable = true;
-      package = pkgs.emacs26-nox;
+      package = if builtins.getEnv "TRAVIS_OS_NAME" == "" then pkgs.emacs26 else pkgs.emacs26-nox;
       extraPackages = epkgs: [ epkgs.use-package ];
     };
     bash = {
