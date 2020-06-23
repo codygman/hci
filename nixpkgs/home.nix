@@ -41,7 +41,7 @@ in
     };
     emacs = {
       enable = true;
-      emacs = pkgs.emacs-nox;
+      emacs = pkgs.emacs26-nox;
       extraPackages = epkgs: [ epkgs.buttercup ];
     };
     bash = {
