@@ -58,6 +58,7 @@ in
   home = {
     packages = with pkgs; [ fd
                             ripgrep
+                            cachix
                             source-code-pro
                             sqlite
                             gcc
