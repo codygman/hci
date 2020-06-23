@@ -45,6 +45,8 @@
 (ert-deftest true-is-true ()
   (should t))
 
+(ert-deftest false-is-true ()
+  (should nil))
 
 ;; duplicate in init.el
 ;; (defun emacs-d-directory ()
