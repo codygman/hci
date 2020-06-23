@@ -15,8 +15,7 @@ nix-channel --update
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 # remove zshrc and bashrc so home-manager can overwrite them
 # TODO add this into bootstrap.hs and only do this on travis?
-rm -v ~/.bashrc
-rm -v ~/.zshrc
+[ ! -f ~/.bashrc ] || rm -v ~/.bashrc
 nix-shell '<home-manager>' -A install
 
 [ -x "$(command -v home-manager)" ] || echo "home-manager failed to install"; exit 1;
