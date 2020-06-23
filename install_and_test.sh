@@ -26,3 +26,4 @@ nix-shell '<home-manager>' -A install
 echo "configure machine to use cachix"
 cachix use codygman5
 
+emacs -batch -f package-initialize -L . -f buttercup-run-discover

@@ -1,5 +1,4 @@
 os:
   - linux
 script:
-  - bash install.sh
-  - bash test.sh
+  - bash install_and_test.sh
