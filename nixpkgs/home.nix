@@ -21,11 +21,6 @@ let
               lib.warn "MYENV not specified, ONLY core home environment will be available!" [];
 in
 {
-  imports = [
-    ./modules/emacs-init.nix
-    ./emacs.nix
-  ];
-
   nixpkgs  = {
     overlays = [
        (import "${emacs-overlay}")
@@ -43,6 +38,10 @@ in
       enable = true;
       enableZshIntegration = true;
       enableBashIntegration = true;
+    };
+    emacs = {
+      enable = true;
+      extraPackages = epkgs: [ epkgs.buttercup ];
     };
     bash = {
       enable = true;
