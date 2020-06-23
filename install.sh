@@ -49,3 +49,8 @@ cachix use codygman5
 
 echo "linking emacs setup"
 ln -rs "$TRAVIS_BUILD_DIR/" "$HOME/.emacs.d"
+
+
+# TODO rename this file or move back to test.sh
+EMACSFOR="PERSONAL" emacs -nw --load load-init-then-run-ert.el
+cat test-results.txt
