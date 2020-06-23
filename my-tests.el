@@ -21,10 +21,11 @@
       (when (not (getenv "DEBUG_TESTS")) (kill-emacs 2))))))
 
 ;; duplicate in init.el
-(defun my-emacs-everywhere-directory ()
+(defun emacs-d-directory ()
   (if (eq nil (getenv "TRAVIS_OS_NAME"))
       "~/.emacs.d/"
-    "~/build/codygman/my-emacs-everywhere/"))
+    (getenv "TRAVIS_BUILD_DIR")))
+
 (ert-deftest version-check ()
   (should (string-equal "27.0.50" emacs-version)))
 
