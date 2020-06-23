@@ -37,12 +37,12 @@ echo "installing home manager"
 nix-shell '<home-manager>' -A install
 echo "done installing home manager"
 
-check_installed("home-manager")
+check_installed "home-manager"
 
 nix-env -iA cachix -f https://cachix.org/api/v1/install
 
-check_installed("cachix")
-check_installed("emacs")
+check_installed "cachix"
+check_installed "emacs"
 
 echo "configure machine to use cachix"
 cachix use codygman5
