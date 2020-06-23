@@ -6,12 +6,6 @@ set -o errexit
 curl -L https://nixos.org/nix/install | sh
 [ ! -f ~/.nix-profile/etc/profile.d/nix.sh ] || . ~/.nix-profile/etc/profile.d/nix.sh
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
-echo "what's the symlink to nixpkgs look like?"
-file ~/.config/nixpkgs
-echo "home"
-ls -larth ~/
-echo "build"
-ls -larth ~/build
 
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
 nix-channel --update
