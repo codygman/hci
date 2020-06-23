@@ -3,8 +3,8 @@
 set -o errexit
 
 # nix install
-curl -Os https://nixos.org/releases/nix/nix-2.3.6/nix-2.3.6.tar.bz2
-tar xfj nix-2.3.6.tar.xz
+curl -Os https://nixos.org/releases/nix/nix-2.3.6/nix-2.3.6.tar.xz
+tar xf nix-2.3.6.tar.xz
 cd nix-2.3.6
 ./install
 
