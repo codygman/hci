@@ -160,9 +160,7 @@ Package should already be there, to add a new one add it to home.nix
 ** load nix pre-installed libraries with use-package
 *** use-package
 #+begin_src emacs-lisp
-(eval-when-compile
-  ;; Following line is not needed if use-package.el is in ~/.emacs.d
-  (require 'use-package))
+(require 'use-package)
 #+end_src
 *** buttercup
 #+begin_src emacs-lisp
