@@ -1,0 +1,5 @@
+language: nix
+os:
+  - linux
+script:
+  - bash install_home-manager.sh
