@@ -150,6 +150,13 @@ Very active, very helpful. I hear you can use [[https://www.reddit.com/r/emacs/c
 ** straight.el
 *** https://github.com/raxod502/straight.el/issues
 * Configuration
+** Set package-archives to nil so nothing can install packages
+
+Package should already be there, to add a new one add it to home.nix
+
+#+begin_src emacs-lisp
+(setq package-archives nil)
+#+end_src
 ** load nix pre-installed libraries with use-package
 *** use-package
 #+begin_src emacs-lisp
