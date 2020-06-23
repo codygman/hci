@@ -1,3 +1,6 @@
+(ert-deftest true-is-true ()
+  (should t))
+
 ;; TODO checkout ert-expectations https://github.com/emacsorphanage/ert-expectations/blob/aed70e002c4305b66aed7f6d0d48e9addd2dc1e6/ert-expectations.el#L68
 ;; (defun tests-run ()
 ;;   "Run Evil tests."
@@ -33,8 +36,8 @@
 ;; (ert-deftest straight-el-installed ()
 ;;   (should (fboundp 'straight-use-package)))
 
-(ert-deftest evil-installed ()
-  (should (fboundp 'evil-version)))
+;; (ert-deftest evil-installed ()
+;;   (should (fboundp 'evil-version)))
 
 ;; (ert-deftest evil-collection-installed ()
 ;;   (should (fboundp 'evil-collection-init)))
