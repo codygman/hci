@@ -150,7 +150,12 @@ Very active, very helpful. I hear you can use [[https://www.reddit.com/r/emacs/c
 ** straight.el
 *** https://github.com/raxod502/straight.el/issues
 * Configuration
-** Set package-archives to nil so nothing can install packages
+** Prevent use-package from installing anything
+*** Set ensure-function to nil
+#+begin_src emacs-lisp
+(setq use-package-ensure-function 'ignore)
+#+end_src
+*** Set package-archives to nil so there's nothing to install from
 
 Package should already be there, to add a new one add it to home.nix
 
