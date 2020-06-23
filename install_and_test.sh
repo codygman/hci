@@ -3,7 +3,7 @@
 # nix install
 # TODO use a pinned version
 curl -L https://nixos.org/nix/install | sh
-[ ! -f ~/.nix-profile/etc/profile.d/nix.sh ] || . ~/.nix-profile/etc/profile.d/nix.sh
+[ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ] && . ~/.nix-profile/etc/profile.d/nix.sh || echo "nix.sh doesn't exist, not sourcing"
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
 
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
@@ -12,10 +12,10 @@ nix-channel --update
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 # remove zshrc and bashrc so home-manager can overwrite them
 # TODO add this into bootstrap.hs and only do this on travis?
-[ ! -f ~/.bashrc ] || rm -v ~/.bashrc
-[ ! -f ~/.profile ] || rm -v ~/.profile
-[ ! -f ~/.bash_profile ] || rm -v ~/.bash_profile
-[ ! -f ~/.ssh/config ] || rm -v ~/.ssh/config
+[ -f "$HOME/.bashrc" ]       && rm -v "$HOME/.bashrc"       || echo "$HOME/.bashrc doesn't exist"
+[ -f "$HOME/.profile" ]      && rm -v "$HOME/.profile"      || echo "$HOME/.profile doesn't exist"
+[ -f "$HOME/.bash_profile" ] && rm -v "$HOME/.bash_profile" || echo "$HOME/.bash_profile doesn't exist"
+[ -f "$HOME/.ssh/config" ]   && rm -v "$HOME/.ssh/config"   || echo "$HOME/.ssh/config doesn't exist"
 
 echo "installing home manager"
 nix-shell '<home-manager>' -A install
