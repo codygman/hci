@@ -51,5 +51,5 @@ echo "linking emacs setup"
 ln -rs "$TRAVIS_BUILD_DIR/" "$HOME/.emacs.d"
 
 echo "now trying to run emacs"
-emacs -batch -f package-initialize -L . -f buttercup-run-discover
+emacs -batch -l init.el -f package-initialize -L . -f buttercup-run-discover
 echo "done trying to run emacs"
