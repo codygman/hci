@@ -34,9 +34,9 @@ echo "done installing home manager"
 
 echo "checking we have home-manager"
 if [ -x "$(command -v home-manager)" ]; then
-    echo "home-manager not installed or not in PATH"; exit 1;
-else
     echo "home-manager installed, moving on"
+else
+    echo "home-manager not installed or not in PATH"; exit 1;
 fi
 
 nix-env -iA cachix -f https://cachix.org/api/v1/install
