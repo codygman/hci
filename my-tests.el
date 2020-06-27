@@ -89,3 +89,6 @@
   (should (string-equal
            (string-trim (substring-no-properties (nth 0 kill-ring)))
            "functionWeWantInScope :: ()")))
+
+
+;; TODO add ghcide (or hls or hie) and lsp, lsp-ui tests
