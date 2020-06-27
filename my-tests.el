@@ -48,3 +48,44 @@
 (ert-deftest haskell-mode-enabled-opening-haskell-file ()
   (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
   (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
+
+;; TODO test for "jf" escape working
+;; TODO test for "Ctrl u" working
+
+(defun copy-line (arg)
+  "Copy lines (as many as prefix argument) in the kill ring"
+  ;; (interactive "p")
+  (kill-ring-save (line-beginning-position)
+                  (line-beginning-position (+ 1 arg)))
+  (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
+
+(require 'subr-x)
+
+(defun my-append-string-to-file (s filename)
+  (with-temp-buffer
+    (insert s)
+    (write-region (point-min) (point-max) filename t)))
+
+(defun wait-for-ghci ()
+  ;; TODO figure out how to maybe use haskell-mode-interactive-prompt-state
+  (sit-for 2))
+
+(ert-deftest ghci-has-locals-in-scope ()
+  (interactive)
+  (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
+  (my-append-string-to-file "START load-file\n" "debug")
+  (haskell-process-load-file)
+  (wait-for-ghci)
+  ;; (sit-for 5)
+  ;; (sleep-for 5)
+  (with-current-buffer "*simple-haskell-project*"
+    (evil-append-line 1)
+    (insert ":t functionWeWantInScope")
+    (haskell-interactive-mode-return)
+    (sleep-for 3)
+    ;; (wait-for-ghci)
+    (evil-previous-line 1)
+    (copy-line 1))
+  (should (string-equal
+           (string-trim (substring-no-properties (nth 0 kill-ring)))
+           "functionWeWantInScope :: ()")))
