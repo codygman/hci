@@ -21,20 +21,20 @@
               (append-to-file (backtrace-to-string (backtrace-get-frames 'backtrace)) nil "test-results.txt"))
           (kill-emacs 2)))))
 
-(ert-deftest true-is-true ()
-  (should t))
-
 ;; duplicate in init.el
 (defun emacs-d-directory ()
   (if (eq nil (getenv "TRAVIS_OS_NAME"))
       (format "~/.emacs.d/%s")
     (getenv "TRAVIS_BUILD_DIR")))
 
-;; (ert-deftest version-check ()
-;;   (should (string-equal "27.0.50" emacs-version)))
+(ert-deftest true-is-true ()
+  (should t))
 
-;; (ert-deftest straight-el-installed ()
-;;   (should (fboundp 'straight-use-package)))
+(ert-deftest version-check ()
+  (should (string-equal "26.3" emacs-version)))
+
+(ert-deftest use-package-installed ()
+  (should (fboundp 'use-package)))
 
 ;; (ert-deftest evil-installed ()
 ;;   (should (fboundp 'evil-version)))
@@ -45,6 +45,6 @@
 ;; (ert-deftest magit-installed ()
 ;;   (should (fboundp 'magit-version)))
 
-(ert-deftest haskell-mode-enabled-opening-haskell-file ()
-  (find-file (emacs-d-directory "testdata/simple-haskell-project/Main.hs"))
-  (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
+;; (ert-deftest haskell-mode-enabled-opening-haskell-file ()
+;;   (find-file (emacs-d-directory "testdata/simple-haskell-project/Main.hs"))
+;;   (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
