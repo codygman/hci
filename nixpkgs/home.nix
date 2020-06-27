@@ -42,7 +42,13 @@ in
     emacs = {
       enable = true;
       package = if builtins.getEnv "TRAVIS_OS_NAME" == "" then pkgs.emacs26 else pkgs.emacs26-nox;
-      extraPackages = epkgs: [ epkgs.use-package epkgs.haskell-mode ];
+      extraPackages = epkgs: with epkgs; [
+        use-package
+        haskell-mode
+        evil
+        evil-collection
+        magit
+      ];
     };
     bash = {
       enable = true;

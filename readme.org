@@ -167,6 +167,13 @@ Package should already be there, to add a new one add it to home.nix
 #+begin_src emacs-lisp
 (require 'use-package)
 #+end_src
+*** evil
+#+begin_src emacs-lisp
+(use-package evil
+  :config
+  (evil-mode 1)
+  )
+#+end_src
 *** haskell-mode
 #+begin_src emacs-lisp
 (use-package haskell-mode
@@ -176,4 +183,3 @@ Package should already be there, to add a new one add it to home.nix
   (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
   (add-hook 'haskell-mode-hook 'haskell-indentation-mode))
 #+end_src
-

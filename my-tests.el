@@ -22,9 +22,9 @@
           (kill-emacs 2)))))
 
 ;; duplicate in init.el
-(defun emacs-d-directory ()
+(defun emacs-d-directory-for (path)
   (if (eq nil (getenv "TRAVIS_OS_NAME"))
-      (format "~/.emacs.d/%s")
+      (format "~/.emacs.d/%s" path)
     (getenv "TRAVIS_BUILD_DIR")))
 
 (ert-deftest true-is-true ()
@@ -36,15 +36,15 @@
 (ert-deftest use-package-installed ()
   (should (fboundp 'use-package)))
 
-;; (ert-deftest evil-installed ()
-;;   (should (fboundp 'evil-version)))
+(ert-deftest evil-installed ()
+  (should (fboundp 'evil-next-line)))
 
-;; (ert-deftest evil-collection-installed ()
-;;   (should (fboundp 'evil-collection-init)))
+(ert-deftest evil-collection-installed ()
+  (should (fboundp 'evil-collection-init)))
 
-;; (ert-deftest magit-installed ()
-;;   (should (fboundp 'magit-version)))
+(ert-deftest magit-installed ()
+  (should (fboundp 'magit-version)))
 
-;; (ert-deftest haskell-mode-enabled-opening-haskell-file ()
-;;   (find-file (emacs-d-directory "testdata/simple-haskell-project/Main.hs"))
-;;   (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
+(ert-deftest haskell-mode-enabled-opening-haskell-file ()
+  (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
+  (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
