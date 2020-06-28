@@ -90,22 +90,22 @@
   ;; TODO figure out how to maybe use haskell-mode-interactive-prompt-state
   (sit-for 5))
 
-(ert-deftest ghci-has-locals-in-scope ()
-  (interactive)
-  (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
-  (my-append-string-to-file "START load-file\n" "debug")
-  (haskell-process-load-file)
-  (sit-for 5)
-  (with-current-buffer "*simple-haskell-project*"
-    (evil-append-line 1)
-    (insert ":t functionWeWantInScope")
-    (haskell-interactive-mode-return)
-    (sit-for 7)
-    (evil-previous-line 1)
-    (copy-line 1))
-  (should (string-equal
-           (string-trim (substring-no-properties (nth 0 kill-ring)))
-           "functionWeWantInScope :: ()")))
+;; (ert-deftest ghci-has-locals-in-scope ()
+;;   (interactive)
+;;   (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
+;;   (my-append-string-to-file "START load-file\n" "debug")
+;;   (haskell-process-load-file)
+;;   (sit-for 5)
+;;   (with-current-buffer "*simple-haskell-project*"
+;;     (evil-append-line 1)
+;;     (insert ":t functionWeWantInScope")
+;;     (haskell-interactive-mode-return)
+;;     (sit-for 7)
+;;     (evil-previous-line 1)
+;;     (copy-line 1))
+;;   (should (string-equal
+;;            (string-trim (substring-no-properties (nth 0 kill-ring)))
+;;            "functionWeWantInScope :: ()")))
 
 ;; evil
 (ert-deftest ctrl-u-scrolls-up ()
@@ -115,7 +115,26 @@
     ;; NOTE this isn't perfectly accurate because for some reason emacs on command line when run with tests-run seems to scroll up a different number for.
     ;; however, this test is proven by the position of the line number changing at all
     ;; TODO figure out how to make this more exact
-    (should (eq (line-number-at-pos) 15))
+    (should (eq (line-number-at-pos) 13))
     )
+
+(ert-deftest emacs-direnv-works ()
+
+  ;; (should (eq nil (executable-find "hello"))) 
+
+  (shell-command "systemctl --user start lorri.socket")
+  (shell-command
+   (format "cd %s; direnv allow"
+	   (emacs-d-directory-for "testdata/direnv/hello")))
+  (find-file (emacs-d-directory-for "testdata/direnv/hello/.envrc"))
+  (should (derived-mode-p 'direnv-envrc-mode))
+  (sit-for 2)
+  (should (executable-find "hello"))
+
+  (find-file (emacs-d-directory-for ""))
+  (delete-other-windows)
+
+  (should (eq nil (executable-find "hello")))
+  )
 
 ;; TODO add ghcide (or hls or hie) and lsp, lsp-ui tests

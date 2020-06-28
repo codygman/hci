@@ -185,3 +185,9 @@ Package should already be there, to add a new one add it to home.nix
   (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
   (add-hook 'haskell-mode-hook 'haskell-indentation-mode))
 #+end_src
+*** direnv mode
+#+begin_src emacs-lisp
+(use-package direnv
+ :config
+ (direnv-mode))
+#+end_src

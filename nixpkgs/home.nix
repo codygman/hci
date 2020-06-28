@@ -34,6 +34,7 @@ in
         evil
         evil-collection
         magit
+	direnv
       ];
     };
 
@@ -72,6 +73,7 @@ in
   };
 
   services = {
+    lorri.enable = true;
   };
 
 }
