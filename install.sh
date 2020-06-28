@@ -20,6 +20,14 @@ else
     echo "nix.sh doesn't exist, not sourcing"
 fi
 
+nix-env -iA cachix -f https://cachix.org/api/v1/install
+check_installed "cachix"
+echo "configure machine to use cachix"
+cachix use codygman5
+echo "start cachix push watcher for nix store, logging to nohup.out"
+nohup cachix push --watch-store /nix/store &
+sleep 2
+
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
 
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
@@ -33,13 +41,6 @@ export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 [ -f "$HOME/.bash_profile" ] && rm -v "$HOME/.bash_profile" || echo "$HOME/.bash_profile doesn't exist"
 [ -f "$HOME/.ssh/config" ]   && rm -v "$HOME/.ssh/config"   || echo "$HOME/.ssh/config doesn't exist"
 
-nix-env -iA cachix -f https://cachix.org/api/v1/install
-check_installed "cachix"
-echo "configure machine to use cachix"
-cachix use codygman5
-echo "start cachix push watcher for nix store, logging to nohup.out"
-nohup cachix push --watch-store /nix/store &
-sleep 2
 
 echo "installing home manager"
 nix-shell '<home-manager>' -A install
