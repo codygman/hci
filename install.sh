@@ -28,6 +28,16 @@ echo "start cachix push watcher for nix store, logging to nohup.out"
 nohup cachix push --watch-store /nix/store &
 sleep 2
 
+echo "cachix watcher update"
+cat nohup.out
+
+nix-env -iA nixpkgs.hello
+
+sleep 20
+
+echo "cachix watcher update"
+cat nohup.out
+
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
 
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
