@@ -2,6 +2,8 @@
 
 set -o errexit
 
+cachix use codygman5
+
 function check_installed() {
     echo "checking we have $1"
     if [ -x "$(command -v $1)" ]; then
