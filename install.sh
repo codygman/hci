@@ -34,18 +34,18 @@ echo "configure machine to use cachix"
 cachix use codygman6
 echo "start cachix push watcher for nix store, logging to nohup.out"
 
-nohup bash -c "cachix push --watch-store codygman6" 2>&1 &
+nohup bash -c "cd $TRAVIS_BUILD_DIR; cachix push --watch-store codygman6" 2>&1 &
 sleep 2
 
 echo "cachix watcher update"
-cat nohup.out
+cd $TRAVIS_BUILD_DIR && cat nohup.out
 
 nix-env -iA nixpkgs.hello
 
 sleep 20
 
 echo "cachix watcher update"
-cat nohup.out
+cd $TRAVIS_BUILD_DIR && cat nohup.out
 
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
 
@@ -79,3 +79,7 @@ echo "version:"
 bash --version
 #bash test.sh
 #bash extra.sh
+
+
+echo "cachix watcher final update"
+cd $TRAVIS_BUILD_DIR && cat nohup.out
