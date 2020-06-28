@@ -23,12 +23,15 @@ nix-channel --update
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 export PATH=$HOME/.nix-profile/bin:$PATH
 
+nix-shell '<home-manager>' -A install
+
 echo "realpath of nixpkgs before ln: $(realpath ~/.config/nixpkgs)"
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
 echo "ls of nixpkgs after ln: "
 ls ~/.config/nixpkgs
 echo "realpath of nixpkgs before install: $(realpath ~/.config/nixpkgs)"
-nix-shell '<home-manager>' -A install
+
+home-manager switch
 
 check_installed "emacs"
 
