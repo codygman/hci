@@ -50,15 +50,8 @@
       (format "~/.emacs.d/%s" path)
     (getenv "TRAVIS_BUILD_DIR")))
 
-
-(ert-deftest false-is-true ()
-  (should nil))
-
-;; (ert-deftest true-is-true ()
-;;   (should t))
-
-;; (ert-deftest version-check ()
-;;   (should (string-equal "26.3" emacs-version)))
+(ert-deftest version-check ()
+  (should (string-equal "26.3" emacs-version)))
 
 ;; (ert-deftest use-package-installed ()
 ;;   (should (fboundp 'use-package)))

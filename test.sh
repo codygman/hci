@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "before: \n$PATH"
+# echo "before: \n$PATH"
 if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
     echo "sourcing"
     . ~/.nix-profile/etc/profile.d/nix.sh
