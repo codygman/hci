@@ -30,6 +30,9 @@ ln -sv "$HCI_DIR/nixpkgs" /home/runner/.config/nixpkgs
 # TODO add this into bootstrap.hs and only do this on CI?
 [[ ! -f ~/.bashrc ]] || rm -v ~/.bashrc
 [[ ! -f ~/.zshrc ]] || rm -v ~/.zshrc
+[[ ! -f ~/.bash_profile ]] || rm -v ~/.bash_profile
+[[ ! -f ~/.profile ]] || rm -v ~/.profile
+
 nix-shell '<home-manager>' -A install
 
 check_installed "emacs"
