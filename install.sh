@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+
+[ -z "$CACHIX_SIGNING_KEY" ] && echo "CACHIX_SIGNING_KEY not set, failing NOW!"; exit 1
+
+
 function check_installed() {
     echo "checking we have $1"
     if [ -x "$(command -v $1)" ]; then
