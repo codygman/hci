@@ -23,16 +23,8 @@ nix-channel --update
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 export PATH=$HOME/.nix-profile/bin:$PATH
 
-# echo "what does nixpkgs look like before home-manager install?"
-# ls -larth /home/runner/.config/nixpkgs
-# echo "this should be same:"
-# ls -larth ~/.config/nixpkgs
-nix-shell '<home-manager>' -A install
+ln -sv "$TRAVIS_BUILD_DIR/nixpkgs" /home/runner/.config/nixpkgs/
 
-echo "realpath of nixpkgs before ln: $(realpath ~/.config/nixpkgs)"
-echo "removing ~/.config/nixpkgs to replace with our own"
-rm -rv ~/.config/nixpkgs
-ln -s "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
 echo ""
 echo ""
 echo "all folders of ~/.config/nixpkgs "
@@ -45,13 +37,8 @@ echo "cat of ~/.config/nixpkgs/home.nix"
 cat cat of ~/.config/nixpkgs/home.nix
 echo ""
 echo ""
-echo "ls of nixpkgs after ln: "
-ls -larth ~/.config/nixpkgs
-echo "
-ls -larth ~/.config/nixpkgs/nixpkgs
-echo "realpath of nixpkgs before install: $(realpath ~/.config/nixpkgs)"
 
-home-manager switch
+nix-shell '<home-manager>' -A install
 
 check_installed "emacs"
 
