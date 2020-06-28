@@ -68,22 +68,19 @@
 
 (defun wait-for-ghci ()
   ;; TODO figure out how to maybe use haskell-mode-interactive-prompt-state
-  (sit-for 2))
+  (sit-for 5))
 
 (ert-deftest ghci-has-locals-in-scope ()
   (interactive)
   (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
   (my-append-string-to-file "START load-file\n" "debug")
   (haskell-process-load-file)
-  (wait-for-ghci)
-  ;; (sit-for 5)
-  ;; (sleep-for 5)
+  (sit-for 5)
   (with-current-buffer "*simple-haskell-project*"
     (evil-append-line 1)
     (insert ":t functionWeWantInScope")
     (haskell-interactive-mode-return)
-    (sleep-for 3)
-    ;; (wait-for-ghci)
+    (sit-for 5)
     (evil-previous-line 1)
     (copy-line 1))
   (should (string-equal
