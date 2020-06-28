@@ -66,6 +66,7 @@ in
                             # will need to ensure cachix by ci and cachix version here match
                             # cachix
                             ghc
+			    stack
                             source-code-pro
                             sqlite
                             gcc
