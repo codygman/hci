@@ -31,9 +31,9 @@ fi
 nix-env -iA cachix -f https://cachix.org/api/v1/install
 check_installed "cachix"
 echo "configure machine to use cachix"
-cachix use codygman5
+cachix use codygman6
 echo "start cachix push watcher for nix store, logging to nohup.out"
-nohup cachix push --watch-store codygman5 &
+nohup cachix push --watch-store codygman6 &
 sleep 2
 
 echo "cachix watcher update"
