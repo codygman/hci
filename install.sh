@@ -47,5 +47,9 @@ check_installed "emacs"
 echo "configure machine to use cachix"
 cachix use codygman5
 
+echo "start cachix push watcher for nix store, logging to nohup.out"
+nohup cachix push --watch-store /nix/store &
+sleep 2
+
 echo "linking emacs setup"
 ln -rs "$TRAVIS_BUILD_DIR/" "$HOME/.emacs.d"
