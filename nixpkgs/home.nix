@@ -21,12 +21,6 @@ let
               lib.warn "MYENV not specified, ONLY core home environment will be available!" [];
 in
 {
-  nixpkgs  = {
-    overlays = [
-       (import "${emacs-overlay}")
-    ];
-  };
-
   programs = {
     home-manager.enable = true;
     git = {
@@ -41,7 +35,8 @@ in
     };
     emacs = {
       enable = true;
-      package = if builtins.getEnv "TRAVIS_OS_NAME" == "" then pkgs.emacs26 else pkgs.emacs26-nox;
+      # package = if builtins.getEnv "TRAVIS_OS_NAME" == "" then emacs-overlay.emacs else pkgs.emacs-nox;
+      package = pkgs.emacsGit;
       extraPackages = epkgs: with epkgs; [
         use-package
         haskell-mode
