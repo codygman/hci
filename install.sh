@@ -33,7 +33,8 @@ check_installed "cachix"
 echo "configure machine to use cachix"
 cachix use codygman6
 echo "start cachix push watcher for nix store, logging to nohup.out"
-nohup cachix push --watch-store codygman6 &
+
+nohup bash -c "cachix push --watch-store codygman6" 2>&1 &
 sleep 2
 
 echo "cachix watcher update"
@@ -48,8 +49,8 @@ cat nohup.out
 
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
 
-nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
-nix-channel --update
+# nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
+# nix-channel --update
 
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 # remove zshrc and bashrc so home-manager can overwrite them
@@ -60,13 +61,13 @@ export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 [ -f "$HOME/.ssh/config" ]   && rm -v "$HOME/.ssh/config"   || echo "$HOME/.ssh/config doesn't exist"
 
 
-echo "installing home manager"
-nix-shell '<home-manager>' -A install
-echo "done installing home manager"
+# echo "installing home manager"
+# nix-shell '<home-manager>' -A install
+# echo "done installing home manager"
 
-check_installed "home-manager"
+# check_installed "home-manager"
 
-check_installed "emacs"
+# check_installed "emacs"
 
 
 echo "linking emacs setup"
