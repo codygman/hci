@@ -23,6 +23,9 @@ nix-channel --update
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 export PATH=$HOME/.nix-profile/bin:$PATH
 
+echo "realpath of nixpkgs before ln: $(realpath ~/.config/nixpkgs)"
+echo "ls of nixpkgs before ln: "
+ls ~/.config/nixpkgs
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
 echo "realpath of nixpkgs before install: $(realpath ~/.config/nixpkgs)"
 nix-shell '<home-manager>' -A install
