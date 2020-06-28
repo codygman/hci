@@ -23,6 +23,7 @@ nix-channel --update
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 export PATH=$HOME/.nix-profile/bin:$PATH
 
+env | grep -i travis | grep -i dir
 ln -sv "$TRAVIS_BUILD_DIR/hci/nixpkgs" /home/runner/.config/nixpkgs
 
 echo ""
