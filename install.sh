@@ -14,8 +14,12 @@ function check_installed() {
     echo "checking we have $1"
     if [ -x "$(command -v $1)" ]; then
         echo "$1 installed, moving on"
+	echo ""
+	echo ""
+	echo ""
     else
-        echo "$1 not installed or not in PATH"; exit 1;
+        echo "$1 not installed or not in PATH";
+	exit 1;
     fi
 }
 
@@ -29,6 +33,7 @@ if [ -f "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
 else
     echo "nix.sh doesn't exist, not sourcing"
 fi
+check_installed "nix-build"
 
 nix-env -iA cachix -f https://cachix.org/api/v1/install
 check_installed "cachix"
