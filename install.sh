@@ -66,13 +66,13 @@ export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 [ -f "$HOME/.ssh/config" ]   && rm -v "$HOME/.ssh/config"   || echo "$HOME/.ssh/config doesn't exist"
 
 
-# echo "installing home manager"
-# nix-shell '<home-manager>' -A install
-# echo "done installing home manager"
+echo "installing home manager"
+nix-shell '<home-manager>' -A install
+echo "done installing home manager"
 
-# check_installed "home-manager"
+check_installed "home-manager"
 
-# check_installed "emacs"
+check_installed "emacs"
 
 
 echo "linking emacs setup"
