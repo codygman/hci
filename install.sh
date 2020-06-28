@@ -5,7 +5,7 @@ if [ -z "$CACHIX_SIGNING_KEY" ]; then
     echo "CACHIX_SIGNING_KEY not set, failing NOW!";
     exit 1
 fi
-    
+   
 
 
 function check_installed() {
@@ -30,6 +30,7 @@ fi
 
 nix-env -iA cachix -f https://cachix.org/api/v1/install
 check_installed "cachix"
+cachix authtoken "$CACHIX_AUTH_TOKEN"
 echo "configure machine to use cachix"
 cachix use codygman5
 echo "start cachix push watcher for nix store, logging to nohup.out"
