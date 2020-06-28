@@ -31,8 +31,22 @@ nix-shell '<home-manager>' -A install
 
 echo "realpath of nixpkgs before ln: $(realpath ~/.config/nixpkgs)"
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
+echo ""
+echo ""
+echo "all folders of ~/.config/nixpkgs "
+ls -larth -R ~/.config/nixpkgs/
+echo ""
+echo ""
+echo ""
+echo ""
+echo "cat of ~/.config/nixpkgs/home.nix"
+cat cat of ~/.config/nixpkgs/home.nix
+echo ""
+echo ""
 echo "ls of nixpkgs after ln: "
-ls ~/.config/nixpkgs
+ls -larth ~/.config/nixpkgs
+echo "
+ls -larth ~/.config/nixpkgs/nixpkgs
 echo "realpath of nixpkgs before install: $(realpath ~/.config/nixpkgs)"
 
 home-manager switch
