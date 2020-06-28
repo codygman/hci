@@ -3,7 +3,6 @@
 (defun log (msg)
   (append-to-file (format "%s\n" msg) nil "test-results.txt"))
 
-
 (defun tests-run ()
   ;; We would like to use `ert-run-tests-batch-and-exit'
   ;; Unfortunately it doesn't work outside of batch mode, and we
@@ -126,23 +125,23 @@
 ;;     (should (eq (line-number-at-pos) 13))
 ;;     )
 
-(ert-deftest emacs-direnv-works ()
-  (log "emacs-direnv-works")
+;; (ert-deftest emacs-direnv-works ()
+;;   (log "emacs-direnv-works")
 
-  (should (eq nil (executable-find "hello"))) 
+;;   (should (eq nil (executable-find "hello"))) 
 
-  (shell-command "systemctl --user start lorri.socket")
-  (shell-command
-   (format "cd %s; direnv allow"
-	   (emacs-d-directory-for "testdata/direnv/hello")))
-  (find-file (emacs-d-directory-for "testdata/direnv/hello/.envrc"))
-  (should (derived-mode-p 'direnv-envrc-mode))
-  (should (string-equal "/home/cody/.emacs.d/testdata/direnv/hello/" default-directory))
-  (direnv-allow)
-  (should (executable-find "hello"))
+;;   (shell-command "systemctl --user start lorri.socket")
+;;   (shell-command
+;;    (format "cd %s; direnv allow"
+;; 	   (emacs-d-directory-for "testdata/direnv/hello")))
+;;   (find-file (emacs-d-directory-for "testdata/direnv/hello/.envrc"))
+;;   (should (derived-mode-p 'direnv-envrc-mode))
+;;   (should (string-equal "/home/cody/.emacs.d/testdata/direnv/hello/" default-directory))
+;;   (direnv-allow)
+;;   (should (executable-find "hello"))
 
-  (find-file (emacs-d-directory-for ""))
-  (should (eq nil (executable-find "hello")))
-  )
+;;   (find-file (emacs-d-directory-for ""))
+;;   (should (eq nil (executable-find "hello")))
+;;   )
 
 ;; TODO add ghcide (or hls or hie) and lsp, lsp-ui tests
