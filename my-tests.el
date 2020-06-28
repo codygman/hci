@@ -11,7 +11,9 @@
   ;; Instead, run the tests interactively, copy the results to a
   ;; text file, and then exit with an appropriate code.
   (setq attempt-stack-overflow-recovery nil
-	attempt-orderly-shutdown-on-fatal-signal nil)
+	attempt-orderly-shutdown-on-fatal-signal nil
+	debug nil
+	)
   (unwind-protect
       (progn
 	(ert-run-tests-interactively t)
@@ -21,8 +23,10 @@
 	    ;; (log (format "failed tests: %s" (princ failed-tests)))
 	    ;; (log (format "zerop failed-tests ==  %s" (princ (zerop failed-tests))))
 	    (if (zerop failed-tests)
-		(progn (log "0 failed tests, exiting with code 0") (kill-emacs 0))
-	      (progn (log "at least 1 failed test, exiting with code 1") (kill-emacs 1)))
+		(progn (log "0 failed tests, exiting with code 0")
+		       (when (not debug) (kill-emacs 0)))
+	      (progn (log "at least 1 failed test, exiting with code 1")
+		     (when (not debug) (kill-emacs 1))))
 
 	    (if nil
 		(message "not nil")
