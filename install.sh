@@ -22,13 +22,9 @@ nix-channel --update
 
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 export PATH=$HOME/.nix-profile/bin:$PATH
+export HCI_DIR=/home/runner/work/hci/hci/
 
-echo "here is what home directory looks like:"
-ls ~
-
-env | grep -i travis | grep -i dir
-echo "linking hci nixpkgs"
-ln -sv "$TRAVIS_BUILD_DIR/hci/nixpkgs" /home/runner/.config/nixpkgs
+ln -sv "$HCI_DIR/nixpkgs" /home/runner/.config/nixpkgs
 
 echo ""
 echo ""
@@ -52,7 +48,7 @@ echo "nix profile bin"
 ls $HOME/.nix-profile/bin
 
 # remove zshrc and bashrc so home-manager can overwrite them
-# TODO add this into bootstrap.hs and only do this on travis?
+# TODO add this into bootstrap.hs and only do this on CI?
 [[ ! -f ~/.bashrc ]] || rm -v ~/.bashrc
 [[ ! -f ~/.zshrc ]] || rm -v ~/.zshrc
 home-manager switch
