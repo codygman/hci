@@ -30,6 +30,8 @@ export PATH=$HOME/.nix-profile/bin:$PATH
 nix-shell '<home-manager>' -A install
 
 echo "realpath of nixpkgs before ln: $(realpath ~/.config/nixpkgs)"
+echo "removing ~/.config/nixpkgs to replace with our own"
+rm -rv ~/.config/nixpkgs
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
 echo ""
 echo ""
