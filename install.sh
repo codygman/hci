@@ -30,11 +30,10 @@ fi
 
 nix-env -iA cachix -f https://cachix.org/api/v1/install
 check_installed "cachix"
-cachix authtoken "$CACHIX_AUTH_TOKEN"
 echo "configure machine to use cachix"
-cachix use codygman6
+cachix use codygman5
 echo "start cachix push watcher for nix store, logging to nohup.out"
-nohup cachix push --watch-store /nix/store &
+nohup cachix push --watch-store codygman5 &
 sleep 2
 
 echo "cachix watcher update"
