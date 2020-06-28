@@ -18,8 +18,8 @@
 	(with-current-buffer "*ert*"
 	  (append-to-file (point-min) (point-max) "test-results.txt")
 	  (let ((failed-tests (ert-stats-completed-unexpected ert--results-stats)))
-	    (append-to-file (format "failed tests: %s\n\n" (princ failed-tests)) nil "test-results.txt")
-	    (append-to-file (format "zerop failed-tests ==  %s\n\n" (princ (zerop failed-tests))) nil "test-results.txt")
+	    (log (format "failed tests: %s\n\n" (princ failed-tests)))
+	    (log (format "zerop failed-tests ==  %s\n\n" (princ (zerop failed-tests))))
 	    (if (zerop failed-tests)
 		(progn (log "0 failed tests, exiting with code 0") (kill-emacs 0))
 	      (progn (log "at least 1 failed test, exiting with code 1") (kill-emacs 1)))
@@ -32,10 +32,10 @@
 	  ))
     (unwind-protect
 	(progn
-	  (append-to-file "Error running tests\n" nil "test-results.txt")
+	  (log "Error running tests\n")
 	  ;; (append-to-file (format "backtrace: %s" (princ (backtrace-get-frames 'backtrace))) nil "test-results.txt")
 
-	  (append-to-file (backtrace-to-string (backtrace-get-frames 'backtrace)) nil "test-results.txt")
+	  (log (backtrace-to-string (backtrace-get-frames 'backtrace)))
 	  ;; (let ((backtrace-frames (backtrace-get-frames 'backtrace)))
 	  ;;   (when backtrace-frames
 	  ;;     (append-to-file (backtrace-to-string backtrace-frames) nil "test-results.txt")
