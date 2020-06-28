@@ -10,7 +10,9 @@ fi
 home-manager switch
 # echo "running emacs: $(which emacs)"
 EMACSFOR="PERSONAL" emacs -nw --load load-init-then-run-ert.el
+emacsExitCode = $?;
 cat test-results.txt
-if [ -f "test-results.txt" ]; then
-    rm test-results.txt
-fi
+exit $emacsExitCode;
+# if [ -f "test-results.txt" ]; then
+    # rm test-results.txt
+# fi
