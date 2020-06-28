@@ -170,6 +170,8 @@ Package should already be there, to add a new one add it to home.nix
 *** evil
 #+begin_src emacs-lisp
 (use-package evil
+  :init
+  (setq evil-want-C-u-scroll t)
   :config
   (evil-mode 1)
   )
