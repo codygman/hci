@@ -23,10 +23,10 @@ nix-channel --update
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 export PATH=$HOME/.nix-profile/bin:$PATH
 
-echo "what does nixpkgs look like before home-manager install?"
-ls -larth /home/runner/.config/nixpkgs
-echo "this should be same:"
-ls -larth ~/.config/nixpkgs
+# echo "what does nixpkgs look like before home-manager install?"
+# ls -larth /home/runner/.config/nixpkgs
+# echo "this should be same:"
+# ls -larth ~/.config/nixpkgs
 nix-shell '<home-manager>' -A install
 
 echo "realpath of nixpkgs before ln: $(realpath ~/.config/nixpkgs)"
