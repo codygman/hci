@@ -1,3 +1,4 @@
 /doom/config.el
 /nixpkgs/result
 *.swp
+/readme.el

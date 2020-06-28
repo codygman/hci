@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 
 set -o errexit
 
@@ -15,7 +15,6 @@ function check_installed() {
 	exit 1;
     fi
 }
-
 
 nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
 nix-channel --update

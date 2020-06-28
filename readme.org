@@ -61,7 +61,7 @@ This one requires much more
 ***** SOMEDAY (maybe) jira and others
 ** Be nice to use
 If it's not subjectively nice for me to use, then I probably won't use it as much as I should.
-* Quickstart (warning: not idempotent, don't run more than once)
+* TODO Reproducible Quickstart (warning: not idempotent, don't run more than once)
 ** Assumes =codygman/hci= repo cloned and setup
 *** start emacs in a nix shell
 #+BEGIN_SRC sh
@@ -149,3 +149,45 @@ Very active, very helpful. I hear you can use [[https://www.reddit.com/r/emacs/c
 
 ** straight.el
 *** https://github.com/raxod502/straight.el/issues
+* Configuration
+** Prevent use-package from installing anything
+*** Set ensure-function to nil
+#+begin_src emacs-lisp
+(setq use-package-ensure-function 'ignore)
+#+end_src
+*** Set package-archives to nil so there's nothing to install from
+
+Package should already be there, to add a new one add it to home.nix
+
+#+begin_src emacs-lisp
+(setq package-archives nil)
+#+end_src
+** load nix pre-installed libraries with use-package
+*** use-package
+#+begin_src emacs-lisp
+(require 'use-package)
+#+end_src
+*** evil
+#+begin_src emacs-lisp
+(use-package evil
+  :init
+  (setq evil-want-C-u-scroll t)
+  :config
+  (evil-mode 1)
+  )
+#+end_src
+*** haskell-mode
+#+begin_src emacs-lisp
+(use-package haskell-mode
+  :mode ("\\.hs\\'" . haskell-mode)
+  :init
+  (message "personal haskell-mode loading")
+  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+  (add-hook 'haskell-mode-hook 'haskell-indentation-mode))
+#+end_src
+*** direnv mode
+#+begin_src emacs-lisp
+(use-package direnv
+ :config
+ (direnv-envrc-mode))
+#+end_src
