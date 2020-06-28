@@ -51,7 +51,7 @@
     (getenv "TRAVIS_BUILD_DIR")))
 
 (ert-deftest version-check ()
-  (should (string-equal "26.3" emacs-version)))
+  (should (string-equal "28.0.50" emacs-version)))
 
 ;; (ert-deftest use-package-installed ()
 ;;   (should (fboundp 'use-package)))
