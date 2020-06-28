@@ -26,19 +26,6 @@ export HCI_DIR=/home/runner/work/hci/hci/
 
 ln -sv "$HCI_DIR/nixpkgs" /home/runner/.config/nixpkgs
 
-echo ""
-echo ""
-echo "all folders of ~/.config/nixpkgs "
-ls -larth -R ~/.config/nixpkgs/
-echo ""
-echo ""
-echo ""
-echo ""
-echo "cat of ~/.config/nixpkgs/home.nix"
-cat cat of ~/.config/nixpkgs/home.nix
-echo ""
-echo ""
-
 nix-shell '<home-manager>' -A install
 
 check_installed "emacs"
