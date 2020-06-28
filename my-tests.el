@@ -100,7 +100,7 @@
     (evil-append-line 1)
     (insert ":t functionWeWantInScope")
     (haskell-interactive-mode-return)
-    (sit-for 5)
+    (sit-for 7)
     (evil-previous-line 1)
     (copy-line 1))
   (should (string-equal
