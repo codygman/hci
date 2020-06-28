@@ -1,7 +1,7 @@
 (require 'ert)
 
 (defun log (msg)
-  (append-to-file msg nil "test-results.txt"))
+  (append-to-file (format "%s\n" msg) nil "test-results.txt"))
 
 
 (defun tests-run ()
@@ -18,8 +18,8 @@
 	(with-current-buffer "*ert*"
 	  (append-to-file (point-min) (point-max) "test-results.txt")
 	  (let ((failed-tests (ert-stats-completed-unexpected ert--results-stats)))
-	    (log (format "failed tests: %s\n\n" (princ failed-tests)))
-	    (log (format "zerop failed-tests ==  %s\n\n" (princ (zerop failed-tests))))
+	    ;; (log (format "failed tests: %s" (princ failed-tests)))
+	    ;; (log (format "zerop failed-tests ==  %s" (princ (zerop failed-tests))))
 	    (if (zerop failed-tests)
 		(progn (log "0 failed tests, exiting with code 0") (kill-emacs 0))
 	      (progn (log "at least 1 failed test, exiting with code 1") (kill-emacs 1)))
