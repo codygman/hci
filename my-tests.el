@@ -53,21 +53,21 @@
 (ert-deftest version-check ()
   (should (string-equal "28.0.50" emacs-version)))
 
-;; (ert-deftest use-package-installed ()
-;;   (should (fboundp 'use-package)))
+(ert-deftest use-package-installed ()
+  (should (fboundp 'use-package)))
 
-;; (ert-deftest evil-installed ()
-;;   (should (fboundp 'evil-next-line)))
+(ert-deftest evil-installed ()
+  (should (fboundp 'evil-next-line)))
 
-;; (ert-deftest evil-collection-installed ()
-;;   (should (fboundp 'evil-collection-init)))
+(ert-deftest evil-collection-installed ()
+  (should (fboundp 'evil-collection-init)))
 
-;; (ert-deftest magit-installed ()
-;;   (should (fboundp 'magit-version)))
+(ert-deftest magit-installed ()
+  (should (fboundp 'magit-version)))
 
-;; (ert-deftest haskell-mode-enabled-opening-haskell-file ()
-;;   (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
-;;   (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
+(ert-deftest haskell-mode-enabled-opening-haskell-file ()
+  (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
+  (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
 
 ;; ;; TODO test for "jf" escape working
 ;; ;; TODO test for "Ctrl u" working
