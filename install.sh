@@ -41,7 +41,7 @@ echo "configure machine to use cachix"
 cachix use codygman6
 echo "start cachix push watcher for nix store, logging to nohup.out"
 
-nohup bash -c "cd $TRAVIS_BUILD_DIR; cachix push --watch-store codygman6" 2>&1 &
+nohup bash -c "cd $TRAVIS_BUILD_DIR; cachix push --watch-store codygman6" 2>&1 > "$TRAVIS_BUILD_DIR/nohup.out" &
 sleep 2
 
 echo "cachix watcher update"
