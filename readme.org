@@ -189,5 +189,5 @@ Package should already be there, to add a new one add it to home.nix
 #+begin_src emacs-lisp
 (use-package direnv
  :config
- (direnv-mode))
+ (direnv-envrc-mode))
 #+end_src

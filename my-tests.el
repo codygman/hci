@@ -13,6 +13,7 @@
   (setq attempt-stack-overflow-recovery nil
 	attempt-orderly-shutdown-on-fatal-signal nil
 	debug nil
+	debug-on-error t
 	)
   (unwind-protect
       (progn
@@ -22,15 +23,15 @@
 	  (let ((failed-tests (ert-stats-completed-unexpected ert--results-stats)))
 	    ;; (log (format "failed tests: %s" (princ failed-tests)))
 	    ;; (log (format "zerop failed-tests ==  %s" (princ (zerop failed-tests))))
+	    (log "checking failed tests")
 	    (if (zerop failed-tests)
 		(progn (log "0 failed tests, exiting with code 0")
 		       (when (not debug) (kill-emacs 0)))
 	      (progn (log "at least 1 failed test, exiting with code 1")
 		     (when (not debug) (kill-emacs 1))))
+	    (log "done checking failed tests")
 
-	    (if nil
-		(message "not nil")
-	      (message "nil"))
+	    
 	    
 	    )
 	  ))
@@ -39,13 +40,14 @@
 	  (log "Error running tests\n")
 	  ;; (append-to-file (format "backtrace: %s" (princ (backtrace-get-frames 'backtrace))) nil "test-results.txt")
 
-	  (log (backtrace-to-string (backtrace-get-frames 'backtrace)))
-	  ;; (let ((backtrace-frames (backtrace-get-frames 'backtrace)))
-	  ;;   (when backtrace-frames
-	  ;;     (append-to-file (backtrace-to-string backtrace-frames) nil "test-results.txt")
-	  ;;     ))
+	  ;; TODO fix wrong type argument numberp error
+	  ;; (log (backtrace-to-string (backtrace-get-frames 'backtrace)))
+	  (let ((backtrace-frames (backtrace-get-frames 'backtrace)))
+	    (when backtrace-frames
+	      (append-to-file (backtrace-to-string backtrace-frames) nil "test-results.txt")
+	      ))
 	  )
-      ;; (kill-emacs 2)
+      (when (not debug) (kill-emacs 2))
       )))
 
 ;; duplicate in init.el
@@ -57,42 +59,43 @@
 (ert-deftest version-check ()
   (should (string-equal "28.0.50" emacs-version)))
 
-(ert-deftest use-package-installed ()
-  (should (fboundp 'use-package)))
+;; (ert-deftest use-package-installed ()
+;;   (should (fboundp 'use-package)))
 
-(ert-deftest evil-installed ()
-  (should (fboundp 'evil-next-line)))
+;; (ert-deftest evil-installed ()
+;;   (should (fboundp 'evil-next-line)))
 
-(ert-deftest evil-collection-installed ()
-  (should (fboundp 'evil-collection-init)))
+;; (ert-deftest evil-collection-installed ()
+;;   (should (fboundp 'evil-collection-init)))
 
-(ert-deftest magit-installed ()
-  (should (fboundp 'magit-version)))
+;; (ert-deftest magit-installed ()
+;;   (should (fboundp 'magit-version)))
 
-(ert-deftest haskell-mode-enabled-opening-haskell-file ()
-  (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
-  (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
+;; (ert-deftest haskell-mode-enabled-opening-haskell-file ()
+;;   (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
+;;   (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
 
 ;; ;; TODO test for "jf" escape working
 ;; ;; TODO test for "Ctrl u" working
 
-(defun copy-line (arg)
-  "Copy lines (as many as prefix argument) in the kill ring"
-  ;; (interactive "p")
-  (kill-ring-save (line-beginning-position)
-                  (line-beginning-position (+ 1 arg)))
-  (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
+;; (defun copy-line (arg)
+;;   "Copy lines (as many as prefix argument) in the kill ring"
+;;   ;; (interactive "p")
+;;   (kill-ring-save (line-beginning-position)
+;;                   (line-beginning-position (+ 1 arg)))
+;;   (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
 
-(require 'subr-x)
+;; (require 'subr-x)
 
-(defun my-append-string-to-file (s filename)
-  (with-temp-buffer
-    (insert s)
-    (write-region (point-min) (point-max) filename t)))
+;; (defun my-append-string-to-file (s filename)
+;;   (log "my-append-string-to-file")
+;;   (with-temp-buffer
+;;     (insert s)
+;;     (write-region (point-min) (point-max) filename t)))
 
-(defun wait-for-ghci ()
-  ;; TODO figure out how to maybe use haskell-mode-interactive-prompt-state
-  (sit-for 5))
+;; (defun wait-for-ghci ()
+;;   ;; TODO figure out how to maybe use haskell-mode-interactive-prompt-state
+;;   (sit-for 5))
 
 ;; (ert-deftest ghci-has-locals-in-scope ()
 ;;   (interactive)
@@ -112,19 +115,21 @@
 ;;            "functionWeWantInScope :: ()")))
 
 ;; evil
-(ert-deftest ctrl-u-scrolls-up ()
-    (find-file (emacs-d-directory-for "testdata/loremipsum.txt"))
-    (execute-kbd-macro (kbd "G"))
-    (execute-kbd-macro (kbd "C-u"))
-    ;; NOTE this isn't perfectly accurate because for some reason emacs on command line when run with tests-run seems to scroll up a different number for.
-    ;; however, this test is proven by the position of the line number changing at all
-    ;; TODO figure out how to make this more exact
-    (should (eq (line-number-at-pos) 13))
-    )
+;; (ert-deftest ctrl-u-scrolls-up ()
+;;   (log "ctrl-u-scrolls-up")
+;;     (find-file (emacs-d-directory-for "testdata/loremipsum.txt"))
+;;     (execute-kbd-macro (kbd "G"))
+;;     (execute-kbd-macro (kbd "C-u"))
+;;     ;; NOTE this isn't perfectly accurate because for some reason emacs on command line when run with tests-run seems to scroll up a different number for.
+;;     ;; however, this test is proven by the position of the line number changing at all
+;;     ;; TODO figure out how to make this more exact
+;;     (should (eq (line-number-at-pos) 13))
+;;     )
 
 (ert-deftest emacs-direnv-works ()
+  (log "emacs-direnv-works")
 
-  ;; (should (eq nil (executable-find "hello"))) 
+  (should (eq nil (executable-find "hello"))) 
 
   (shell-command "systemctl --user start lorri.socket")
   (shell-command
@@ -132,12 +137,11 @@
 	   (emacs-d-directory-for "testdata/direnv/hello")))
   (find-file (emacs-d-directory-for "testdata/direnv/hello/.envrc"))
   (should (derived-mode-p 'direnv-envrc-mode))
-  (sit-for 2)
+  (should (string-equal "/home/cody/.emacs.d/testdata/direnv/hello/" default-directory))
+  (direnv-allow)
   (should (executable-find "hello"))
 
   (find-file (emacs-d-directory-for ""))
-  (delete-other-windows)
-
   (should (eq nil (executable-find "hello")))
   )
 
