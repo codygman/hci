@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -o errexit
+
 
 if [ -z "$CACHIX_SIGNING_KEY" ]; then
     echo "CACHIX_SIGNING_KEY not set, failing NOW!";
