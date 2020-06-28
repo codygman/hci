@@ -26,6 +26,10 @@ export HCI_DIR=/home/runner/work/hci/hci/
 
 ln -sv "$HCI_DIR/nixpkgs" /home/runner/.config/nixpkgs
 
+# remove zshrc and bashrc so home-manager can overwrite them
+# TODO add this into bootstrap.hs and only do this on CI?
+[[ ! -f ~/.bashrc ]] || rm -v ~/.bashrc
+[[ ! -f ~/.zshrc ]] || rm -v ~/.zshrc
 nix-shell '<home-manager>' -A install
 
 check_installed "emacs"
@@ -34,9 +38,6 @@ check_installed "emacs"
 echo "nix profile bin"
 ls $HOME/.nix-profile/bin
 
-# remove zshrc and bashrc so home-manager can overwrite them
-# TODO add this into bootstrap.hs and only do this on CI?
-[[ ! -f ~/.bashrc ]] || rm -v ~/.bashrc
-[[ ! -f ~/.zshrc ]] || rm -v ~/.zshrc
+# TODO move into a separate test.sh so we can run that same test.sh file locally
 home-manager switch
 emacs -batch -f buttercup-run-discover
