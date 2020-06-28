@@ -43,4 +43,4 @@ ls $HOME/.nix-profile/bin
 
 # TODO move into a separate test.sh so we can run that same test.sh file locally
 home-manager switch
-emacs -batch -f buttercup-run-discover
+#emacs -batch -f buttercup-run-discover
