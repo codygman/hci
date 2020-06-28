@@ -2,20 +2,18 @@
 
 set -o errexit
 
-
 if [ -z "$CACHIX_SIGNING_KEY" ]; then
     echo "CACHIX_SIGNING_KEY not set, failing NOW!";
     exit 1
 fi
-   
-
 
 function check_installed() {
     echo "checking we have $1"
     if [ -x "$(command -v $1)" ]; then
+	echo ""
+	echo "=================================================="
         echo "$1 installed, moving on"
-	echo ""
-	echo ""
+	echo "=================================================="
 	echo ""
     else
         echo "$1 not installed or not in PATH";
@@ -45,14 +43,14 @@ nohup bash -c "cd $TRAVIS_BUILD_DIR; cachix push --watch-store codygman6" 2>&1 >
 sleep 2
 
 echo "cachix watcher update"
-cd $TRAVIS_BUILD_DIR && cat nohup.out
+cd $TRAVIS_BUILD_DIR && head -n10 nohup.out
 
 nix-env -iA nixpkgs.hello
 
 sleep 20
 
 echo "cachix watcher update"
-cd $TRAVIS_BUILD_DIR && cat nohup.out
+cd $TRAVIS_BUILD_DIR && head -n10 nohup.out
 
 ln -rs "$TRAVIS_BUILD_DIR/nixpkgs" ~/.config/nixpkgs
 
@@ -87,6 +85,12 @@ bash --version
 #bash test.sh
 #bash extra.sh
 
+echo "cachix process"
+ps aux | grep cachix
+kill $(pidof nohup)
+echo "cachix process after kill"
+ps aux | grep cachix
 
-echo "cachix watcher final update"
+
+echo "cachix watcher final full update"
 cd $TRAVIS_BUILD_DIR && cat nohup.out
