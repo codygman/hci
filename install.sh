@@ -71,3 +71,10 @@ check_installed "emacs"
 
 echo "linking emacs setup"
 ln -rs "$TRAVIS_BUILD_DIR/" "$HOME/.emacs.d"
+
+echo "we are using this bash: "
+echo "path: $(which bash)"
+echo "version:"
+bash --version
+bash test.sh
+bash extra.sh

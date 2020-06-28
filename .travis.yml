@@ -2,5 +2,3 @@ os:
   - linux
 script:
   - bash install.sh
-  - bash test.sh
-  - bash extra.sh
