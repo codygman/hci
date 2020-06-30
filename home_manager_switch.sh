@@ -28,8 +28,8 @@ function check_installed() {
     fi
 }
 
-home-manager switch
-check_installed "emacs"
-
-. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 export PATH=$HOME/.nix-profile/bin:$PATH
+home-manager switch
+. "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+
+check_installed "emacs"
