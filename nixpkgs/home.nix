@@ -25,7 +25,7 @@ in
     };
 
     emacs = {
-      enable = true;
+      enable = false;
       # package = if builtins.getEnv "TRAVIS_OS_NAME" == "" then emacs-overlay.emacs else pkgs.emacs-nox;
       package = pkgs.emacsGit;
       extraPackages = epkgs: with epkgs; [
