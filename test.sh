@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -o errexit
 
+exit 1
+
 home-manager switch
 # echo "running emacs: $(which emacs)"
 # Before running tests, clean the stack directory for our haskell test project
