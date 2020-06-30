@@ -61,6 +61,12 @@ in
   };
 
   home = {
+
+    keyboard = {
+      layout = "us";
+      options = [ "ctrl:nocaps" ];
+    };
+
     packages = with pkgs; [ fd
                             ripgrep
                             # will need to ensure cachix by ci and cachix version here match
