@@ -15,5 +15,7 @@ jobs:
         # Only needed for private caches
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - run: bash install.sh
+    - run: bash home_manager_setup.sh
+    - run: bash home_manager_switch.sh
     - run: bash test.sh
 

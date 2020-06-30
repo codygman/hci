@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -o errexit
 
 home-manager switch
 # echo "running emacs: $(which emacs)"
