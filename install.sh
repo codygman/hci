@@ -45,5 +45,4 @@ ls $HOME/.nix-profile/bin
 export PATH=$HOME/.nix-profile/bin:$PATH
 
 # TODO move into a separate test.sh so we can run that same test.sh file locally
-home-manager switch
-emacs -batch -f buttercup-run-discover
+bash test.sh
