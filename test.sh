@@ -8,6 +8,8 @@ pushd testdata/simple-haskell-project && stack clean && popd
 EMACSFOR="PERSONAL" emacs -batch -f package-initialize -L . -f buttercup-run-discover
 emacsExitCode=$?;
 
+# TODO improve git commit hooks and track with git via https://medium.com/@anandmohit7/improving-development-workflow-using-git-hooks-8498f5aa3345
+
 if [ -z "$GITHUB_ACTIONS" ]; then
     exit $emacsExitCode;
 fi
