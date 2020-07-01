@@ -162,6 +162,11 @@ Package should already be there, to add a new one add it to home.nix
 #+begin_src emacs-lisp
 (setq package-archives nil)
 #+end_src
+** Core Emacs Configuration
+*** Set a custom custom-file
+    #+begin_src emacs-lisp
+    (setq custom-file "~/.emacs-custom.el")
+    #+end_src
 ** load nix pre-installed libraries with use-package
 *** use-package
 #+begin_src emacs-lisp
@@ -191,3 +196,11 @@ Package should already be there, to add a new one add it to home.nix
  :config
  (direnv-envrc-mode))
 #+end_src
+*** Color theme
+#+begin_src emacs-lisp
+  (use-package poet-dark
+    :config
+    (load-theme 'poet-dark t)
+    )
+#+end_src
+
