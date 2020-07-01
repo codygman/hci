@@ -167,6 +167,22 @@ Package should already be there, to add a new one add it to home.nix
     #+begin_src emacs-lisp
     (setq custom-file "~/.emacs-custom.el")
     #+end_src
+*** Hide annoying things
+    #+begin_src emacs-lisp
+      (tool-bar-mode -1)
+      (toggle-scroll-bar -1)
+      (menu-bar-mode -1)
+    #+end_src
+*** Font stuff
+#+begin_src emacs_lisp
+(set-frame-font "Source Code Pro 13" nil t)
+#+end_src
+
+    #+begin_src emacs-lisp
+      (add-hook 'text-mode-hook
+		(lambda ()
+		  (variable-pitch-mode 1)))
+    #+end_src
 ** load nix pre-installed libraries with use-package
 *** use-package
 #+begin_src emacs-lisp
@@ -196,11 +212,9 @@ Package should already be there, to add a new one add it to home.nix
  :config
  (direnv-envrc-mode))
 #+end_src
-*** Color theme
+*** color theme
 #+begin_src emacs-lisp
-  (use-package poet-dark
-    :config
-    (load-theme 'poet-dark t)
-    )
+  ;; TODO figure out why use-package doesn't work here
+  (load-theme 'doom-one t)
 #+end_src
 

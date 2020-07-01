@@ -36,7 +36,7 @@ in
         evil-collection
         magit
 	direnv
-	poet-theme
+	doom-themes
       ];
     };
 
