@@ -3,8 +3,9 @@ set -o errexit
 
 export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
 export PATH=$HOME/.nix-profile/bin:$PATH
-export HCI_DIR=/home/runner/work/hci/hci/
+export HCI_DIR=/home/runner/work/hci/hci
 
+rm -rv ~/.config/nixpkgs
 ln -sv "$HCI_DIR/nixpkgs" /home/runner/.config/nixpkgs
 
 # remove zshrc and bashrc so home-manager can overwrite them
