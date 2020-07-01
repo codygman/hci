@@ -24,6 +24,10 @@ function check_installed() {
 	echo ""
     else
         echo "$1 not installed or not in PATH";
+	echo "~/.config/nixpkgs/home.nix looks like: "
+	cat ~/.config/nixpkgs/home.nix
+	echo "PATH is:"
+	echo "$PATH"
 	exit 1;
     fi
 }
