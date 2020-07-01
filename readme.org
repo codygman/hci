@@ -163,6 +163,21 @@ Package should already be there, to add a new one add it to home.nix
 (setq package-archives nil)
 #+end_src
 ** Core Emacs Configuration
+*** Font stuff
+#+begin_src emacs-lisp
+;; Set default font
+(set-face-attribute 'default nil
+                    :family "Source Code Pro"
+                    :height 120
+                    :weight 'normal
+                    :width 'normal)
+#+end_src
+
+    #+begin_src emacs-lisp
+      (add-hook 'text-mode-hook
+		(lambda ()
+		  (variable-pitch-mode 1)))
+    #+end_src
 *** Set a custom custom-file
     #+begin_src emacs-lisp
     (setq custom-file "~/.emacs-custom.el")
@@ -173,21 +188,19 @@ Package should already be there, to add a new one add it to home.nix
       (toggle-scroll-bar -1)
       (menu-bar-mode -1)
     #+end_src
-*** Font stuff
-#+begin_src emacs_lisp
-(set-frame-font "Source Code Pro 13" nil t)
-#+end_src
-
-    #+begin_src emacs-lisp
-      (add-hook 'text-mode-hook
-		(lambda ()
-		  (variable-pitch-mode 1)))
-    #+end_src
 ** load nix pre-installed libraries with use-package
 *** use-package
 #+begin_src emacs-lisp
 (require 'use-package)
 #+end_src
+*** general
+    #+begin_src emacs-lisp
+    (require 'general)
+      ;; (use-package general
+      ;;   :ensure t
+      ;;   :config
+      ;;   (general-evil-setup t))
+    #+end_src
 *** evil
 #+begin_src emacs-lisp
 (use-package evil
