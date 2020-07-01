@@ -198,12 +198,36 @@ Package should already be there, to add a new one add it to home.nix
       (use-package general
 	:ensure t
 	:config
+	(general-auto-unbind-keys) ;; NOTE not sure this works?
 	(general-evil-setup t)
-	(general-evil-define-key 'normal 'global
-				 :prefix "SPC"
-				 "v" 'emacs-version)
+	(general-imap "j"
+		      (general-key-dispatch 'self-insert-command
+					    :timeout 0.25
+					    ;; TODO make this work so jf writes the file when I enter normal mode
+					    ;; "j" '(my-write-then-normal-state)
+					    "f" 'evil-normal-state))
+	(general-create-definer my-leader-def
+	  :prefix "C")
+	      (my-leader-def
+	       :states '(normal visual emacs motion)
+	       :prefix "SPC"
+	       :keymaps 'override
+	       :non-normal-prefix "M-SPC"
+	       "u"   '(universal-argument :which-key "universal-argument")
+	       )
 	)
     #+end_src
+*** magit
+#+begin_src emacs-lisp
+  (use-package magit
+    :general
+    (nmap
+     :prefix "SPC"
+     "gg" 'magit-status
+     )
+    )
+#+end_src
+
 *** evil
 #+begin_src emacs-lisp
 (use-package evil
@@ -212,6 +236,18 @@ Package should already be there, to add a new one add it to home.nix
   :config
   (evil-mode 1)
   )
+#+end_src
+*** projectile
+#+begin_src emacs-lisp
+  (use-package projectile
+    :general
+    (nmap
+     :prefix "SPC"
+     "pp" 'projectile-switch-project
+     "pf" 'projectile-find-file
+     )
+    :config
+    (projectile-mode +1))
 #+end_src
 *** haskell-mode
 #+begin_src emacs-lisp
@@ -233,4 +269,6 @@ Package should already be there, to add a new one add it to home.nix
   ;; TODO figure out why use-package doesn't work here
   (load-theme 'doom-one t)
 #+end_src
-
+* NOTE 
+** This [[https://github.com/codygman/my-emacs-everywhere/blob/4898bc236fcff390d587e69831f3c17019e027f0/emacs-config.org][minimal literate config]] I wrote is probably useful
+*** use graphic p stuff 

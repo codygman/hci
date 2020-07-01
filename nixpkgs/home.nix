@@ -38,6 +38,7 @@ in
 	direnv
 	doom-themes
 	general
+	projectile
       ];
     };
 
