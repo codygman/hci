@@ -37,6 +37,7 @@ in
         magit
 	direnv
 	doom-themes
+	general
       ];
     };
 
