@@ -1,3 +1,4 @@
 (require 'org)
 (require 'use-package)
-(org-babel-load-file "readme.org")
+(message (format "buffer file name is: %s" buffer-file-name))
+(org-babel-load-file (format "%s/.emacs.d/readme.org" (getenv "HOME")))
