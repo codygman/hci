@@ -195,11 +195,14 @@ Package should already be there, to add a new one add it to home.nix
 #+end_src
 *** general
     #+begin_src emacs-lisp
-    (require 'general)
-      ;; (use-package general
-      ;;   :ensure t
-      ;;   :config
-      ;;   (general-evil-setup t))
+      (use-package general
+	:ensure t
+	:config
+	(general-evil-setup t)
+	(general-evil-define-key 'normal 'global
+				 :prefix "SPC"
+				 "v" 'emacs-version)
+	)
     #+end_src
 *** evil
 #+begin_src emacs-lisp
