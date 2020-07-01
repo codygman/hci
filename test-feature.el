@@ -16,4 +16,9 @@
 
            )
 
+ (describe "Evil Integration"
+           ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
+           ;; (it "evil is enabled"
+           ;;     (expect (fboundp 'evil-next-line) :to-be t))
+           ;; )
  )
