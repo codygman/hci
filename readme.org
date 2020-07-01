@@ -193,10 +193,24 @@ Package should already be there, to add a new one add it to home.nix
 #+begin_src emacs-lisp
 (require 'use-package)
 #+end_src
+*** evil
+#+begin_src emacs-lisp
+(use-package evil
+  :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode 1))
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+#+end_src
 *** general
     #+begin_src emacs-lisp
       (use-package general
-	:ensure t
+	:after evil
 	:config
 	(general-auto-unbind-keys) ;; NOTE not sure this works?
 	(general-evil-setup t)
@@ -228,15 +242,6 @@ Package should already be there, to add a new one add it to home.nix
     )
 #+end_src
 
-*** evil
-#+begin_src emacs-lisp
-(use-package evil
-  :init
-  (setq evil-want-C-u-scroll t)
-  :config
-  (evil-mode 1)
-  )
-#+end_src
 *** projectile
 #+begin_src emacs-lisp
   (use-package projectile
