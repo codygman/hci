@@ -21,4 +21,13 @@
            ;; (it "evil is enabled"
            ;;     (expect (fboundp 'evil-next-line) :to-be t))
            ;; )
+
+           (it "evil collection is installed"
+               (expect (fboundp 'evil-collection-init) :to-be t))
+
+           (it "evil collection is enabled"
+               (expect 'evil-collection :to-equal (derived-mode-p 'evil-collection)))
+
+           )
+
  )
