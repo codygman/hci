@@ -237,6 +237,7 @@ Package should already be there, to add a new one add it to home.nix
 	       :non-normal-prefix "M-SPC"
 	       "u"   '(universal-argument :which-key "Universal Argument")
 	       "tf" '(toggle-frame-fullscreen :which-key "Toggle Fullscreen")
+	       "wd" '(delete-window :which-key "Delete Window")
 
 	       "hf" '(describe-function :which-key "Describe Function")
 	       "hk" '(describe-key :which-key "Describe Key")
