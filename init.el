@@ -1,3 +1,9 @@
 (require 'org)
 (require 'use-package)
-(org-babel-load-file (format "%s/.emacs.d/readme.org" (getenv "HOME")))
+
+(defun emacs-d-directory-for (path)
+  (if (eq nil (getenv "GITHUB_WORKSPACE"))
+      (format "~/.emacs.d/%s" path)
+    (getenv "GITHUB_WORKSPACE")))
+
+(org-babel-load-file (emacs-d-directory-for "readme.org"))

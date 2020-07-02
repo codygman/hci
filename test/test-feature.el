@@ -1,8 +1,8 @@
 
 (defun emacs-d-directory-for (path)
-  (if (eq nil (getenv "TRAVIS_OS_NAME"))
+  (if (eq nil (getenv "GITHUB_WORKSPACE"))
       (format "~/.emacs.d/%s" path)
-    (getenv "TRAVIS_BUILD_DIR")))
+    (getenv "GITHUB_WORKSPACE")))
 
 
 (describe

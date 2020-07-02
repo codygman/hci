@@ -1,4 +1,9 @@
-(load "~/.emacs.d/init.el")
+(defun emacs-d-directory-for (path)
+  (if (eq nil (getenv "GITHUB_WORKSPACE"))
+      (format "~/.emacs.d/%s" path)
+    (getenv "GITHUB_WORKSPACE")))
+
+(load (emacs-d-directory-for "init.el"))
 (require 'buttercup)
 
 (let* ((default-directory "~/hci/test")
