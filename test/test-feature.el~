@@ -29,7 +29,8 @@
            ;;     (expect 'evil-collection :to-equal (derived-mode-p 'evil-collection)))
 
            (it "evil collection is enabled"
-	       (expect evil-collection-unimpaired-mode :to-be t))
+	       (princ minor-mode-list)
+	       (expect global-evil-collection-unimpaired-mode :to-be-truthy))
            )
 
  )

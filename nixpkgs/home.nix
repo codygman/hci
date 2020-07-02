@@ -36,6 +36,9 @@ in
         evil-collection
         magit
 	direnv
+	doom-themes
+	general
+	projectile
       ];
     };
 

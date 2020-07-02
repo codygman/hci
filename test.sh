@@ -5,7 +5,7 @@ home-manager switch
 # echo "running emacs: $(which emacs)"
 # Before running tests, clean the stack directory for our haskell test project
 pushd testdata/simple-haskell-project && stack clean && popd
-EMACSFOR="PERSONAL" emacs -batch -f package-initialize -L . -f buttercup-run-discover
+EMACSFOR="PERSONAL" emacs -Q -f package-initialize  --load load-init-then-test.el -batch
 emacsExitCode=$?;
 
 # TODO improve git commit hooks and track with git via https://medium.com/@anandmohit7/improving-development-workflow-using-git-hooks-8498f5aa3345
