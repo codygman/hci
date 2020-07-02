@@ -37,7 +37,6 @@
 	       (expect global-evil-collection-unimpaired-mode :to-be-truthy))
 
 	   (it "ctrl-u scrolls up"
-
 	       (find-file (emacs-d-directory-for "testdata/loremipsum.txt"))
 	       (execute-kbd-macro (kbd "G"))
 	       (execute-kbd-macro (kbd "C-u"))
