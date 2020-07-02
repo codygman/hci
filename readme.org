@@ -188,7 +188,7 @@ Package should already be there, to add a new one add it to home.nix
       (toggle-scroll-bar -1)
       (menu-bar-mode -1)
     #+end_src
-** load nix pre-installed libraries with use-package
+** Package configuration
 *** use-package
 #+begin_src emacs-lisp
 (require 'use-package)
