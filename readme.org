@@ -272,7 +272,7 @@ Package should already be there, to add a new one add it to home.nix
 *** color theme
 #+begin_src emacs-lisp
   ;; TODO figure out why use-package doesn't work here
-  ;; (load-theme 'doom-one t)
+  (load-theme 'doom-one t)
 #+end_src
 * NOTE 
 ** This [[https://github.com/codygman/my-emacs-everywhere/blob/4898bc236fcff390d587e69831f3c17019e027f0/emacs-config.org][minimal literate config]] I wrote is probably useful
