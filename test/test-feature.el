@@ -43,7 +43,7 @@
 	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
 	   (it "C-d scrolls down in magit status buffer"
 	     (expect
-	      (execute-kbd-macro (kbd "C-u"))
+	      (execute-kbd-macro (kbd "C-d"))
 	      :not :to-throw ))
 
 	   )

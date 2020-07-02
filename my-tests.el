@@ -115,15 +115,8 @@
   (log "ctrl-u-scrolls-up")
     (find-file (emacs-d-directory-for "testdata/loremipsum.txt"))
     (execute-kbd-macro (kbd "G"))
-    (execute-kbd-macro (kbd "C-u"))
+    (execute-kbd-macro (kbd "C-u")))
     ;; NOTE this isn't perfectly accurate because for some reason emacs on command line when run with tests-run seems to scroll up a different number for.
-    ;; however, this test is proven by the position of the line number changing at all
-    ;; TODO figure out how to make this more exact
-    (should (eq (line-number-at-pos) 13))
-    )
-
-;; (ert-deftest emacs-direnv-works ()
-;;   (log "emacs-direnv-works")
 
 ;;   (should (eq nil (executable-find "hello"))) 
 

@@ -33,6 +33,7 @@ in
         use-package
         haskell-mode
         evil
+	evil-magit
         evil-collection
         magit
 	direnv
