@@ -6,7 +6,7 @@
 (load (emacs-d-directory-for "init.el"))
 (require 'buttercup)
 
-(let* ((default-directory "~/hci/test")
+(let* ((default-directory (emacs-d-directory-for "test"))
        ;; hack to ensure that relative filepath handling of buttercup doesn't mess up our expectations
-       (command-line-args-left '("~/hci/test"))
+       (command-line-args-left '((emacs-d-directory-for "test"))
        ) (buttercup-run-discover))
