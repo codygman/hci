@@ -25,9 +25,11 @@
            (it "evil collection is installed"
                (expect (fboundp 'evil-collection-init) :to-be t))
 
-           (it "evil collection is enabled"
-               (expect 'evil-collection :to-equal (derived-mode-p 'evil-collection)))
+           ;; (it "evil collection is enabled"
+           ;;     (expect 'evil-collection :to-equal (derived-mode-p 'evil-collection)))
 
+           (it "evil collection is enabled"
+	       (expect evil-collection-unimpaired-mode :to-be t))
            )
 
  )
