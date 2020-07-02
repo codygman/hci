@@ -13,7 +13,7 @@ if [ $buttercupExitCode -ne 0 ]; then
     exit $buttercupExitCode;
 fi
 
-if [ -z "$IN_GIT_HOOK" ] && [ "$TERM" != "dumb" ]; then
+if [ -z "$IN_GIT_HOOK" ] && [ -z "$INSIDE_EMACS" ]; then
    echo "finished running buttercup tests, running ert tests"
    EMACSFOR="PERSONAL" emacs -nw --load load-init-then-run-ert.el
    echo "finished running ert tests"
