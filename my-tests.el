@@ -67,9 +67,9 @@
 (ert-deftest magit-installed ()
   (should (fboundp 'magit-version)))
 
-;; (ert-deftest haskell-mode-enabled-opening-haskell-file ()
-;;   (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
-;;   (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
+(ert-deftest haskell-mode-enabled-opening-haskell-file ()
+  (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
+  (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
 
 ;; ;; TODO test for "jf" escape working
 ;; ;; TODO test for "Ctrl u" working
