@@ -235,7 +235,8 @@ Package should already be there, to add a new one add it to home.nix
 	       :prefix "SPC"
 	       :keymaps 'override
 	       :non-normal-prefix "M-SPC"
-	       "u"   '(universal-argument :which-key "universal-argument")
+	       "u"   '(universal-argument :which-key "Universal Argument")
+	       "tf" '(toggle-frame-fullscreen :which-key "Toggle Fullscreen"
 	       )
 	)
     #+end_src
