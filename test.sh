@@ -6,8 +6,13 @@ home-manager switch
 # Before running tests, clean the stack directory for our haskell test project
 pushd testdata/simple-haskell-project && stack clean && popd
 EMACSFOR="PERSONAL" emacs -Q -f package-initialize  --load load-init-then-test.el -batch
-echo "finished running buttercup tests, running ert tests"
-EMACSFOR="PERSONAL" emacs -nw --load load-init-then-run-ert.el
+echo "we are in TERM: $TERM"
+if [ -z "$IN_GIT_HOOK" ]; then
+   echo "finished running buttercup tests, running ert tests"
+   EMACSFOR="PERSONAL" emacs -nw --load load-init-then-run-ert.el
+   echo "finished running ert tests"
+fi
+
 emacsExitCode=$?;
 
 # TODO improve git commit hooks and track with git via https://medium.com/@anandmohit7/improving-development-workflow-using-git-hooks-8498f5aa3345
@@ -20,7 +25,6 @@ else
     ls
 fi
 
-echo "finished running ert tests"
 
 if [ -z "$GITHUB_ACTIONS" ]; then
     exit $emacsExitCode;
