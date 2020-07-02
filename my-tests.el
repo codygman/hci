@@ -64,8 +64,8 @@
 ;; (ert-deftest evil-collection-installed ()
 ;;   (should (fboundp 'evil-collection-init)))
 
-;; (ert-deftest magit-installed ()
-;;   (should (fboundp 'magit-version)))
+(ert-deftest magit-installed ()
+  (should (fboundp 'magit-version)))
 
 ;; (ert-deftest haskell-mode-enabled-opening-haskell-file ()
 ;;   (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
