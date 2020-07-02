@@ -26,15 +26,15 @@
 
  (describe "Evil Integration"
 
-           ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
-           (it "evil is enabled"
-               (expect (fboundp 'evil-next-line) :to-be t))
+	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
+	   (it "evil is enabled"
+	       (expect (fboundp 'evil-next-line) :to-be t))
 
-           (it "evil collection is installed"
-               (expect (fboundp 'evil-collection-init) :to-be t))
+	   (it "evil collection is installed"
+	       (expect (fboundp 'evil-collection-init) :to-be t))
 
-           (it "evil collection is enabled"
+	   (it "evil collection is enabled"
 	       (expect global-evil-collection-unimpaired-mode :to-be-truthy))
-           )
+
 
  )
