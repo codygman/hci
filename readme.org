@@ -248,6 +248,10 @@ Package should already be there, to add a new one add it to home.nix
 *** magit
 #+begin_src emacs-lisp
   (use-package magit
+    :init
+     ;; TODO write test for this
+     (add-hook 'with-editor-mode-hook 'evil-insert-state)
+
     :general
     (nmap
      :prefix "SPC"
