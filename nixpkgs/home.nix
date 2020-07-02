@@ -84,15 +84,19 @@ in
     lorri.enable = true;
     redshift = {
       enable = true;
+      latitude = "32.7767";
+      longitude = "96.7970";
       brightness = {
-        night = "0.4";
-        day = "0.8";
+        # Day and night mixed up, lol
+        day = "0.4";
+        night = "0.8";
       };
       tray = false;
-      provider = "geoclue2";
+      provider = "manual";
       temperature = {
-        day = 5501;
-        night = 3501;
+        # Day and night mixed up, lol
+        night = 5501;
+        day = 3501;
       };
     extraOptions = ["-v"];
     };
