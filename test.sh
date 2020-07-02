@@ -11,6 +11,8 @@ if [ -z "$IN_GIT_HOOK" ]; then
    echo "finished running buttercup tests, running ert tests"
    EMACSFOR="PERSONAL" emacs -nw --load load-init-then-run-ert.el
    echo "finished running ert tests"
+else
+    echo "in git hook, skipping ert test since we don't have TTY"
 fi
 
 emacsExitCode=$?;
@@ -20,9 +22,6 @@ emacsExitCode=$?;
 if [ -f "test-results.txt" ]; then
     cat test-results.txt
     rm -v test-results.txt
-else
-    echo "test-results doesn't exist"
-    ls
 fi
 
 
