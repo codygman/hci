@@ -236,7 +236,11 @@ Package should already be there, to add a new one add it to home.nix
 	       :keymaps 'override
 	       :non-normal-prefix "M-SPC"
 	       "u"   '(universal-argument :which-key "Universal Argument")
-	       "tf" '(toggle-frame-fullscreen :which-key "Toggle Fullscreen"
+	       "tf" '(toggle-frame-fullscreen :which-key "Toggle Fullscreen")
+
+	       "hf" '(describe-function :which-key "Describe Function")
+	       "hk" '(describe-key :which-key "Describe Key")
+	       "ha" '(apropos-command :which-key "Apropos Command")
 	       )
 	)
     #+end_src
