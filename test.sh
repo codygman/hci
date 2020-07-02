@@ -6,7 +6,7 @@ home-manager switch
 # Before running tests, clean the stack directory for our haskell test project
 pushd testdata/simple-haskell-project && stack clean && popd
 EMACSFOR="PERSONAL" emacs -Q -f package-initialize  --load load-init-then-test.el -batch
-echo "we are in TERM: $TERM"
+
 if [ -z "$IN_GIT_HOOK" ]; then
    echo "finished running buttercup tests, running ert tests"
    EMACSFOR="PERSONAL" emacs -nw --load load-init-then-run-ert.el
