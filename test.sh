@@ -6,7 +6,7 @@ home-manager switch
 pushd testdata/simple-haskell-project && stack clean && popd
 
 echo "run buttercup tests"
-EMACSFOR="PERSONAL" emacs -Q -f package-initialize  --load load-init-then-test.el -batch
+EMACSFOR="PERSONAL" emacs -Q -f package-initialize  --load load-init-then-test.el -batch --debug-init
 buttercupExitCode=$?;
 
 if [ $buttercupExitCode -ne 0 ]; then
