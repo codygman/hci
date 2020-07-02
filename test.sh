@@ -7,6 +7,11 @@ pushd testdata/simple-haskell-project && stack clean && popd
 
 echo "run buttercup tests"
 EMACSFOR="PERSONAL" emacs -Q -f package-initialize  --load load-init-then-test.el -batch
+buttercupExitCode=$?;
+
+if [ $buttercupExitCode -ne 0 ]; then
+    exit $buttercupExitCode;
+fi
 
 if [ -z "$IN_GIT_HOOK" ]; then
    echo "finished running buttercup tests, running ert tests"
