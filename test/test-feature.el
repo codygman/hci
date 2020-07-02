@@ -2,7 +2,7 @@
 (defun emacs-d-directory-for (path)
   (if (eq nil (getenv "GITHUB_WORKSPACE"))
       (format "~/.emacs.d/%s" path)
-    (getenv "GITHUB_WORKSPACE")))
+    (format "%s/%s" (getenv "GITHUB_WORKSPACE") path)))
 
 
 (describe

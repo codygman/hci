@@ -51,9 +51,9 @@
 
 ;; duplicate in init.el
 (defun emacs-d-directory-for (path)
-  (if (eq nil (getenv "TRAVIS_OS_NAME"))
+  (if (eq nil (getenv "GITHUB_WORKSPACE"))
       (format "~/.emacs.d/%s" path)
-    (getenv "TRAVIS_BUILD_DIR")))
+    (format "%s/%s" (getenv "GITHUB_WORKSPACE") path)))
 
 ;; (ert-deftest use-package-installed ()
 ;;   (should (fboundp 'use-package)))
