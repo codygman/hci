@@ -12,6 +12,7 @@
 
            (it "emacs version should be 28.0.50"
                (expect emacs-version :to-equal "28.0.50"))
+
            )
 
  (describe "Haskell Integration"
@@ -24,16 +25,13 @@
            )
 
  (describe "Evil Integration"
+
            ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
-           ;; (it "evil is enabled"
-           ;;     (expect (fboundp 'evil-next-line) :to-be t))
-           ;; )
+           (it "evil is enabled"
+               (expect (fboundp 'evil-next-line) :to-be t))
 
            (it "evil collection is installed"
                (expect (fboundp 'evil-collection-init) :to-be t))
-
-           ;; (it "evil collection is enabled"
-           ;;     (expect 'evil-collection :to-equal (derived-mode-p 'evil-collection)))
 
            (it "evil collection is enabled"
 	       (expect global-evil-collection-unimpaired-mode :to-be-truthy))
