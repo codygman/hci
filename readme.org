@@ -336,6 +336,13 @@ Package should already be there, to add a new one add it to home.nix
 	)
 
     #+end_src
+*** winner mode
+    #+begin_src emacs-lisp
+      (use-package winner
+	:ensure t
+	:config
+	(winner-mode 1))
+    #+end_src
 *** helper functions
 **** toggle maximize buffer
      #+begin_src elisp
