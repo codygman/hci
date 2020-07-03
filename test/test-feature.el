@@ -49,4 +49,39 @@
 
 	   )
 
+
+ (describe "Window Navigation"
+
+	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
+	   (it "split 4 windows and move through them clockwise with =SPC {h,j,k,l}="
+	     (expect
+	      ;; NOTE this test didn't work because of "window too small"
+	      ;; I don't know if the height/width of the emacs -batch
+	      ;; command is machine specific
+	      ;; so if this fails in CI, on a new computer, different os, etc
+	      ;; look here first
+	      (let ((split-width-threshold nil)
+		    (split-height-threshold nil)
+		    (window-min-height 1)
+		    (window-min-width 1))
+		;; setup
+		;; fullscreen just so we have enough room
+		(execute-kbd-macro (kbd "SPC w v"))
+		(execute-kbd-macro (kbd "SPC w s"))
+		(execute-kbd-macro (kbd "SPC w l"))
+		(execute-kbd-macro (kbd "SPC w s"))
+		;; return to top left
+		(execute-kbd-macro (kbd "SPC w h"))
+		;; clockwise
+		(execute-kbd-macro (kbd "SPC w l"))
+		(execute-kbd-macro (kbd "SPC w j"))
+		(execute-kbd-macro (kbd "SPC w h"))
+		(execute-kbd-macro (kbd "SPC w k"))
+		)
+	      :not :to-throw ))
+
+	   )
+
+
+
  )
