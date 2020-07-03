@@ -1,4 +1,5 @@
 (use-package general
+  :after evil
   :config
   (general-auto-unbind-keys) ;; NOTE not sure this works?
   (general-evil-setup t)
