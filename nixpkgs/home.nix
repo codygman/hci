@@ -87,6 +87,7 @@ in
                             source-code-pro
                             sqlite
                             gcc
+			    # niv
                           ];
   };
 
