@@ -299,9 +299,14 @@
 
 *** projectile
     #+begin_src emacs-lisp
-      (use-package projectile
-	:config
-	(projectile-mode +1))
+	    (use-package projectile
+	      :general
+	      (nmap
+		:prefix "SPC"
+		"pa" '(projectile-add-known-project :wk "Projectile add known project")
+		)
+	      :config
+	      (projectile-mode +1))
     #+end_src
 *** haskell-mode
     #+begin_src emacs-lisp
@@ -316,7 +321,7 @@
     #+begin_src emacs-lisp
       (use-package direnv
 	:config
-	(direnv-envrc-mode))
+	(direnv-mode))
     #+end_src
 *** color theme
     #+begin_src emacs-lisp
@@ -387,14 +392,15 @@
 	:prefix "SPC"
 	"ff" 'helm-find-files
 	":" '(helm-M-x :which-key "M-x")
+	"bb" '(switch-to-buffer :which-key "Switch to buffer")
 	)
       :config
-      (use-package helm-flx)
-      (use-package helm-fuzzier)
+      ;; (use-package helm-flx)
+      ;; (use-package helm-fuzzier)
       (use-package helm-rg)
       (helm-mode 1)
-      (helm-flx-mode 1)
-      (helm-fuzzier-mode 1)
+      ;; (helm-flx-mode 1)
+      ;; (helm-fuzzier-mode 1)
       :bind (:map helm-map
 		  ("<tab>" . helm-execute-persistent-action)
 		  ("C-h" . helm-find-files-up-one-level)
@@ -436,6 +442,9 @@
 
 I've *really* missed this one.... =C-x o= gets old fast
 *** TODO helm
+**** DONE initial 
+**** TODO fix completions not showing up in =SPC f f=
+maybe smex or something is doing this?
 *** TODO =SPC *= search word at point through project
 *** TODO =SPC s p= search project
 *** TODO =SPC '= search project (or skip this one and use SPC s p all time?)
