@@ -356,56 +356,63 @@
 	  helm-swoop-split-direction 'split-window-vertically
 	  helm-swoop-speed-or-color t
 	  helm-swoop-split-window-function 'helm-default-display-buffer
-	  helm-swoop-pre-input-function (lambda () "")))
-
-  (use-package helm
-    :init
-    (setq helm-M-x-fuzzy-match t
-	  helm-mode-fuzzy-match t
-	  helm-buffers-fuzzy-matching t
-	  helm-recentf-fuzzy-match t
-	  helm-locate-fuzzy-match t
-	  helm-semantic-fuzzy-match t
-	  helm-imenu-fuzzy-match t
-	  helm-completion-in-region-fuzzy-match t
-	  helm-candidate-number-list 80
-	  ;; helm-split-window-in-side-p t
-	  helm-move-to-line-cycle-in-source t
-	  helm-echo-input-in-header-line t
-	  helm-autoresize-max-height 0
-	  helm-autoresize-min-height 20
-	  helm-always-two-windows t
-	  )
+	  helm-swoop-pre-input-function (lambda () ""))
     :general
     (nmap
-      :prefix "SPC"
-      "ff" 'helm-find-files
-      "SPC" '(helm-M-x :which-key "M-x")
-      )
-    :config
-    (use-package helm-flx)
-    (use-package helm-fuzzier)
-    (use-package helm-rg)
-    (helm-mode 1)
-    (helm-flx-mode 1)
-    (helm-fuzzier-mode 1)
-    :bind (:map helm-map
-		("<tab>" . helm-execute-persistent-action)
-		("C-h" . helm-find-files-up-one-level)
-		("<backtab>" . helm-find-files-up-one-level)
-		("C-z" . helm-select-action)
-		)
+	:prefix "SPC"
+	"ss" '(helm-swoop :which-key "helm swoop")
+	)
     )
 
-  (use-package helm-projectile
-    :general
-    (nmap
-      :prefix "SPC"
-      "pp"  '(helm-projectile-switch-project :which-key "switch project")
-      "pb"  '(helm-projectile-switch-to-buffer :which-key "switch buffer")
-      "pf" 'helm-projectile-find-file
+    (use-package helm
+      :init
+      (setq helm-M-x-fuzzy-match t
+	    helm-mode-fuzzy-match t
+	    helm-buffers-fuzzy-matching t
+	    helm-recentf-fuzzy-match t
+	    helm-locate-fuzzy-match t
+	    helm-semantic-fuzzy-match t
+	    helm-imenu-fuzzy-match t
+	    helm-completion-in-region-fuzzy-match t
+	    helm-candidate-number-list 80
+	    ;; helm-split-window-in-side-p t
+	    helm-move-to-line-cycle-in-source t
+	    helm-echo-input-in-header-line t
+	    helm-autoresize-max-height 0
+	    helm-autoresize-min-height 20
+	    helm-always-two-windows t
+	    )
+      :general
+      (nmap
+	:prefix "SPC"
+	"ff" 'helm-find-files
+	":" '(helm-M-x :which-key "M-x")
+	)
+      :config
+      (use-package helm-flx)
+      (use-package helm-fuzzier)
+      (use-package helm-rg)
+      (helm-mode 1)
+      (helm-flx-mode 1)
+      (helm-fuzzier-mode 1)
+      :bind (:map helm-map
+		  ("<tab>" . helm-execute-persistent-action)
+		  ("C-h" . helm-find-files-up-one-level)
+		  ("<backtab>" . helm-find-files-up-one-level)
+		  ("C-z" . helm-select-action)
+		  )
       )
-    )
+
+    (use-package helm-projectile
+      :general
+      (nmap
+	:prefix "SPC"
+	"pp"  '(helm-projectile-switch-project :which-key "switch project")
+	"pb"  '(helm-projectile-switch-to-buffer :which-key "switch buffer")
+	"pf" 'helm-projectile-find-file
+	"SPC" 'helm-projectile-find-file
+	)
+      )
 #+end_src
 *** helper functions
 **** toggle maximize buffer
@@ -462,3 +469,4 @@ C-x C-e is annoying sometimes... I think spacemacs had something for this
 *** TODO maybe make =fj= work as evil escape too since I quickly smash them in the wrong order sometimes
 *** TODO hoogle/stackage search in helm
 *** TODO github fuzzy search !!! (copy paste code examples from search OoOOOOOO)
+*** TODO make helm less obtrusive (helm-swoop in an org src buffer for instance)
