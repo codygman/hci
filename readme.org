@@ -281,6 +281,17 @@
 	  "o-" 'dired
 	  ))
     #+end_src
+*** save-hist-mode           :built-in:
+    #+begin_src emacs-lisp
+      (use-package savehist
+	:init
+	(setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+	(setq savehist-file "~/.emacs.d/savehist")
+	:config
+	(savehist-mode 1)
+	)
+
+    #+end_src
 
 *** magit
     #+begin_src emacs-lisp
