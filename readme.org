@@ -230,6 +230,12 @@ nix-env --uninstall nox
 
 	  )
 	)
+  (use-package evil
+   :init
+    (setq evil-want-integration t
+  ) ;; This is optional since it's already set to t by default.
+    :config
+    (evil-mode 1))
 
       (use-package evil-collection
 	:after evil
