@@ -1,1 +1,1 @@
-("~/hci/")
+("~/hci/" "~/code/minimal-emacs-literate-workflow/")
