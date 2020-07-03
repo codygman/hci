@@ -224,13 +224,14 @@ nix-env --uninstall nox
     #+end_src
 *** evil and evil collection
     #+begin_src emacs-lisp
+      (use-package evil
+	:after general
+	:init
       (setq evil-want-keybinding nil
 	    evil-want-C-d-scroll t
 	    evil-want-C-u-scroll t
 	    evil-want-integration t
 	    )
-      (use-package evil
-	:after general
 	:config
 	(evil-mode 1)
 	:general
