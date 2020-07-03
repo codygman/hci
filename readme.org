@@ -198,44 +198,13 @@ nix-env --uninstall nox
       (setq evil-want-keybinding nil
 	    evil-want-C-d-scroll t
 	    evil-want-C-u-scroll t
+	    evil-want-integration t
 	    )
       (use-package evil
-	:init
-	(setq evil-want-integration t
-	      ) ;; This is optional since it's already set to t by default.
 	:config
 	(evil-mode 1)
-	:general
-	(nmap
-	  :prefix "SPC"
-	  ;; window management
-	  ;;; splits
-	  "wv"  '(split-window-right :which-key "split right a window")
-	  "ws"  '(split-window-below :which-key "split bottom")
-
-	  ;;; moving between windows
-	  "wd"  '(delete-window :which-key "delete window")
-	  "wm"  '(toggle-maximize-buffer :which-key "maximize buffer")
-	  "wh"  '(evil-window-left :which-key "move left a window")
-	  "wj"  '(evil-window-down :which-key "move down a window")
-	  "wk"  '(evil-window-up :which-key "move up a window")
-	  "wl"  '(evil-window-right :which-key "move right a window")
-
-	  ;;; actually moving windows
-	  ;;; TODO evil-move-function-far-* doesn't do this, should see what doom did here (maybe windmove)?
-	  ;; "wH"  '(somefunctionidk-window-left :which-key "move a window left")
-	  ;; "wJ"  '(somefunctionidk-window-down :which-key "move a window down")
-	  ;; "wK"  '(somefunctionidk-window-up :which-key "move a window up")
-	  ;; "wL"  '(somefunctionidk-window-right :which-key "move a window right")
-
-	  )
+	
 	)
-  (use-package evil
-   :init
-    (setq evil-want-integration t
-  ) ;; This is optional since it's already set to t by default.
-    :config
-    (evil-mode 1))
 
       (use-package evil-collection
 	:after evil
