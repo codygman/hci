@@ -367,35 +367,39 @@
 ** Random Things TODO
 *** BIG NOTE: crib from [[file:~/code/minimal-emacs-literate-workflow/init.el::;; prevent gc during startup][minimal-emacs-literate-workflow config]]
     also https://git.sr.ht/~codygman/emacs-config/tree/master
-*** TODO window management
+*** DONE window management
     SPC j (up) SPC l (left) etc
 
 I've *really* missed this one.... =C-x o= gets old fast
-*** TODO =SPC n l= org store link
+*** TODO helm
 *** TODO =SPC *= search word at point through project
-*** TODO =SPC '= search project
 *** TODO =SPC s p= search project
+*** TODO =SPC '= search project (or skip this one and use SPC s p all time?)
     huh... =projectile-ripgrep= couldn't find rg? But:
+*** TODO =SPC w {u,r}= for winner undo/redo
+*** TODO =SPC w w= maybe to switch buffers more quickly?
+*** TODO compilation mode bindings (SPC c c/SPC c C)
+*** TODO flycheck
+**** TODO elisp (without all the docs noise)
+**** TODO shellcheck
+**** TODO hlint
+*** TODO use fixed width font for org source buffers
+  - otherwise code doesn't align
+  - I've done this before elsewhere, maybe see https://git.sr.ht/~codygman/emacs-config/tree/master
+  
 *** TODO yasnippet and source code block completion omfg
     
 also maybe look at my experiment here again: [[file:~/code/minimal-emacs-literate-workflow/init.el::;; prevent gc during startup][minimal-emacs-literate-workflow config]]
 
 snippets
 https://git.sr.ht/~codygman/emacs-config/tree/master/snippets/org-mode
-*** TODO save file on evil escape
-*** TODO turn ou key statistics thing
-*** TODO flycheck
-**** TODO elisp (without all the docs noise)
-**** TODO shellcheck
-**** TODO hlint
 *** TODO =alt+{l,r}= demote/promote subheading
+*** TODO =SPC n l= org store link
+*** TODO save file on evil escape
+*** TODO turn on key statistics thing
 *** TODO eval form at point... current form... or something
 C-x C-e is annoying sometimes... I think spacemacs had something for this
 *** TODO =RET= should follow org links and not go to next line (evil collection doing this??)
-*** TODO use fixed width font for org source buffers
-  - otherwise code doesn't align
-  - I've done this before elsewhere, maybe see https://git.sr.ht/~codygman/emacs-config/tree/master
-  
 *** TODO switch to help buffer by default after doing =SPC h <somekey>=
    that way I can scroll through it and quit out when I'm done (though maybe I could get used to the "scroll other buffer" workflow that aims to let you keep doing what you were doing
 *** TODO maybe make =fj= work as evil escape too since I quickly smash them in the wrong order sometimes
