@@ -209,14 +209,25 @@ Package should already be there, to add a new one add it to home.nix
     (nmap
       :prefix "SPC"
       ;; window management
+      ;;; splits
+      "wv"  '(split-window-right :which-key "split right a window")
+      "ws"  '(split-window-below :which-key "split bottom")
+
+      ;;; moving between windows
       "wd"  '(delete-window :which-key "delete window")
       "wm"  '(toggle-maximize-buffer :which-key "maximize buffer")
-      "wh"  '(evil-window-left :which-key "move left")
+      "wh"  '(evil-window-left :which-key "move left a window")
       "wj"  '(evil-window-down :which-key "move down a window")
       "wk"  '(evil-window-up :which-key "move up a window")
       "wl"  '(evil-window-right :which-key "move right a window")
-      "wv"  '(split-window-right :which-key "split right a window")
-      "ws"  '(split-window-below :which-key "split bottom")
+
+      ;;; actually moving windows
+      ;;; TODO evil-move-function-far-* doesn't do this, should see what doom did here (maybe windmove)?
+      ;; "wH"  '(somefunctionidk-window-left :which-key "move a window left")
+      ;; "wJ"  '(somefunctionidk-window-down :which-key "move a window down")
+      ;; "wK"  '(somefunctionidk-window-up :which-key "move a window up")
+      ;; "wL"  '(somefunctionidk-window-right :which-key "move a window right")
+
       )
     )
 
