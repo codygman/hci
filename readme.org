@@ -193,32 +193,9 @@ nix-env --uninstall nox
     #+begin_src emacs-lisp
 (require 'use-package)
     #+end_src
-*** evil and evil collection
-    #+begin_src emacs-lisp
-      (setq evil-want-keybinding nil
-	    evil-want-C-d-scroll t
-	    evil-want-C-u-scroll t
-	    evil-want-integration t
-	    )
-      (use-package evil
-	:config
-	(evil-mode 1)
-	
-	)
-
-      (use-package evil-collection
-	:after evil
-	:config
-	(evil-collection-init))
-    #+end_src
-*** evil-magit
-    #+begin_src emacs-lisp
-    (use-package evil-magit :after evil :config (evil-magit-init))
-    #+end_src
 *** general
     #+begin_src emacs-lisp
       (use-package general
-	:after evil
 	:config
 	(general-auto-unbind-keys) ;; NOTE not sure this works?
 	(general-evil-setup t)
@@ -244,6 +221,30 @@ nix-env --uninstall nox
 	       "ha" '(apropos-command :which-key "Apropos Command")
 	       )
 	)
+    #+end_src
+*** evil and evil collection
+    #+begin_src emacs-lisp
+      (setq evil-want-keybinding nil
+	    evil-want-C-d-scroll t
+	    evil-want-C-u-scroll t
+	    evil-want-integration t
+	    )
+      (use-package evil
+        :after general
+	:config
+	(evil-mode 1)
+	:general
+	
+	)
+
+      (use-package evil-collection
+	:after evil
+	:config
+	(evil-collection-init))
+    #+end_src
+*** evil-magit
+    #+begin_src emacs-lisp
+    (use-package evil-magit :after evil :config (evil-magit-init))
     #+end_src
 *** magit
     #+begin_src emacs-lisp
