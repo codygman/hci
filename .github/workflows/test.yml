@@ -18,4 +18,5 @@ jobs:
     - run: bash home_manager_setup.sh
     - run: bash home_manager_switch.sh
     - run: bash test.sh
+    - run: bash run-ert-tests.sh
 
