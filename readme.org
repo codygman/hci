@@ -188,6 +188,11 @@
       (toggle-scroll-bar -1)
       (menu-bar-mode -1)
     #+end_src
+*** Misc
+    #+begin_src emacs-lisp
+      ;; always follow symlinks and DONT PROMPT ME
+      (setq vc-follow-symlinks t)
+    #+end_src
 ** Package configuration
 *** use-package
     #+begin_src emacs-lisp
@@ -295,12 +300,6 @@
 *** projectile
     #+begin_src emacs-lisp
       (use-package projectile
-	:general
-	(nmap
-	  :prefix "SPC"
-	  "pp" 'projectile-switch-project
-	  "pf" 'projectile-find-file
-	  )
 	:config
 	(projectile-mode +1))
     #+end_src
@@ -346,10 +345,68 @@
 *** winner mode
     #+begin_src emacs-lisp
       (use-package winner
-	:ensure t
 	:config
 	(winner-mode 1))
     #+end_src
+*** Helm
+#+begin_src emacs-lisp
+  (use-package helm-swoop
+    :init
+    (setq helm-swoop-split-with-multiple-windows t
+	  helm-swoop-split-direction 'split-window-vertically
+	  helm-swoop-speed-or-color t
+	  helm-swoop-split-window-function 'helm-default-display-buffer
+	  helm-swoop-pre-input-function (lambda () "")))
+
+  (use-package helm
+    :init
+    (setq helm-M-x-fuzzy-match t
+	  helm-mode-fuzzy-match t
+	  helm-buffers-fuzzy-matching t
+	  helm-recentf-fuzzy-match t
+	  helm-locate-fuzzy-match t
+	  helm-semantic-fuzzy-match t
+	  helm-imenu-fuzzy-match t
+	  helm-completion-in-region-fuzzy-match t
+	  helm-candidate-number-list 80
+	  ;; helm-split-window-in-side-p t
+	  helm-move-to-line-cycle-in-source t
+	  helm-echo-input-in-header-line t
+	  helm-autoresize-max-height 0
+	  helm-autoresize-min-height 20
+	  helm-always-two-windows t
+	  )
+    :general
+    (nmap
+      :prefix "SPC"
+      "ff" 'helm-find-files
+      "SPC" '(helm-M-x :which-key "M-x")
+      )
+    :config
+    (use-package helm-flx)
+    (use-package helm-fuzzier)
+    (use-package helm-rg)
+    (helm-mode 1)
+    (helm-flx-mode 1)
+    (helm-fuzzier-mode 1)
+    :bind (:map helm-map
+		("<tab>" . helm-execute-persistent-action)
+		("C-h" . helm-find-files-up-one-level)
+		("<backtab>" . helm-find-files-up-one-level)
+		("C-z" . helm-select-action)
+		)
+    )
+
+  (use-package helm-projectile
+    :general
+    (nmap
+      :prefix "SPC"
+      "pp"  '(helm-projectile-switch-project :which-key "switch project")
+      "pb"  '(helm-projectile-switch-to-buffer :which-key "switch buffer")
+      "pf" 'helm-projectile-find-file
+      )
+    )
+#+end_src
 *** helper functions
 **** toggle maximize buffer
      #+begin_src elisp

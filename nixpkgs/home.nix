@@ -35,6 +35,11 @@ in
         evil
 	evil-magit
         evil-collection
+	helm
+	helm-rg
+	helm-swoop
+	helm-flx
+	helm-fuzzier
         magit
 	direnv
 	doom-themes
