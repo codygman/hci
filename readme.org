@@ -198,13 +198,6 @@ nix-env --uninstall nox
       (use-package general
 	:config
 	(general-auto-unbind-keys) ;; NOTE not sure this works?
-	(general-evil-setup t)
-	(general-imap "j"
-		      (general-key-dispatch 'self-insert-command
-					    :timeout 0.25
-					    ;; TODO make this work so jf writes the file when I enter normal mode
-					    ;; "j" '(my-write-then-normal-state)
-					    "f" 'evil-normal-state))
 	(general-create-definer my-leader-def
 	  :prefix "C")
 	      (my-leader-def
