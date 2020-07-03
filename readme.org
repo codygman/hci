@@ -232,6 +232,7 @@
 	  "u"   '(universal-argument :which-key "Universal Argument")
 	  "tf" '(toggle-frame-fullscreen :which-key "Toggle Fullscreen")
 	  "wd" '(delete-window :which-key "Delete Window")
+	  "qq" '(save-buffers-kill-terminal :which-key "Quit Emacs")
 
 	  "hf" '(describe-function :which-key "Describe Function")
 	  "hk" '(describe-key :which-key "Describe Key")
