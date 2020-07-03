@@ -3,6 +3,7 @@
 let
   sources = import ./nix/sources.nix;
   emacs-overlay = sources.emacs-overlay {};
+  # mylorri = sources.lorri;
   pkgs = import sources.nixpkgs { overlays = [ (import sources.emacs-overlay) ];};
   home-manager = import sources.home-manager {};
   myEnv = builtins.getEnv "MYENV";
@@ -86,13 +87,17 @@ in
 			    stack
                             source-code-pro
                             sqlite
+			    # mylorri
                             gcc
 			    # niv
                           ];
   };
 
   services = {
-    lorri.enable = true;
+    lorri = {
+      # package = mylorri;
+      enable = true;
+    };
     redshift = {
       enable = true;
       latitude = "32.7767";
