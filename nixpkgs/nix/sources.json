@@ -35,18 +35,6 @@
         "url": "https://github.com/nmattia/niv/archive/f73bf8d584148677b01859677a63191c31911eae.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
-    "nix-doom-emacs": {
-        "branch": "master",
-        "description": "doom-emacs packaged for Nix",
-        "homepage": "",
-        "owner": "vlaci",
-        "repo": "nix-doom-emacs",
-        "rev": "9132038a72eb73c55a541bd03a2afc10a1be140c",
-        "sha256": "1ifgjbmh9b3h13f0sizpvawlmbl7yfc154lrsbijm8c4il18bxx9",
-        "type": "tarball",
-        "url": "https://github.com/vlaci/nix-doom-emacs/archive/9132038a72eb73c55a541bd03a2afc10a1be140c.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
     "nixpkgs": {
         "branch": "nixos-19.09",
         "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",
