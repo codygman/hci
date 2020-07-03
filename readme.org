@@ -336,6 +336,17 @@ Package should already be there, to add a new one add it to home.nix
 	)
 
     #+end_src
+*** helper functions
+**** toggle maximize buffer
+     #+begin_src elisp
+       (defun toggle-maximize-buffer () "Maximize buffer"
+	      (interactive)
+	      (if (= 1 (length (window-list)))
+		  (jump-to-register '_)
+		(progn
+		  (window-configuration-to-register '_)
+		  (delete-other-windows))))
+     #+end_src
 * NOTE 
 ** This [[https://github.com/codygman/my-emacs-everywhere/blob/4898bc236fcff390d587e69831f3c17019e027f0/emacs-config.org][minimal literate config]] I wrote is probably useful
 *** use graphic p stuff 
