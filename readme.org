@@ -202,8 +202,7 @@
 	:config
 	(which-key-mode))
     #+end_src
-
-*** general
+*** general (Best leave this loading near the top)
     #+begin_src emacs-lisp
       (use-package general
 	:after which-key
