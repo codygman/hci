@@ -191,13 +191,19 @@ nix-env --uninstall nox
 ** Package configuration
 *** use-package
     #+begin_src emacs-lisp
+(require 'general)
 (require 'use-package)
     #+end_src
 *** general
     #+begin_src emacs-lisp
       (use-package general
+        :init
+(setq evil-want-keybinding nil
+      evil-want-C-d-scroll t
+      evil-want-C-u-scroll t
+      evil-want-integration t
+      )
 	:config
-	(general-auto-unbind-keys) ;; NOTE not sure this works?
 	(general-create-definer my-leader-def
 	  :prefix "C")
 	      (my-leader-def
@@ -208,6 +214,7 @@ nix-env --uninstall nox
 	       "u"   '(universal-argument :which-key "Universal Argument")
 	       "tf" '(toggle-frame-fullscreen :which-key "Toggle Fullscreen")
 	       "wd" '(delete-window :which-key "Delete Window")
+	       "wm"  '(toggle-maximize-buffer :which-key "maximize buffer")
 
 	       "hf" '(describe-function :which-key "Describe Function")
 	       "hk" '(describe-key :which-key "Describe Key")
@@ -217,11 +224,11 @@ nix-env --uninstall nox
     #+end_src
 *** evil and evil collection
     #+begin_src emacs-lisp
-      (setq evil-want-keybinding nil
-	    evil-want-C-d-scroll t
-	    evil-want-C-u-scroll t
-	    evil-want-integration t
-	    )
+      ;; (setq evil-want-keybinding nil
+      ;;       evil-want-C-d-scroll t
+      ;;       evil-want-C-u-scroll t
+      ;;       evil-want-integration t
+      ;;       )
       (use-package evil
 	:after general
 	:config
@@ -230,9 +237,7 @@ nix-env --uninstall nox
 	(nmap
 	  :prefix "SPC"
 	  ;; TODO uncommenting any of these causes an error where evil isn't loaded
-	  ;; "wd"  '(delete-window :which-key "delete window")
-	  ;; "wm"  '(toggle-maximize-buffer :which-key "maximize buffer")
-	  ;; "wh"  '(evil-window-left :which-key "move left")
+	  "wh"  '(evil-window-left :which-key "move left")
 	  ;; "wj"  '(evil-window-down :which-key "move down a window")
 	  ;; "wk"  '(evil-window-up :which-key "move up a window")
 	  ;; "wl"  '(evil-window-right :which-key "move right a window")

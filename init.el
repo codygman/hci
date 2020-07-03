@@ -7,5 +7,4 @@
       (format "~/.emacs.d/%s" path)
     (let ((github-workspace (getenv "GITHUB_WORKSPACE")))
       (progn (message (format "emacs-d-directory-for: GITHUB_WORKSPACE is %s" github-workspace)) (format "%s/%s" github-workspace path)))))
-
 (org-babel-load-file (emacs-d-directory-for "readme.org"))
