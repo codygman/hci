@@ -65,27 +65,27 @@
 ** Assumes =codygman/hci= repo cloned and setup
 *** start emacs in a nix shell
     #+BEGIN_SRC sh
-nix-shell --pure -I nixpkgs=https://github.com/NixOS/nixpkgs-channels/archive/d5291756487d70bc336e33512a9baf9fa1788faf.tar.gz -p emacs git
+    nix-shell --pure -I nixpkgs=https://github.com/NixOS/nixpkgs-channels/archive/d5291756487d70bc336e33512a9baf9fa1788faf.tar.gz -p emacs git
     #+END_SRC
 *** =C-x C-f= your way to ~/hci/readme.org
 *** come back to this specific spot from emacs, then tangle or evaluate the source code blocks as appropriate
 *** clone =codygman/hci=
     #+begin_src sh :dir ~
-  git clone git@github.com:codygman/codygman/hci.git
+    git clone git@github.com:codygman/codygman/hci.git
     #+end_src
 *** setup
     :PROPERTIES:
     :ID:       51d79bf3-53bd-4fc4-83d0-8616c0718d65
     :END:
     #+begin_src sh :tangle /tmp/setup.sh
-# mv current emacs somewhere else (or remove if you don't need it)
-mv ~/.emacs.d ~/.bak.emacs.d
-git clone -b develop git://github.com/hlissner/doom-emacs ~/.emacs.d
-ln -rs ~/codygman/hci/doom.d ~/doom.d
-# assuming "personal" env
-cd ~/.emacs.d
-cd MYENV="personal" ./switch.hs
-~/.emacs.d/bin/doom install
+      # mv current emacs somewhere else (or remove if you don't need it)
+      mv ~/.emacs.d ~/.bak.emacs.d
+      git clone -b develop git://github.com/hlissner/doom-emacs ~/.emacs.d
+      ln -rs ~/codygman/hci/doom.d ~/doom.d
+      # assuming "personal" env
+      cd ~/.emacs.d
+      cd MYENV="personal" ./switch.hs
+      ~/.emacs.d/bin/doom install
     #+end_src
 
     #+RESULTS:
@@ -96,8 +96,8 @@ cd MYENV="personal" ./switch.hs
 **** =SPC o t= to popup a terminal
 **** from within the terminal
      #+BEGIN_SRC sh
-cd /tmp/
-sh setup.sh
+       cd /tmp/
+       sh setup.sh
      #+END_SRC
 *** common issues
 **** "'X' and 'Y' have the same priority; use nix-env --set-flag..."
@@ -109,7 +109,7 @@ sh setup.sh
 ****** =NOTE= the library name immediately after =/store/= is =nox= so it is what is causing the clash
 ****** resolution
        #+begin_src sh
-nix-env --uninstall nox
+	 nix-env --uninstall nox
        #+end_src
 
        #+RESULTS:
@@ -153,24 +153,24 @@ nix-env --uninstall nox
 ** Prevent use-package from installing anything
 *** Set ensure-function to nil
     #+begin_src emacs-lisp
-(setq use-package-ensure-function 'ignore)
+      (setq use-package-ensure-function 'ignore)
     #+end_src
 *** Set package-archives to nil so there's nothing to install from
 
     Package should already be there, to add a new one add it to home.nix
 
     #+begin_src emacs-lisp
-(setq package-archives nil)
+      (setq package-archives nil)
     #+end_src
 ** Core Emacs Configuration
 *** Font stuff
     #+begin_src emacs-lisp
-;; Set default font
-(set-face-attribute 'default nil
-		    :family "Source Code Pro"
-		    :height 120
-		    :weight 'normal
-		    :width 'normal)
+      ;; Set default font
+      (set-face-attribute 'default nil
+			  :family "Source Code Pro"
+			  :height 120
+			  :weight 'normal
+			  :width 'normal)
     #+end_src
 
     #+begin_src emacs-lisp
@@ -180,7 +180,7 @@ nix-env --uninstall nox
     #+end_src
 *** Set a custom custom-file
     #+begin_src emacs-lisp
-    (setq custom-file "~/.emacs-custom.el")
+      (setq custom-file "~/.emacs-custom.el")
     #+end_src
 *** Hide annoying things
     #+begin_src emacs-lisp
@@ -191,9 +191,18 @@ nix-env --uninstall nox
 ** Package configuration
 *** use-package
     #+begin_src emacs-lisp
-(require 'general)
-(require 'use-package)
+      (require 'use-package)
     #+end_src
+*** which-key
+    #+begin_src emacs-lisp
+      (use-package which-key
+	:init
+	(setq which-key-separator " ")
+	(setq which-key-prefix-prefix "+")
+	:config
+	(which-key-mode))
+    #+end_src
+
 *** general
     #+begin_src emacs-lisp
       (use-package general
@@ -203,37 +212,84 @@ nix-env --uninstall nox
       evil-want-C-u-scroll t
       evil-want-integration t
       )
+	:after which-key
 	:config
+	(general-auto-unbind-keys) ;; NOTE not sure this works?
+	(general-evil-setup t)
+	(general-imap "j"
+	  (general-key-dispatch 'self-insert-command
+	    :timeout 0.25
+	    ;; TODO make this work so jf writes the file when I enter normal mode
+	    ;; "j" '(my-write-then-normal-state)
+	    "f" 'evil-normal-state))
+	(my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
+	  "u"   '(universal-argument :which-key "Universal Argument")
+	  "tf" '(toggle-frame-fullscreen :which-key "Toggle Fullscreen")
+	  "wd" '(delete-window :which-key "Delete Window")
+
+	  "hf" '(describe-function :which-key "Describe Function")
+	  "hk" '(describe-key :which-key "Describe Key")
+	  "ha" '(apropos-command :which-key "Apropos Command")
 	(general-create-definer my-leader-def
-	  :prefix "C")
-	      (my-leader-def
-	       :states '(normal visual emacs motion)
+	  ;; window
+	  "wm"  '(toggle-maximize-buffer :which-key "maximize buffer")
+	  "wh"  '(evil-window-left :which-key "move left")
+	  "wj"  '(evil-window-down :which-key "move down a window")
+	  "wk"  '(evil-window-up :which-key "move up a window")
+	  "wl"  '(evil-window-right :which-key "move right a window")
+	  "wv"  '(split-window-right :which-key "split right a window")
+	  "ws"  '(split-window-below :which-key "split bottom")
+	  )
 	       :prefix "SPC"
 	       :keymaps 'override
 	       :non-normal-prefix "M-SPC"
 	       "u"   '(universal-argument :which-key "Universal Argument")
-	       "tf" '(toggle-frame-fullscreen :which-key "Toggle Fullscreen")
-	       "wd" '(delete-window :which-key "Delete Window")
-	       "wm"  '(toggle-maximize-buffer :which-key "maximize buffer")
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
+	  "u"   '(universal-argument :which-key "Universal Argument")
+	  "tf" '(toggle-frame-fullscreen :which-key "Toggle Fullscreen")
+	  "wd" '(delete-window :which-key "Delete Window")
 
-	       "hf" '(describe-function :which-key "Describe Function")
-	       "hk" '(describe-key :which-key "Describe Key")
-	       "ha" '(apropos-command :which-key "Apropos Command")
-	       )
+	  "hf" '(describe-function :which-key "Describe Function")
+	  "hk" '(describe-key :which-key "Describe Key")
+	;; NOTE For some reason general binding is broken in the evil block
+	  "wh"  '(evil-window-left :which-key "move left")
+	  "wj"  '(evil-window-down :which-key "move down a window")
+	  "wk"  '(evil-window-up :which-key "move up a window")
+	  "wl"  '(evil-window-right :which-key "move right a window")
+	  "wv"  '(split-window-right :which-key "split right a window")
+	  "ws"  '(split-window-below :which-key "split bottom")
+	  )
+======= end
 	)
     #+end_src
 *** evil and evil collection
     #+begin_src emacs-lisp
+<<<<<<< variant A
       ;; (setq evil-want-keybinding nil
       ;;       evil-want-C-d-scroll t
       ;;       evil-want-C-u-scroll t
       ;;       evil-want-integration t
       ;;       )
+>>>>>>> variant B
+======= end
       (use-package evil
-	:after general
+	:init
+	(setq evil-want-keybinding nil
+	      evil-want-C-d-scroll t
+	      evil-want-C-u-scroll t
+	      evil-want-integration t
+	      )
 	:config
 	(evil-mode 1)
 	:general
+<<<<<<< variant A
 	(nmap
 	  :prefix "SPC"
 	  ;; TODO uncommenting any of these causes an error where evil isn't loaded
@@ -245,6 +301,9 @@ nix-env --uninstall nox
 	  ;; "ws"  '(split-window-below :which-key "split bottom")
 	  )
 
+>>>>>>> variant B
+	;; NOTE For some reason general binding is broken in the evil block
+======= end
 	)
 
       (use-package evil-collection
@@ -254,54 +313,54 @@ nix-env --uninstall nox
     #+end_src
 *** evil-magit
     #+begin_src emacs-lisp
-    (use-package evil-magit :after evil :config (evil-magit-init))
+      (use-package evil-magit :after evil :config (evil-magit-init))
     #+end_src
 *** magit
     #+begin_src emacs-lisp
-  (use-package magit
-    :init
-     ;; TODO write test for this
-     (add-hook 'with-editor-mode-hook 'evil-insert-state)
+      (use-package magit
+	:init
+	;; TODO write test for this
+	(add-hook 'with-editor-mode-hook 'evil-insert-state)
 
-    :general
-    (nmap
-     :prefix "SPC"
-     "gg" 'magit-status
-     )
-    )
+	:general
+	(nmap
+	  :prefix "SPC"
+	  "gg" 'magit-status
+	  )
+	)
     #+end_src
 
 *** projectile
     #+begin_src emacs-lisp
-  (use-package projectile
-    :general
-    (nmap
-     :prefix "SPC"
-     "pp" 'projectile-switch-project
-     "pf" 'projectile-find-file
-     )
-    :config
-    (projectile-mode +1))
+      (use-package projectile
+	:general
+	(nmap
+	  :prefix "SPC"
+	  "pp" 'projectile-switch-project
+	  "pf" 'projectile-find-file
+	  )
+	:config
+	(projectile-mode +1))
     #+end_src
 *** haskell-mode
     #+begin_src emacs-lisp
-(use-package haskell-mode
-  :mode ("\\.hs\\'" . haskell-mode)
-  :init
-  (message "personal haskell-mode loading")
-  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-  (add-hook 'haskell-mode-hook 'haskell-indentation-mode))
+      (use-package haskell-mode
+	:mode ("\\.hs\\'" . haskell-mode)
+	:init
+	(message "personal haskell-mode loading")
+	(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+	(add-hook 'haskell-mode-hook 'haskell-indentation-mode))
     #+end_src
 *** direnv mode
     #+begin_src emacs-lisp
-(use-package direnv
- :config
- (direnv-envrc-mode))
+      (use-package direnv
+	:config
+	(direnv-envrc-mode))
     #+end_src
 *** color theme
     #+begin_src emacs-lisp
-  ;; TODO figure out why use-package doesn't work here
-  (load-theme 'doom-one t)
+      ;; TODO figure out why use-package doesn't work here
+      (load-theme 'doom-one t)
     #+end_src
 *** compilation mode
     #+begin_src emacs-lisp

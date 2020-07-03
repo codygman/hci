@@ -40,6 +40,7 @@ in
 	doom-themes
 	general
 	projectile
+	which-key
       ];
     };
 
