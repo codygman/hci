@@ -267,6 +267,16 @@
     #+begin_src emacs-lisp
       (use-package evil-magit :after evil :config (evil-magit-init))
     #+end_src
+*** dired
+    #+begin_src emacs-lisp
+      (use-package dired
+	:general
+	(nmap
+	  :prefix "SPC"
+	  "o-" 'dired
+	  ))
+    #+end_src
+
 *** magit
     #+begin_src emacs-lisp
       (use-package magit
