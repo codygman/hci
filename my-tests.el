@@ -114,9 +114,9 @@
 ;; evil
 (ert-deftest ctrl-u-scrolls-up ()
   (log "ctrl-u-scrolls-up")
-    (find-file (emacs-d-directory-for "testdata/loremipsum.txt"))
-    (execute-kbd-macro (kbd "G"))
-    (execute-kbd-macro (kbd "C-u")))
+  (find-file (emacs-d-directory-for "testdata/loremipsum.txt"))
+  (execute-kbd-macro (kbd "G"))
+  (execute-kbd-macro (kbd "C-u")))
 
 
 ;; helm
@@ -128,18 +128,18 @@
   (projectile-add-known-project (emacs-d-directory-for ""))
   ;; ensure that we can successfully switch to magit for a given project
   (should (string-equal
-   "magit: hci"
-   (save-excursion
-     (with-simulated-input
-	 '("hci"
-	   (wsi-simulate-idle-time 0.5)
-	   "M-g")
-       (helm-projectile-switch-project))
-     (buffer-name)))))
+	   "magit: hci"
+	   (save-excursion
+	     (with-simulated-input
+		 '("hci"
+		   (wsi-simulate-idle-time 0.5)
+		   "M-g")
+	       (helm-projectile-switch-project))
+	     (buffer-name)))))
 
 
 (ert-deftest haskell-flycheck-squiggly-appears-underneath-misspelled-function ()
-    (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
+  (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
   (replace-string "putStrLn" "putStrLnORAORAORA")
   (save-buffer)
   (redisplay t)
@@ -147,7 +147,7 @@
   (should (eq 'flycheck-error (get-char-property (point) 'face)))
   )
 
-    ;; NOTE this isn't perfectly accurate because for some reason emacs on command line when run with tests-run seems to scroll up a different number for.
+;; NOTE this isn't perfectly accurate because for some reason emacs on command line when run with tests-run seems to scroll up a different number for.
 
 ;;   (should (eq nil (executable-find "hello"))) 
 
