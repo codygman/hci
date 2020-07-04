@@ -276,7 +276,11 @@
     #+begin_src emacs-lisp
       (use-package dired
 	:general
-	(nmap
+      (my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
 	  :prefix "SPC"
 	  "o-" 'dired
 	  ))
@@ -301,7 +305,11 @@
 	(add-hook 'with-editor-mode-hook 'evil-insert-state)
 
 	:general
-	(nmap
+	(my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
 	  :prefix "SPC"
 	  "gg" 'magit-status
 	  )
@@ -312,8 +320,12 @@
     #+begin_src emacs-lisp
 	    (use-package projectile
 	      :general
-	      (nmap
-		:prefix "SPC"
+	(my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
+	  :prefix "SPC"
 		"pa" '(projectile-add-known-project :wk "Projectile add known project")
 		)
 	      :config
@@ -374,7 +386,12 @@
 	  helm-swoop-split-window-function 'helm-default-display-buffer
 	  helm-swoop-pre-input-function (lambda () ""))
     :general
-    (nmap
+	(my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
+	  :prefix "SPC"
 	:prefix "SPC"
 	"ss" '(helm-swoop :which-key "helm swoop")
 	)
@@ -426,8 +443,12 @@
 
     (use-package helm-projectile
       :general
-      (nmap
-	:prefix "SPC"
+	(my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
+	  :prefix "SPC"
 	"pp"  '(helm-projectile-switch-project :which-key "switch project")
 	"pb"  '(helm-projectile-switch-to-buffer :which-key "switch buffer")
 	"pf" 'helm-projectile-find-file
