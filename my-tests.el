@@ -52,7 +52,7 @@
 ;; duplicate in init.el
 (defun emacs-d-directory-for (path)
   (if (eq nil (getenv "GITHUB_WORKSPACE"))
-      (format "~/.emacs.d/%s" path)
+      (format "~/hci/%s" path)
     (let ((github-workspace (getenv "GITHUB_WORKSPACE")))
       (progn (message (format "emacs-d-directory-for: GITHUB_WORKSPACE is %s" github-workspace)) (format "%s/%s" github-workspace path)))))
 
@@ -123,14 +123,15 @@
 ;;; helm projectile
 ;;;; TODO can add known projects with helm
 (ert-deftest projectile-switch-projects-to-magit-works ()
-  ;; find git-annex,haskell-ide-engine, and pandoc projects cloned to /tmp
-  (projectile-discover-projects-in-directory "/tmp")
+  ;; find our own git project to test projectile on since we know we'll have it both locally and in CI always
+  (projectile-clear-known-projects)
+  (projectile-add-known-project (emacs-d-directory-for ""))
   ;; ensure that we can successfully switch to magit for a given project
   (should (string-equal
-   "magit: pandoc"
+   "magit: hci"
    (save-excursion
      (with-simulated-input
-	 '("pan"
+	 '("hci"
 	   (wsi-simulate-idle-time 0.5)
 	   "M-g")
        (helm-projectile-switch-project))
