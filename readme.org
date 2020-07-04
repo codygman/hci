@@ -462,6 +462,13 @@
 	)
       )
 #+end_src
+*** nix-mode
+    #+begin_src emacs-lisp
+      (use-package nix
+        :defer nil
+        :mode ("\\.nix\\'" . nix-mode))
+    #+end_src
+
 *** helper functions
 **** toggle maximize buffer
      #+begin_src elisp

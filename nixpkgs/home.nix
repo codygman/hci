@@ -43,6 +43,7 @@ in
 	helm-flx
 	helm-fuzzier
         magit
+	nix-mode
 	direnv
 	doom-themes
         flycheck
