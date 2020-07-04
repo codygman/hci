@@ -83,7 +83,8 @@
 	   )
  (xdescribe "Ironing out odd issues I run into"
 
-	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
+	    ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
 
+	    )
  )
  
