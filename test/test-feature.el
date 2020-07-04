@@ -82,6 +82,20 @@
 
 	   )
 
+ (describe "Project Navigation"
+
+	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
+	   (it "helm projectile starts without an error"
+	     (expect
+	      ;; NOTE this test didn't work because of "window too small"
+	      ;; I don't know if the height/width of the emacs -batch
+	      ;; command is machine specific
+	      ;; so if this fails in CI, on a new computer, different os, etc
+	      ;; look here first
+	      (helm-projectile-switch-project)
+	      :not :to-throw ))
+
+	   )
 
 
  )
