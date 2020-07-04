@@ -23,6 +23,12 @@
 	       (expect 'haskell-mode :to-equal (derived-mode-p 'haskell-mode))
 	       )
 
+	   (xit "flycheck squiggly appears underneath misspelled putStrLnORAORAORA function"
+	       (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
+	       (replace-string "putStrLn" "putStrLnORAORAORA")
+	       (save-buffer)
+	       (sit-for 5)
+
 	   )
 
  (describe "Evil Integration"
