@@ -117,6 +117,25 @@
     (find-file (emacs-d-directory-for "testdata/loremipsum.txt"))
     (execute-kbd-macro (kbd "G"))
     (execute-kbd-macro (kbd "C-u")))
+
+
+;; helm
+;;; helm projectile
+;;;; TODO can add known projects with helm
+(ert-deftest projectile-switch-projects-to-magit-works ()
+  ;; find git-annex,haskell-ide-engine, and pandoc projects cloned to /tmp
+  (projectile-discover-projects-in-directory "/tmp")
+  ;; ensure that we can successfully switch to magit for a given project
+  (should (string-equal
+   "magit: pandoc"
+   (save-excursion
+     (with-simulated-input
+	 '("pan"
+	   (wsi-simulate-idle-time 0.5)
+	   "M-g")
+       (helm-projectile-switch-project))
+     (buffer-name)))))
+
     ;; NOTE this isn't perfectly accurate because for some reason emacs on command line when run with tests-run seems to scroll up a different number for.
 
 ;;   (should (eq nil (executable-find "hello"))) 
