@@ -81,6 +81,19 @@
 		:not :to-throw ))
 
 	   )
+
+ (describe "Specific modes"
+
+	   (describe "nix-mode"
+
+		     (it "Nix mode highlighting works"
+			 (find-file (emacs-d-directory-for "testdata/sample.nix"))
+			 (expect (get-char-property (point) 'face) :to-equal "nix-keyword-face"))
+
+		     )
+
+	   )
+
  (describe "Ironing out odd issues I run into"
 
 	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
