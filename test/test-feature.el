@@ -23,11 +23,12 @@
 	       (expect 'haskell-mode :to-equal (derived-mode-p 'haskell-mode))
 	       )
 
-	   (xit "flycheck squiggly appears underneath misspelled putStrLnORAORAORA function"
+	   (it "flycheck squiggly appears underneath misspelled putStrLnORAORAORA function"
 	       (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
 	       (replace-string "putStrLn" "putStrLnORAORAORA")
 	       (save-buffer)
-	       (sit-for 5)
+	       (sit-for 1)
+	       (expect (get-char-property (point) 'face) :to-equal 'flycheck-error))
 
 	   )
 
