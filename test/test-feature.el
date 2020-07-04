@@ -84,13 +84,6 @@
 
  (describe "Specific modes"
 
-	   (describe "nix-mode"
-
-		     (it "Nix mode highlighting works"
-			 (find-file (emacs-d-directory-for "testdata/sample.nix"))
-			 (expect (get-char-property (point) 'face) :to-equal "nix-keyword-face"))
-
-		     )
 
 	   )
 
