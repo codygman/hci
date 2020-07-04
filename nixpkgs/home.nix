@@ -46,6 +46,7 @@ in
 	doom-themes
 	general
 	projectile
+	with-simulated-input
 	which-key
       ];
     };

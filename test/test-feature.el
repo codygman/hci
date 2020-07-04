@@ -11,19 +11,19 @@
 
  (describe "Set a baseline with simple tests"
 
-           (it "emacs version should be 28.0.50"
-               (expect emacs-version :to-equal "28.0.50"))
+	   (it "emacs version should be 28.0.50"
+	       (expect emacs-version :to-equal "28.0.50"))
 
-           )
+	   )
 
  (describe "Haskell Integration"
 
-           (it "haskell mode is active after opening a haskell file"
-               (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
-               (expect 'haskell-mode :to-equal (derived-mode-p 'haskell-mode))
-               )
+	   (it "haskell mode is active after opening a haskell file"
+	       (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
+	       (expect 'haskell-mode :to-equal (derived-mode-p 'haskell-mode))
+	       )
 
-           )
+	   )
 
  (describe "Evil Integration"
 
@@ -43,9 +43,9 @@
 
 	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
 	   (it "C-d scrolls down in magit status buffer"
-	     (expect
-	      (execute-kbd-macro (kbd "C-d"))
-	      :not :to-throw ))
+	       (expect
+		(execute-kbd-macro (kbd "C-d"))
+		:not :to-throw ))
 
 	   )
 
@@ -85,16 +85,20 @@
  (describe "Project Navigation"
 
 	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
-	   (it "helm projectile starts without an error"
+	   (it "can switch projects with helm projectile"
+	     ;; (funcall-interactively 'projectile-add-known-project "~/.emacs.d/testdata/simple-haskell-project/")
 	     (expect
 	      ;; NOTE this test didn't work because of "window too small"
 	      ;; I don't know if the height/width of the emacs -batch
 	      ;; command is machine specific
 	      ;; so if this fails in CI, on a new computer, different os, etc
 	      ;; look here first
-	      (helm-projectile-switch-project)
+	      (with-simulated-input
+		  '("nonexistent-project"
+		    (wsi-simulate-idle-time 100)
+		    "RET")
+		(car (helm-projectile-switch-project)))
 	      :not :to-throw ))
-
 	   )
 
 
