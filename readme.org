@@ -399,8 +399,12 @@
 	    helm-always-two-windows t
 	    )
       :general
-      (nmap
-	:prefix "SPC"
+      ;; TODO change rest of general def's to use this instead of nmap?
+      (my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
 	"ff" 'helm-find-files
 	":" '(helm-M-x :which-key "M-x")
 	"bb" '(switch-to-buffer :which-key "Switch to buffer")
@@ -452,6 +456,21 @@
     SPC j (up) SPC l (left) etc
 
 I've *really* missed this one.... =C-x o= gets old fast
+*** TODO figure out why keybindings aren't taking effect in magit and other buffers
+**** in non magit buffer 
+SPC SPC runs the command helm-projectile-find-file (found in
+evil-normal-state-map), which is an interactive compiled Lisp function
+in ‘helm-projectile.el’.
+
+It is bound to SPC SPC, SPC p f.
+
+(helm-projectile-find-file &optional ARG)
+
+Use projectile with Helm for finding files in project
+
+With a prefix ARG invalidates the cache first.
+**** in magit buffer 
+SPC SPC is undefined
 *** TODO helm
 **** DONE initial 
 **** TODO fix completions not showing up in =SPC f f=
@@ -460,6 +479,7 @@ maybe smex or something is doing this?
 *** TODO =SPC s p= search project
 *** TODO =SPC '= search project (or skip this one and use SPC s p all time?)
     huh... =projectile-ripgrep= couldn't find rg? But:
+*** TODO spc b d kill buffer
 *** TODO =SPC w {u,r}= for winner undo/redo
 *** TODO =SPC w w= maybe to switch buffers more quickly?
 *** TODO compilation mode bindings (SPC c c/SPC c C)

@@ -81,6 +81,17 @@
 		:not :to-throw ))
 
 	   )
+ (describe "Ironing out odd issues I run into"
+
+	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
+	   (it "SPC SPC is bound in magit buffers"
+	       (expect
+		;; (magit "~/hci")
+		;; note if anything uses helm it will need to use the tests-run function!
+		(execute-kbd-macro (kbd "SPC SPC RET"))
+		:not :to-throw ))
+
+	   )
 
  )
  
