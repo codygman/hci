@@ -45,6 +45,7 @@ in
         magit
 	direnv
 	doom-themes
+        flycheck
 	general
 	projectile
 	with-simulated-input
