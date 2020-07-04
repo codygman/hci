@@ -37,6 +37,7 @@ in
 	evil-magit
         evil-collection
 	helm
+	helm-projectile
 	helm-rg
 	helm-swoop
 	helm-flx
