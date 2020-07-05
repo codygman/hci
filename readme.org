@@ -473,7 +473,7 @@
 
 *** helper functions
 **** toggle maximize buffer
-     #+begin_src elisp
+     #+begin_src emacs-lisp
        (defun toggle-maximize-buffer () "Maximize buffer"
 	      (interactive)
 	      (if (= 1 (length (window-list)))
