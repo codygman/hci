@@ -182,6 +182,15 @@
     #+begin_src emacs-lisp
       (setq custom-file "~/.emacs-custom.el")
     #+end_src
+*** Don't generate annoying backup files in current directory
+    #+begin_src emacs-lisp
+      (setq backup-directory-alist `(("." . "~/.saves")))
+      (setq delete-old-versions t
+	    kept-new-versions 6
+	    kept-old-versions 2
+	    version-control t)
+      (setq backup-by-copying-when-linked t)
+    #+end_src
 *** Hide annoying things
     #+begin_src emacs-lisp
       (tool-bar-mode -1)
