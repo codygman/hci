@@ -366,20 +366,6 @@
 
       (use-package flycheck-haskell
 	:config
-	(defun flycheck-haskell--read-configuration-with-helper (command)
-	  (with-temp-buffer
-	    ;; Hack around call-process' limitation handling standard error
-	    (let ((error-file (make-temp-file "flycheck-haskell-errors")))
-	      (pcase (apply 'call-process (car command) nil (list t error-file) nil (cdr command))
-		(0 (delete-file error-file)
-		   (goto-char (point-min))
-		   (read (current-buffer)))
-		(retcode (insert-file-contents error-file)
-			 (delete-file error-file)
-			 (message "command is: \n%s" command)
-			 (message "Reading Haskell configuration failed with exit code %s and (haxx) output:\n%s"
-				  retcode (buffer-string))
-			 nil)))))
 	:hook (haskell-mode . flycheck-haskell-setup))
     #+end_src
 *** direnv mode

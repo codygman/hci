@@ -188,7 +188,8 @@
 (ert-deftest haskell-nix-stack-workflow-isolated-flycheck-works ()
   (kill-all-buffers-except-ert)
   (cd (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/"))
-  (direnv-allow)
+  ;; TODO bust lorri cache and try this... it won't work. There always needs ot be a cached build or things will fail at the project discovery and configuration level. Any way around this?
+  (direnv-allow);; TODO this doesn't actually work if you direnv deny this project :/
   (find-file (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/app/Main.hs"))
   (sit-for 2)
   (should (executable-find "hpack"))
