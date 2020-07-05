@@ -120,7 +120,7 @@
        "Please uninstall the system level version of 'nox' if you want home-manager to manage it, otherwise remove it from your home-manager configuration"
 ** TODO make running this a no-op if already installed
 * Getting Help
-
+  
   With a many systems on top of systems, complexity abound, and the stakes sometimes high for not being able to figure something out for a given piece of that system seeking out help in the best places and getting it quickly is paramount.
 
   The following sections are ordered by how often I need to seek out help for that section. This is subject to change, so if doom becomes the thing I seek help out for the least then it will get moved down.
@@ -527,9 +527,10 @@ I've *really* missed this one.... =C-x o= gets old fast
 **** DONE elisp 
 **** DONE shellcheck
 **** DONE haskell
-*** TODO spc b d kill buffer
-*** TODO compilation mode bindings (SPC c c/SPC c C)
-*** TODO =SPC w {u,r}= for winner undo/redo
+*** DONE emacs y-or-n-p
+*** DONE spc b d kill buffer
+*** DONE compilation mode bindings (SPC c c/SPC c C)
+*** DONE =SPC w {u,r}= for winner undo/redo
 *** TODO turn off garbage emacs file generation in current directory
 *** TODO yasnippet and source code block completion omfg
     
