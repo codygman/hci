@@ -86,19 +86,27 @@
  (describe "Specific modes"
 
 	   (it "haskell-flycheck-squiggly-appears-underneath-misspelled-function"
-	       (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
-	       (replace-string "putStrLn" "putStrLnORAORAORA")
-	       (redisplay t)
-	       (sit-for 2)
-	       (should (eq 'flycheck-error (get-char-property (point) 'face)))
+	       (defun open-haskell-file-add-mispelling-wait-return-face ()
+		 "emacs-with-window-capability"
+		 (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
+		 (replace-string "putStrLn" "putStrLnORAORAORA")
+		 (redisplay t)
+		 (sit-for 5)
+		 (get-char-property (point) 'face)
+		 
+		 )
+	       (let ((face-of-misspelled-putstrln
+		      (server-eval-at "emacs-with-window-capability" 'open-haskell-file-add-mispelling-wait-return-face)))
+		 (should (eq 'flycheck-error face-of-misspelled-putstrln))
+		 )
 	       )
 
 	   )
 
  (describe "Ironing out odd issues I run into"
 
-	    ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
+	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
 
-	    )
+	   )
  )
- 
+
