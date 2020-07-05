@@ -100,6 +100,7 @@ in
 			    # mylorri
                             gcc
 			    # niv
+			    signal-desktop
                           ];
   };
 
