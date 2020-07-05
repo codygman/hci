@@ -490,7 +490,25 @@
     SPC j (up) SPC l (left) etc
 
 I've *really* missed this one.... =C-x o= gets old fast
-*** TODO figure out why keybindings aren't taking effect in magit and other buffers
+*** DONE simple flycheck
+**** DONE elisp 
+**** DONE shellcheck
+**** DONE haskell
+*** TODO spc b d kill buffer
+*** TODO compilation mode bindings (SPC c c/SPC c C)
+*** TODO =SPC w {u,r}= for winner undo/redo
+*** TODO turn off garbage emacs file generation in current directory
+*** TODO yasnippet and source code block completion omfg
+    
+also maybe look at my experiment here again: [[file:~/code/minimal-emacs-literate-workflow/init.el::;; prevent gc during startup][minimal-emacs-literate-workflow config]]
+
+snippets
+https://git.sr.ht/~codygman/emacs-config/tree/master/snippets/org-mode
+*** TODO use fixed width font for org source buffers
+  - otherwise code doesn't align
+  - I've done this before elsewhere, maybe see https://git.sr.ht/~codygman/emacs-config/tree/master
+  
+*** DONE figure out why keybindings aren't taking effect in magit and other buffers
 **** in non magit buffer 
 SPC SPC runs the command helm-projectile-find-file (found in
 evil-normal-state-map), which is an interactive compiled Lisp function
@@ -505,36 +523,42 @@ Use projectile with Helm for finding files in project
 With a prefix ARG invalidates the cache first.
 **** in magit buffer 
 SPC SPC is undefined
-*** TODO helm
+**** this was fixed by making sure all states were there and we use override keymap
+**** I'm not positive why this worked though
+*** DONE helm
 **** DONE initial 
-**** TODO fix completions not showing up in =SPC f f=
+**** DONE fix completions not showing up in =SPC f f=
 maybe smex or something is doing this?
+
+this never showed up again
 *** TODO =SPC *= search word at point through project
 *** TODO =SPC s p= search project
+*** TODO extended flycheck
+**** TODO error navigation using =]e= and =[e=
+**** TODO hlint
 *** TODO =SPC '= search project (or skip this one and use SPC s p all time?)
     huh... =projectile-ripgrep= couldn't find rg? But:
-*** TODO spc b d kill buffer
-*** TODO =SPC w {u,r}= for winner undo/redo
-*** TODO =SPC w w= maybe to switch buffers more quickly?
-*** TODO compilation mode bindings (SPC c c/SPC c C)
-*** TODO flycheck
-**** TODO elisp (without all the docs noise)
-**** TODO shellcheck
-**** TODO hlint
-*** TODO use fixed width font for org source buffers
-  - otherwise code doesn't align
-  - I've done this before elsewhere, maybe see https://git.sr.ht/~codygman/emacs-config/tree/master
-  
-*** TODO yasnippet and source code block completion omfg
-    
-also maybe look at my experiment here again: [[file:~/code/minimal-emacs-literate-workflow/init.el::;; prevent gc during startup][minimal-emacs-literate-workflow config]]
+*** TODO enable using buttercup tests for everything
+**** end result could look like
+     #+begin_src elisp
+       ;; simple tests that don't require anything extra remain the same
+       (it "emacs version should be 28.0.50"
+	   (expect emacs-version :to-equal "28.0.50"))
 
-snippets
-https://git.sr.ht/~codygman/emacs-config/tree/master/snippets/org-mode
+       ;; more complex tests will use the daemon instance of emacs started with invisible frame
+       ;; TODO later make a macro to make this even more painless
+       (it "emacs version should be 28.0.50"
+	   (expect
+	    (server-eval-at "foo"
+			    (emacs-version :to-equal "28.0.50")))
+     #+end_src
+     idea from https://github.com/jorgenschaefer/emacs-buttercup/issues/174#issuecomment-625508845
+*** TODO make =M-{h,l}= in org insert mode also promote/demote subtree
 *** TODO =alt+{l,r}= demote/promote subheading
 *** TODO =SPC n l= org store link
-*** TODO save file on evil escape
 *** TODO turn on key statistics thing
+*** TODO =SPC w w= maybe to switch buffers more quickly?
+*** TODO save file on evil escape
 *** TODO eval form at point... current form... or something
 C-x C-e is annoying sometimes... I think spacemacs had something for this
 *** TODO =RET= should follow org links and not go to next line (evil collection doing this??)
@@ -544,3 +568,4 @@ C-x C-e is annoying sometimes... I think spacemacs had something for this
 *** TODO hoogle/stackage search in helm
 *** TODO github fuzzy search !!! (copy paste code examples from search OoOOOOOO)
 *** TODO make helm less obtrusive (helm-swoop in an org src buffer for instance)
+    
