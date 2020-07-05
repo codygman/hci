@@ -10,10 +10,8 @@
 (describe
  "Codygman's hci"
 
- (describe "Set a baseline with simple tests"
-
 	   (it "emacs version should be 28.0.50"
-	       (expect emacs-version :to-equal "28.0.50"))
+	       (expect emacs-version :to-equal "28.0.50")
 
 	   )
 
@@ -50,8 +48,7 @@
 
 	   )
 
-
- (describe "Window Navigation"
+(describe "Window Navigation"
 
 	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
 	   (it "split 4 windows and move through them clockwise with =SPC {h,j,k,l}="
@@ -83,32 +80,50 @@
 
 	   )
 
- (describe "Specific modes"
 
-	   (it "haskell-flycheck-squiggly-appears-underneath-misspelled-function"
-	       (defun open-haskell-file-add-mispelling-wait-return-face ()
-		 "emacs-with-window-capability"
-		 (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
-		 (direnv-allow)
-		 (sit-for 5)
-		 (replace-string "putStrLn" "putStrLnORAORAORA")
-		 (redisplay t)
-		 (sit-for 5)
-		 (get-char-property (point) 'face)
-		 
-		 )
-	       (let ((face-of-misspelled-putstrln
-		      (server-eval-at "emacs-with-window-capability" 'open-haskell-file-add-mispelling-wait-return-face)))
-		 (should (eq 'flycheck-error face-of-misspelled-putstrln))
-		 )
+ (describe "emacs server for complex tests"
+	   (it "return it's own pid"
+	       (expect
+		(numberp (server-eval-at "emacs-with-window-capability" '(emacs-pid)))
+		:to-be t)
+	       )
+	   (it "can load our test/shared.el file"
+	       (expect
+		(server-eval-at "emacs-with-window-capability" '(load "~/.emacs.d/test/shared.el"))
+		:to-be t)
+	       )
+	   (it "can run simple run-true function in daemon instance"
+	       (expect
+		(server-eval-at "emacs-with-window-capability" '(return-true))
+		:to-be t)
+	       )
+
+	   ;; expensive (5s load time!)
+	   (it "open a file without throwing"
+	       (expect
+		(server-eval-at "emacs-with-window-capability" '(open-simple-haskell-project-main-file))
+		:not :to-throw)
 	       )
 
 	   )
 
- (describe "Ironing out odd issues I run into"
+ (describe "Specific modes"
 
-	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
+	   ;; (it "haskell-flycheck-squiggly-appears-underneath-misspelled-function"
+	       
+	   ;;     (let ((face-of-misspelled-putstrln
+	   ;; 	      (server-eval-at "emacs-with-window-capability" '(open-haskell-file-add-mispelling-wait-return-face))))
+	   ;; 	 (should (eq 'flycheck-error face-of-misspelled-putstrln))
+	   ;; 	 (server-eval-at "emacs-with-window-capability" '(load "~/.emacs.d/test/shared.el"))
+	   ;; 	 )
+	   ;;     )
 
 	   )
+
+ ;; (describe "Ironing out odd issues I run into"
+
+ ;; 	   ;; I think any evil tests require `tests-run` (see my-tests.el or evil repos tests)
+
+ ;; 	   )
  )
 
