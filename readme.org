@@ -354,8 +354,14 @@
 *** flycheck
     #+begin_src emacs-lisp
       (use-package flycheck
-	:ensure t
-	:init (global-flycheck-mode))
+	:after direnv
+	:init
+	(setq flycheck-executable-find
+	      (lambda (cmd)
+		(direnv-update-environment default-directory)
+		(executable-find cmd)))
+	(setq-default flycheck-disabled-checkers '(haskell-ghc))
+	(global-flycheck-mode))
     #+end_src
 *** direnv mode
     #+begin_src emacs-lisp
