@@ -140,7 +140,6 @@
 (ert-deftest haskell-flycheck-squiggly-appears-underneath-misspelled-function ()
   (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
   (replace-string "putStrLn" "putStrLnORAORAORA")
-  (save-buffer)
   (redisplay t)
   (sit-for 2)
   (should (eq 'flycheck-error (get-char-property (point) 'face)))
