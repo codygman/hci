@@ -542,6 +542,16 @@
 	(setq lsp-haskell-process-path-hie "ghcide")
 	(setq lsp-haskell-process-args-hie nil)
 	)
+      (general-def
+	:prefix ", c"
+	:states '(normal visual)
+	:keymaps 'haskell-mode-map
+	"L" 'flycheck-list-errors
+	"b" 'flycheck-buffer
+	"c" 'flycheck-clear
+	"l" 'lsp-ui-flycheck-list
+	"n" 'flycheck-next-error
+	"p" 'flycheck-previous-error)
 
       (use-package lsp-ui
 	:commands lsp-ui-mode
