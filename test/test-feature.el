@@ -109,14 +109,14 @@
 
  (describe "Specific modes"
 
-	   ;; (it "haskell-flycheck-squiggly-appears-underneath-misspelled-function"
+	   (it "haskell-flycheck-squiggly-appears-underneath-misspelled-function"
 	       
-	   ;;     (let ((face-of-misspelled-putstrln
-	   ;; 	      (server-eval-at "emacs-with-window-capability" '(open-haskell-file-add-mispelling-wait-return-face))))
-	   ;; 	 (should (eq 'flycheck-error face-of-misspelled-putstrln))
-	   ;; 	 (server-eval-at "emacs-with-window-capability" '(load "~/.emacs.d/test/shared.el"))
-	   ;; 	 )
-	   ;;     )
+	       (let ((face-of-misspelled-putstrln
+		      (server-eval-at "emacs-with-window-capability" '(open-haskell-file-add-mispelling-wait-return-face))))
+		 (should (eq 'flycheck-error face-of-misspelled-putstrln))
+		 (server-eval-at "emacs-with-window-capability" '(load "~/.emacs.d/test/shared.el"))
+		 )
+	       )
 
 	   )
 
