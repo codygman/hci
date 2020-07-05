@@ -89,6 +89,8 @@
 	       (defun open-haskell-file-add-mispelling-wait-return-face ()
 		 "emacs-with-window-capability"
 		 (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
+		 (direnv-allow)
+		 (sit-for 5)
 		 (replace-string "putStrLn" "putStrLnORAORAORA")
 		 (redisplay t)
 		 (sit-for 5)
