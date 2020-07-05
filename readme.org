@@ -433,6 +433,7 @@
 	"ff" 'helm-find-files
 	":" '(helm-M-x :which-key "M-x")
 	"bb" '(switch-to-buffer :which-key "Switch to buffer")
+	"bd" '(kill-buffer :which-key "Kill Buffer")
 	)
       :config
       ;; (use-package helm-flx)
