@@ -50,5 +50,7 @@
 				   (write-region (point-min) (point-max) "/tmp/messages-output" ))
 
 		 (princ (buffer-substring-no-properties (point-min) (point-max)))
+		 (set-buffer-modified-p nil)
+		 (kill-this-buffer)
 		 
 		 )
