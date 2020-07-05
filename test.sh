@@ -8,6 +8,11 @@ pushd testdata/simple-haskell-project && stack clean && popd
 # start emacs with a hidden frame for more complex tests like helm interaction, verifying flycheck fontification, or things requiring windows
 emacs -Q -f package-initialize --daemon=emacs-with-window-capability
 echo "run buttercup tests"
+if [ -z "$GITHUB_ACTIONS" ]; then
+    echo "We are running locally, pre-emptively open nix shells that tests depend on"
+    # NOTE in github actions we'll do this as a separate step so we can get timing info
+    bash prebuild-simple-haskell-project-nix-shell.sh
+else 
 EMACSFOR="PERSONAL" emacs -Q -f package-initialize  --load load-init-then-test.el -batch --debug-init
 buttercupExitCode=$?;
 

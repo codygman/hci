@@ -17,6 +17,7 @@ jobs:
     - run: bash install.sh
     - run: bash home_manager_setup.sh
     - run: bash home_manager_switch.sh
+    - run: bash prebuild-simple-haskell-project-nix-shell.sh
     - run: bash test.sh
     - run: bash run-ert-tests.sh
 
