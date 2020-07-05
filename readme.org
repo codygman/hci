@@ -392,7 +392,18 @@
     #+begin_src emacs-lisp
       (use-package winner
 	:config
-	(winner-mode 1))
+	(winner-mode 1)
+	:general
+	(my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
+	  :prefix "SPC"
+	  "wu" '(winner-undo :which-key "Winner Undo")
+	  "wr" '(winner-redo :which-key "Winner Redo")
+	  )
+	)
     #+end_src
 *** Helm
 #+begin_src emacs-lisp
