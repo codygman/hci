@@ -122,20 +122,20 @@
 ;; helm
 ;;; helm projectile
 ;;;; TODO can add known projects with helm
-(ert-deftest projectile-switch-projects-to-magit-works ()
-  ;; find our own git project to test projectile on since we know we'll have it both locally and in CI always
-  (projectile-clear-known-projects)
-  (projectile-add-known-project (emacs-d-directory-for ""))
-  ;; ensure that we can successfully switch to magit for a given project
-  (should (string-equal
-	   "magit: hci"
-	   (save-excursion
-	     (with-simulated-input
-		 '("hci"
-		   (wsi-simulate-idle-time 0.5)
-		   "M-g")
-	       (helm-projectile-switch-project))
-	     (buffer-name)))))
+;; (ert-deftest projectile-switch-projects-to-magit-works ()
+;;   ;; find our own git project to test projectile on since we know we'll have it both locally and in CI always
+;;   (projectile-clear-known-projects)
+;;   (projectile-add-known-project (emacs-d-directory-for ""))
+;;   ;; ensure that we can successfully switch to magit for a given project
+;;   (should (string-equal
+;; 	   "magit: hci"
+;; 	   (save-excursion
+;; 	     (with-simulated-input
+;; 		 '("hci"
+;; 		   (wsi-simulate-idle-time 0.5)
+;; 		   "M-g")
+;; 	       (helm-projectile-switch-project))
+;; 	     (buffer-name)))))
 
 (ert-deftest haskell-flycheck-squiggly-appears-underneath-misspelled-function ()
 
