@@ -565,7 +565,7 @@
       (use-package company-lsp
 	:config
 	(setq company-minimum-prefix-length 1
-	      company-idle-delay 0.01))
+	      company-idle-delay 0.01)
       (push 'company-lsp company-backends))
 
       ;; TODO move company to own block
