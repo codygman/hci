@@ -1,0 +1,10 @@
+cradle:
+  multi:
+    - path: ./test
+      config:
+        cradle:
+          none: # Do not even attempt to load this directory
+    - path: ./ # for everything else, load it with stack
+      config:
+        cradle:
+          stack:
