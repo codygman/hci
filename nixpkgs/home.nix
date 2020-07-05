@@ -28,7 +28,7 @@ in
     emacs = {
       enable = true;
       # package = if builtins.getEnv "TRAVIS_OS_NAME" == "" then emacs-overlay.emacs else pkgs.emacs-nox;
-      package = pkgs.emacsGit;
+      package = pkgs.emacsGit.override {withGTK2 = false; withGTK3 = false;};
       extraPackages = epkgs: with epkgs; [
         buttercup
         use-package
