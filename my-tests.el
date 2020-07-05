@@ -138,10 +138,21 @@
 	     (buffer-name)))))
 
 (ert-deftest haskell-flycheck-squiggly-appears-underneath-misspelled-function ()
+
   (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
-  (replace-string "putStrLn" "putStrLnORAORAORA")
+
+  (flycheck-mode nil)
+  (direnv-allow)
+  (direnv-update-environment)
   (redisplay t)
   (sit-for 2)
+
+  (flycheck-mode 1)
+  (replace-string "putStrLn" "putStrLnORAORAORA")
+  (execute-kbd-macro (kbd "4h"))
+  (redisplay t)
+  (sit-for 5)
+
   (should (eq 'flycheck-error (get-char-property (point) 'face)))
   )
 
