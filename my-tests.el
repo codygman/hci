@@ -156,6 +156,7 @@
 
   (should (eq 'flycheck-error (get-char-property (point) 'face)))
   ;; NOTE keeping this buffer open somehow made projectile-switch-projects-to-magit-works fail
+  ;; TODO can we make this local?
   (set-buffer-modified-p nil)
 
   (kill-this-buffer)
