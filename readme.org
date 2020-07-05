@@ -192,6 +192,8 @@
     #+begin_src emacs-lisp
       ;; always follow symlinks and DONT PROMPT ME
       (setq vc-follow-symlinks t)
+
+      (defalias 'yes-or-no-p 'y-or-n-p)
     #+end_src
 ** Package configuration
 *** use-package
