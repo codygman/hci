@@ -142,17 +142,15 @@
 
   (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
 
-  (flycheck-mode nil)
-  (direnv-allow)
-  (direnv-update-environment)
-  (redisplay t)
-  (sit-for 2)
-
-  (flycheck-mode 1)
   (replace-string "putStrLn" "putStrLnORAORAORA")
   (execute-kbd-macro (kbd "4h"))
-  (redisplay t)
-  (sit-for 5)
+  ;; sit for long enough for a flycheck syntax check to start
+  (sit-for .5)
+  (with-timeout (2 (message "5 seconds passed, skipping haskell-flycheck-squiggly-appears-underneath-misspelled-function"))
+    (while flycheck-current-syntax-check
+      (sit-for .05)
+      )
+    )
 
   (should (eq 'flycheck-error (get-char-property (point) 'face)))
   ;; NOTE keeping this buffer open somehow made projectile-switch-projects-to-magit-works fail
