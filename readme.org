@@ -375,6 +375,16 @@
 		  #'endless/colorize-compilation)
 
 	;; :hook (compilation-filter-hook  endless/colorize-compilation)
+	:general
+	(my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
+	  :prefix "SPC"
+	  "cc" '(recompile :which-key "M-x recompile")
+	  "cC" '(compile :which-key "M-x compile")
+	  )
 	)
 
     #+end_src
