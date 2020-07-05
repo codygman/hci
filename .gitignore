@@ -10,3 +10,7 @@
 /test-results.txt
 /eshell/history
 /elpa/
+/testdata/simple-haskell-project/.direnv/
+/projectile.cache
+/savehist
+/tramp
