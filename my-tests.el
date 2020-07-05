@@ -151,7 +151,7 @@
   (replace-string "putStrLn" "putStrLnORAORAORA")
   (execute-kbd-macro (kbd "4h"))
   (redisplay t)
-  (sit-for 10)
+  (sit-for 5)
 
   (should (eq 'flycheck-error (get-char-property (point) 'face)))
   )
