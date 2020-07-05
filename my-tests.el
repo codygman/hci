@@ -122,6 +122,7 @@
 ;; helm
 ;;; helm projectile
 ;;;; TODO can add known projects with helm
+;; TODO for some reason after adding haskell-flycheck-squiggly-appears-underneath-misspelled-function it caused this one to fail
 (ert-deftest projectile-switch-projects-to-magit-works ()
   ;; find our own git project to test projectile on since we know we'll have it both locally and in CI always
   (projectile-clear-known-projects)
@@ -154,6 +155,10 @@
   (sit-for 5)
 
   (should (eq 'flycheck-error (get-char-property (point) 'face)))
+  ;; NOTE keeping this buffer open somehow made projectile-switch-projects-to-magit-works fail
+  (set-buffer-modified-p nil)
+
+  (kill-this-buffer)
   )
 
 (ert-deftest nix-highlighting-works-in-nix-file ()
