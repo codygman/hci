@@ -519,7 +519,54 @@
         :defer nil
         :mode ("\\.nix\\'" . nix-mode))
     #+end_src
+*** lsp
+    #+begin_src emacs-lisp
+      (use-package lsp-mode
+	:hook ((haskell-mode . lsp-deferred)
+	       (lsp-mode . lsp-enable-which-key-integration))
+	:commands (lsp lsp-deferred)
+	:config 
+	:general
+	(my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'haskell-mode-map ;; TODO isn't there an lsp mode map?
+	  :non-normal-prefix "M-SPC"
+	  :prefix "SPC"
+	  "ca" '(lsp-execute-code-action :wk "lsp execute code action")
+	  )
+	)
 
+      (use-package lsp-haskell
+	:init
+	(setq lsp-haskell-process-path-hie "ghcide")
+	(setq lsp-haskell-process-args-hie nil)
+	)
+
+      (use-package lsp-ui
+	:commands lsp-ui-mode
+	:config
+	;; (setq lsp-ui-flycheck-live-reporting nil)
+	;; (setq lsp-ui-sideline-enable nil)
+	;; (setq lsp-ui-doc-enable nil)
+	;; (setq lsp-ui-sideline-show-diagnostics nil)
+	)
+
+      (use-package company-lsp
+	:config
+	(setq company-minimum-prefix-length 1
+	      company-idle-delay 0.01))
+      (push 'company-lsp company-backends))
+
+      ;; TODO move company to own block
+      (use-package company
+	:init
+	(add-hook 'haskell-mode-hook 'company-mode)
+	:bind (:map haskell-mode-map
+		    ("TAB" . company-indent-or-complete-common)))
+
+
+    #+end_src
 *** helper functions
 **** toggle maximize buffer
      #+begin_src emacs-lisp
