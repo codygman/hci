@@ -66,11 +66,12 @@
 ;;   (should (fboundp 'evil-collection-init)))
 
 (ert-deftest magit-installed ()
-  (should (fboundp 'magit-version)))
+  (should (fboundp 'magit-version))
+  (log "magit-installed passed"))
 
-(ert-deftest haskell-mode-enabled-opening-haskell-file ()
-  (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
-  (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
+;; (ert-deftest haskell-mode-enabled-opening-haskell-file ()
+;;   (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
+;;   (should (eq 'haskell-mode (derived-mode-p 'haskell-mode))))
 
 ;; ;; TODO test for "jf" escape working
 ;; ;; TODO test for "Ctrl u" working
@@ -113,10 +114,10 @@
 
 ;; evil
 (ert-deftest ctrl-u-scrolls-up ()
-  (log "ctrl-u-scrolls-up")
   (find-file (emacs-d-directory-for "testdata/loremipsum.txt"))
   (execute-kbd-macro (kbd "G"))
-  (execute-kbd-macro (kbd "C-u")))
+  (execute-kbd-macro (kbd "C-u"))
+  (log "ctrl-u-scrolls-up passed"))
 
 
 ;; helm
@@ -136,9 +137,30 @@
 		   (wsi-simulate-idle-time 0.5)
 		   "M-g")
 	       (helm-projectile-switch-project))
-	     (buffer-name)))))
+	     (buffer-name))))
+  (log "projectile-switch-projects-to-magit-works passed"))
+
+
+(require 'cl) ;; TODO necessary?
+(defun kill-all-buffers-except-ert ()
+    "Kill all other buffers."
+    (interactive)
+    (mapc 'kill-buffer
+          (delq (current-buffer)
+                (remove-if-not (lambda (x) (string-equal "*ert*" (buffer-file-name))) (buffer-list)))))
+
+;; (defun kill-other-buffers ()
+;;     "Kill all other buffers."
+;;     (interactive)
+;;     (mapc 'kill-buffer 
+;;           (delq (current-buffer) 
+;;                 (remove-if-not '(buffer-file-name) (buffer-list)))))
+
+
+
 
 (ert-deftest haskell-flycheck-squiggly-appears-underneath-misspelled-function ()
+  (kill-all-buffers-except-ert)
 
   (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
 
@@ -158,14 +180,62 @@
   (set-buffer-modified-p nil)
 
   (kill-this-buffer)
-  )
+
+  (log "haskell-flycheck-squiggly-appears-underneath-misspelled-function passed"))
+
+
+
+(ert-deftest haskell-nix-stack-workflow-isolated-flycheck-works ()
+  (kill-all-buffers-except-ert)
+  (cd (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/"))
+  (direnv-allow)
+  (find-file (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/app/Main.hs"))
+  (sit-for 2)
+  (should (executable-find "hpack"))
+  ;; (direnv-update-directory-environment (emacs-d-directory-for "testdata/simple-haskell-project/"))
+  ;; (trace-function 'direnv-update-directory-environment)
+  (message "exec-path: %s\n" exec-path)
+
+  ;; (when (not flycheck-ghc-args)
+  ;;   (set-buffer-modified-p nil)
+  ;;   (kill-this-buffer)
+  ;;   (flycheck-haskell-clear-config-cache)
+  ;;   (flycheck-haskell-configure)
+  ;;   (sit-for 1)
+  ;;   (find-file (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/app/Main.hs")))
+
+  ;; (flycheck-mode nil)
+  ;; (flycheck-haskell-clear-config-cache)
+  ;; (funcall-interactively (flycheck-haskell-configure))
+  ;; (flycheck-mode 1)
+
+  ;; (replace-string "someFunc" "someFuncooooo")
+  ;; (execute-kbd-macro (kbd "4h"))
+  ;; sit for long enough for a flycheck syntax check to start
+  (sit-for .5)
+  ;; (with-timeout (2 (message "5 seconds passed, skipping haskell-flycheck-squiggly-appears-underneath-misspelled-function"))
+  ;;   (while flycheck-current-syntax-check
+  ;;     (sit-for .05)
+  ;;     )
+  ;;   )
+  ;; (sit-for 5)
+
+  ;; (should (eq 'flycheck-error (get-char-property (point) 'face)))
+  ;; NOTE keeping this buffer open somehow made projectile-switch-projects-to-magit-works fail
+  ;; TODO can we make this local?
+  (set-buffer-modified-p nil)
+
+  (kill-this-buffer)
+
+  (log "haskell-nix-stack-workflow-isolated-flycheck-works passed"))
 
 (ert-deftest nix-highlighting-works-in-nix-file ()
   (find-file (emacs-d-directory-for "testdata/sample.nix"))
   (redisplay t)
   (should (eq 1 (point)))
   (should (string-equal "nix-keyword-face"
-			(get-char-property (point) 'face))))
+			(get-char-property (point) 'face)))
+  (log "nix-highlighting-works-in-nix-file passed"))
 
 
 ;; NOTE this isn't perfectly accurate because for some reason emacs on command line when run with tests-run seems to scroll up a different number for.

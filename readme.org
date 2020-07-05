@@ -353,20 +353,46 @@
     #+end_src
 *** flycheck
     #+begin_src emacs-lisp
-      (use-package flycheck
-	:after direnv
-	:init
-	(setq flycheck-executable-find
-	      (lambda (cmd)
-		(direnv-update-environment default-directory)
-		(executable-find cmd)))
-	(setq-default flycheck-disabled-checkers '(haskell-ghc))
-	(global-flycheck-mode))
+	    (use-package flycheck
+	      :init
+	      (setq flycheck-executable-find
+		    (lambda (cmd)
+		      ;; (message (format "updating default directory with direnv: %s") default-directory)
+		      (direnv-update-environment default-directory)
+		      ;;(sit-for 1)
+		      (executable-find cmd)))
+	      ;; (setq-default flycheck-disabled-checkers '(haskell-stack-ghc))
+	      (global-flycheck-mode))
+
+      (use-package flycheck-haskell
+	:config
+	(defun flycheck-haskell--read-configuration-with-helper (command)
+	  (with-temp-buffer
+	    ;; Hack around call-process' limitation handling standard error
+	    (let ((error-file (make-temp-file "flycheck-haskell-errors")))
+	      (pcase (apply 'call-process (car command) nil (list t error-file) nil (cdr command))
+		(0 (delete-file error-file)
+		   (goto-char (point-min))
+		   (read (current-buffer)))
+		(retcode (insert-file-contents error-file)
+			 (delete-file error-file)
+			 (message "command is: \n%s" command)
+			 (message "Reading Haskell configuration failed with exit code %s and (haxx) output:\n%s"
+				  retcode (buffer-string))
+			 nil)))))
+	:hook (haskell-mode . flycheck-haskell-setup))
     #+end_src
 *** direnv mode
     #+begin_src emacs-lisp
+    (defun myadvice (&optional directory force-summary)
+        ;; (flycheck-haskell-configure)
+     )
       (use-package direnv
+        :after flycheck-haskell
+	:init 
+	;; (advice-add 'direnv-update-directory-environment :after #'myadvice)
 	:config
+        
 	(direnv-mode))
     #+end_src
 *** color theme
