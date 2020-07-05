@@ -46,7 +46,6 @@ in
 	helm-fuzzier
         lsp-mode
         lsp-haskell
-        lsp-rust
         lsp-ui
         magit
 	nix-mode
