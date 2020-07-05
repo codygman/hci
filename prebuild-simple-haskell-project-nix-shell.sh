@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+set -o errexit
+
 echo "cd to simple-haskell-project"
 cd $GITHUB_WORKSPACE/testdata/simple-haskell-project
 echo "it's directory looks like"
