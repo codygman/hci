@@ -5,6 +5,8 @@ home-manager switch
 # Before running tests, clean the stack directory for our haskell test project
 pushd testdata/simple-haskell-project && stack clean && popd
 
+# start emacs with a hidden frame for more complex tests like helm interaction, verifying flycheck fontification, or things requiring windows
+emacs -Q --daemon=emacs-with-window-capability
 echo "run buttercup tests"
 EMACSFOR="PERSONAL" emacs -Q -f package-initialize  --load load-init-then-test.el -batch --debug-init
 buttercupExitCode=$?;

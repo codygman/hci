@@ -1,3 +1,4 @@
+(require 'server) ;; needed for more complex tests, see dameon started in test.sh also
 
 (defun emacs-d-directory-for (path)
   (if (eq nil (getenv "GITHUB_WORKSPACE"))
