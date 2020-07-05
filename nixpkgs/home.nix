@@ -31,6 +31,8 @@ in
       package = pkgs.emacsGit;
       extraPackages = epkgs: with epkgs; [
         buttercup
+        company
+        company-lsp
         use-package
         haskell-mode
         evil
@@ -42,6 +44,9 @@ in
 	helm-swoop
 	helm-flx
 	helm-fuzzier
+        lsp-mode
+        lsp-haskell
+        lsp-ui
         magit
 	nix-mode
 	direnv
