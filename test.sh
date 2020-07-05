@@ -12,7 +12,7 @@ if [ -z "$GITHUB_ACTIONS" ]; then
     echo "We are running locally, pre-emptively open nix shells that tests depend on"
     # NOTE in github actions we'll do this as a separate step so we can get timing info
     bash prebuild-simple-haskell-project-nix-shell.sh
-else 
+fi 
 EMACSFOR="PERSONAL" emacs -Q -f package-initialize  --load load-init-then-test.el -batch --debug-init
 buttercupExitCode=$?;
 
