@@ -47,6 +47,7 @@ in
 	direnv
 	doom-themes
         flycheck
+        flycheck-haskell
 	general
 	projectile
 	with-simulated-input
@@ -93,7 +94,7 @@ in
                             ripgrep
                             # will need to ensure cachix by ci and cachix version here match
                             # cachix
-                            ghc
+                            # ghc
 			    stack
                             source-code-pro
                             sqlite
