@@ -539,11 +539,12 @@ this never showed up again
 *** TODO extended flycheck
 **** TODO error navigation using =]e= and =[e=
 **** TODO hlint
+*** TODO add forge support
 *** TODO =SPC '= search project (or skip this one and use SPC s p all time?)
     huh... =projectile-ripgrep= couldn't find rg? But:
 *** TODO enable using buttercup tests for everything
 **** end result could look like
-     #+begin_src elisp
+     #+begin_src emacs-lisp :tangle no
        ;; simple tests that don't require anything extra remain the same
        (it "emacs version should be 28.0.50"
 	   (expect emacs-version :to-equal "28.0.50"))
