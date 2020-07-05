@@ -544,3 +544,5 @@ C-x C-e is annoying sometimes... I think spacemacs had something for this
 *** TODO hoogle/stackage search in helm
 *** TODO github fuzzy search !!! (copy paste code examples from search OoOOOOOO)
 *** TODO make helm less obtrusive (helm-swoop in an org src buffer for instance)
+*** TODO make dired copy suggest buffer other than current one by default when another open
+    doom did this, but emacs by default doesn't? maybe itw as dired-plus or something?
