@@ -47,27 +47,23 @@
 	    
 	    )
 	  ))
-    (unwind-protect
-	(progn
-	  (log "Error running tests\n")
-	  ;; (append-to-file (format "backtrace: %s" (princ (backtrace-get-frames 'backtrace))) nil "test-results.txt")
+    (when (not debug) (kill-emacs 2))
+    ;; TODO fix error reporting stuff
+    ;; (unwind-protect
+    ;; 	(progn
+    ;; 	  (log "Error running tests\n")
+    ;; 	  ;; (append-to-file (format "backtrace: %s" (princ (backtrace-get-frames 'backtrace))) nil "test-results.txt")
 
-	  ;; TODO fix wrong type argument numberp error
-	  ;; (log (backtrace-to-string (backtrace-get-frames 'backtrace)))
-	  (let ((backtrace-frames (backtrace-get-frames 'backtrace)))
-	    (when backtrace-frames
-	      (append-to-file (backtrace-to-string backtrace-frames) nil "test-results.txt")
-	      ))
-	  )
-      (when (not debug) (kill-emacs 2))
-      )))
-
-;; duplicate in init.el
-(defun emacs-d-directory-for (path)
-  (if (eq nil (getenv "GITHUB_WORKSPACE"))
-      (format "~/hci/%s" path)
-    (let ((github-workspace (getenv "GITHUB_WORKSPACE")))
-      (progn (message (format "emacs-d-directory-for: GITHUB_WORKSPACE is %s" github-workspace)) (format "%s/%s" github-workspace path)))))
+    ;; 	  ;; TODO fix wrong type argument numberp error
+    ;; 	  ;; (log (backtrace-to-string (backtrace-get-frames 'backtrace)))
+    ;; 	  (let ((backtrace-frames (backtrace-get-frames 'backtrace)))
+    ;; 	    (when backtrace-frames
+    ;; 	      (append-to-file (backtrace-to-string backtrace-frames) nil "test-results.txt")
+    ;; 	      ))
+    ;; 	  )
+    ;;   (when (not debug) (kill-emacs 2))
+    ;;   )
+    ))
 
 ;; (ert-deftest use-package-installed ()
 ;;   (should (fboundp 'use-package)))
