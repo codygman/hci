@@ -1,7 +1,20 @@
 (require 'ert)
 
+;; duplicate in init.el
+(defun emacs-d-directory-for (path)
+  (if (eq nil (getenv "GITHUB_WORKSPACE"))
+      (format "~/hci/%s" path)
+    (let ((github-workspace (getenv "GITHUB_WORKSPACE")))
+      (progn (message (format "emacs-d-directory-for: GITHUB_WORKSPACE is %s" github-workspace)) (format "%s/%s" github-workspace path)))))
+
+
 (defun log (msg)
   (append-to-file (format "%s\n" msg) nil "test-results.txt"))
+
+(defun before-tests-init ()
+  ;; add any lsp folders to workspace or tests will hang
+   (lsp-workspace-folders-add (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/"))
+  )
 
 (defun tests-run ()
   ;; We would like to use `ert-run-tests-batch-and-exit'
@@ -16,7 +29,7 @@
 	)
   (unwind-protect
       (progn
-	(ert-run-tests-interactively t)
+	(progn (ert-run-tests-interactively t) (before-test-init))
 	(with-current-buffer "*ert*"
 	  (append-to-file (point-min) (point-max) "test-results.txt")
 	  (let ((failed-tests (ert-stats-completed-unexpected ert--results-stats)))
