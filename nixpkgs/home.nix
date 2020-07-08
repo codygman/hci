@@ -108,7 +108,8 @@ in
                             ripgrep
                             # will need to ensure cachix by ci and cachix version here match
                             # cachix
-                            # ghc
+                            # ghcide
+                            ghc
 			    stack
                             source-code-pro
                             sqlite
