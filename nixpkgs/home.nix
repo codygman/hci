@@ -44,7 +44,16 @@ in
 	helm-swoop
 	helm-flx
 	helm-fuzzier
-        lsp-mode
+        ( lsp-mode.override (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            src = pkgs.fetchFromGitHub {
+              owner = "emacs-lsp";
+              repo = "lsp-mode";
+              rev = "3aad14064cccf530ff58ffc4263bd99de44e9fe1";
+              sha256 = "0w5plh0z6x1pijw3g05lz7p69jm49yay8iw86scb7d00fsmnci3s";
+            };
+          });
+        }) )
         lsp-haskell
         lsp-ui
         magit
