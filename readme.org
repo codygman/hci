@@ -366,6 +366,8 @@
 
       (use-package flycheck-haskell
 	:config
+	;; :init
+	;; (advice-add 'direnv-update-directory-environment :before #'flycheck-haskell-setup)
 	:hook (haskell-mode . flycheck-haskell-setup))
     #+end_src
 *** direnv mode
@@ -376,7 +378,6 @@
       (use-package direnv
         :after flycheck-haskell
 	:init 
-	;; (advice-add 'direnv-update-directory-environment :after #'myadvice)
 	:config
         
 	(direnv-mode))
