@@ -132,6 +132,7 @@
   (evil-append-line 1)
   (insert "1")
   (haskell-interactive-mode-return)
+  (log (format "max timeout for %s is %d" action max-ghci-wait))
   (with-timeout (max-ghci-wait (error "action '%s' took more than %.1f seconds in ghci '%s'" action max-ghci-wait (buffer-name)))
     (while (not (re-search-backward expected-output-rgx nil t))
       (goto-char (point-max))
@@ -139,6 +140,7 @@
       )
     ) 
   (log (format "ghci ready at %s" (current-time-string)))
+  (sit-for 3)
   (goto-char (point-max))
   
   )
@@ -149,11 +151,11 @@
   ;; (my-append-string-to-file "START load-file\n" "debug")
   (haskell-process-load-file)
   (with-current-buffer "*simple-haskell-project*"
-  (wait-for-ghci "initial load" "^1$" 10)
+    (wait-for-ghci "initial load" "^1$" 10)
     (evil-append-line 1)
     (insert ":t functionWeWantInScope")
     (haskell-interactive-mode-return)
-    (wait-for-ghci ":t functionWeWantInScope" "^func.+)$" 2)
+    (wait-for-ghci ":t functionWeWantInScope" "^func.+)$" 5)
     (evil-previous-line 1)
     (copy-line 1))
   (should (string-equal
@@ -172,6 +174,7 @@
 ;;; helm projectile
 ;;;; TODO can add known projects with helm
 ;; TODO for some reason after adding haskell-flycheck-squiggly-appears-underneath-misspelled-function it caused this one to fail
+
 (ert-deftest projectile-switch-projects-to-magit-works ()
   ;; find our own git project to test projectile on since we know we'll have it both locally and in CI always
   (projectile-clear-known-projects)
@@ -204,9 +207,6 @@
           (delq (current-buffer) 
                 (remove-if-not '(buffer-file-name) (buffer-list)))))
 
-
-
-
 (ert-deftest haskell-flycheck-squiggly-appears-underneath-misspelled-function ()
   (kill-all-buffers-except-ert)
 
@@ -218,15 +218,15 @@
 
   ;; if not already started, sit for long enough for a flycheck syntax check to start
   ;; (message "value of flycheck-current-syntax-check: %s" flycheck-current-syntax-check)
-  ;; (when (not flycheck-current-syntax-check)
-  ;;   (log "flycheck syntax hasn't started yet, waiting up to 2 seconds for it")
-  ;;   (with-timeout (2 (error "2 seconds passed and flycheck syntax check still hasn't started, error"))
-  ;;     (while (not flycheck-current-syntax-check)
-  ;; 	(sit-for 0.1))))
+  (when (not flycheck-current-syntax-check)
+    (log "flycheck syntax hasn't started yet, waiting up to 2 seconds for it")
+    (with-timeout (5 (error "2 seconds passed and flycheck syntax check still hasn't started, error"))
+      (while (not flycheck-current-syntax-check)
+	(sit-for 0.1))))
   ;; TODO ideally we'd use the above or something like it but it can sometimes go into an infinite loop somehow
-  (sit-for 0.5)
+  ;; (sit-for 2)
 
-  (with-timeout (5 (message "5 seconds passed, skipping haskell-flycheck-squiggly-appears-underneath-misspelled-function"))
+  (with-timeout (10 (message "5 seconds passed, skipping haskell-flycheck-squiggly-appears-underneath-misspelled-function"))
     (while flycheck-current-syntax-check
       (sit-for 1)
       )

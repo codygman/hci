@@ -1,1 +1,1 @@
-("~/hci/" "~/code/haskell-nix-stack-workflow/" "~/code/minimal-emacs-literate-workflow/")
+("~/hci/")
