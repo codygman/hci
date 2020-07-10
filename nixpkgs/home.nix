@@ -11,7 +11,7 @@ let
   mylib = import ./nix/mylib.nix {pkgs = pkgs;};
 in
 {
-  imports = mylib.loadPersonalOrWorkEnv;
+  imports = mylib.loadPrivatePersonalOrWorkEnv ;
 
  # TODO why do we have two different overlays for this expression body and in the pkgs import??
  nixpkgs = {
