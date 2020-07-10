@@ -46,7 +46,7 @@
   time.timeZone = "America/Chicago";
 
   environment.systemPackages = with pkgs; [
-    wget vim
+    wget
   ];
 
   # List services that you want to enable:
