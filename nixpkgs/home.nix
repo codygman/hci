@@ -106,20 +106,30 @@ in
       options = [ "ctrl:nocaps" ];
     };
 
-    packages = with pkgs; [ fd
-                            ripgrep
-                            # will need to ensure cachix by ci and cachix version here match
-                            # cachix
-                            # ghcide
-                            ghc
-			    stack
-                            source-code-pro
-                            sqlite
-			    # mylorri
-                            gcc
-			    # niv
-			    signal-desktop
-                          ];
+    packages = with pkgs; [
+      # cachix # not sure what was wrong here
+      # ghcide # having this by default would be nice for the ghc I'm using most at the time
+      # mylorri # TODO
+      # niv # not defined?
+      # will need to ensure cachix by ci and cachix version here match
+      cmake
+      coreutils
+      fd
+      firefox
+      gcc
+      gcc
+      ghc
+      gnumake
+      graphviz
+      libnotify
+      nox
+      ripgrep
+      signal-desktop
+      source-code-pro
+      sqlite
+      sqlite
+      stack
+    ];
   };
 
   services = {
