@@ -13,10 +13,10 @@ in
 {
   imports = mylib.loadPrivatePersonalOrWorkEnv ;
 
- # TODO why do we have two different overlays for this expression body and in the pkgs import??
- nixpkgs = {
+  # TODO why do we have two different overlays for this expression body and in the pkgs import??
+  nixpkgs = {
     overlays = [
-       (import sources.emacs-overlay)
+      (import sources.emacs-overlay)
     ];
   };
 
@@ -40,14 +40,14 @@ in
         use-package
         haskell-mode
         evil
-	evil-magit
+        evil-magit
         evil-collection
-	helm
-	helm-projectile
-	helm-rg
-	helm-swoop
-	helm-flx
-	helm-fuzzier
+        helm
+        helm-projectile
+        helm-rg
+        helm-swoop
+        helm-flx
+        helm-fuzzier
         ( lsp-mode.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {
             src = pkgs.fetchFromGitHub {
@@ -61,15 +61,15 @@ in
         lsp-haskell
         lsp-ui
         magit
-	nix-mode
-	direnv
-	doom-themes
+        nix-mode
+        direnv
+        doom-themes
         flycheck
         flycheck-haskell
-	general
-	projectile
-	with-simulated-input
-	which-key
+        general
+        projectile
+        with-simulated-input
+        which-key
       ];
     };
 
@@ -155,7 +155,7 @@ in
         night = 5501;
         day = 3501;
       };
-    extraOptions = ["-v"];
+      extraOptions = ["-v"];
     };
   };
 
