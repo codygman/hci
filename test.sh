@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-home-manager switch
+./switch.sh
 # echo "running emacs: $(which emacs)"
 # Before running tests, clean the stack directory for our haskell test project
 pushd testdata/simple-haskell-project && stack clean && popd
