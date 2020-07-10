@@ -8,8 +8,10 @@ let
   home-manager = import sources.home-manager {};
   myEnv = builtins.getEnv "MYENV";
   lib = pkgs.lib;
+  mylib = import ./nix/mylib.nix {pkgs = pkgs;};
 in
 {
+  imports = mylib.loadPersonalOrWorkEnv;
 
  # TODO why do we have two different overlays for this expression body and in the pkgs import??
  nixpkgs = {
