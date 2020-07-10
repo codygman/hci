@@ -82,7 +82,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" "network-manager" "networkmanager" ]; # Enable ‘sudo’ for the user.
   };
-  home-manager.users.cody = import ./nixpkgs/home.nix;
+  home-manager.users.cody = import ./home.nix;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
