@@ -9,6 +9,8 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./cachix.nix
+      <home-manager/nixos> # TODO we should avoid using a channel and pin here
+      # NOTE maybe see if https://github.com/ryantm/home-manager-template has anything I can use or if I should switch to it if applicable
     ];
 
 
@@ -87,6 +89,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" "network-manager" "networkmanager" ]; # Enable ‘sudo’ for the user.
   };
+  home-manager.users.cody = import ./nixpkgs/home.nix;
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
