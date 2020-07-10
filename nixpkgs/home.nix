@@ -27,6 +27,8 @@ in
       path = "${home-manager.path}";
     };
 
+    vim.enable = true;
+
     emacs = {
       enable = true;
       # package = if builtins.getEnv "TRAVIS_OS_NAME" == "" then emacs-overlay.emacs else pkgs.emacs-nox;
