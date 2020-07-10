@@ -5,7 +5,7 @@
 
 if [ -z "$IN_GIT_HOOK" ] && [ -z "$INSIDE_EMACS" ]; then
     echo "finished running buttercup tests, running ert tests"
-    exec EMACSFOR="PERSONAL" emacs -nw --load load-init-then-run-ert.el
+    exec emacs -nw --load load-init-then-run-ert.el
     echo "finished running ert tests"
 else
     echo "in git hook, skipping ert test since we don't have TTY"
