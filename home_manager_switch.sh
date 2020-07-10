@@ -34,6 +34,9 @@ function check_installed() {
 }
 
 export PATH=$HOME/.nix-profile/bin:$PATH
+# NOTE this is okay for now I think
+# TODO eventually change this to use switch.sh (or hs if we change to it) and remove all the symlinking above/elsewhere
+# NOTE be sure to look for other places that might assume those nixpkgs symlinks are present, but I can't think of any right now
 home-manager switch
 . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 

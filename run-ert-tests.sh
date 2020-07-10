@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# TODO I don't think these are running on github actions anymore :/
-# see https://github.com/codygman/hci/runs/837926664?check_suite_focus=true#step:9:7
+# It seems this was never running on github actions?
+# TODO make a new branch... maybe `debug-emacs-no-window-minimal` and see if there's a bug, we can figure out a work around, or just want to go full X11 server and xvfb
 
 if [ -z "$IN_GIT_HOOK" ] && [ -z "$INSIDE_EMACS" ]; then
     echo "finished running buttercup tests, running ert tests"
