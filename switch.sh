@@ -6,6 +6,7 @@
 # This will be useful to ensure both my system level and user (or home) level states are in sync
 if grep -q "NixOS" /etc/issue; then
     echo "we are on nixos; calling nixos-rebuild and assuming home-manager module enabled"
+    # TODO avoid needing sudo here by using nix-build directly, NOTE subsequent calls will somehow need to use the result symlink it generates
     NIXOS_CONFIG=$(pwd)/nixpkgs/configuration.nix sudo -E nixos-rebuild switch
 else
     echo "we are not on nixos, calling home-manager switch"
