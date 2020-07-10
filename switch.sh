@@ -1,11 +1,7 @@
 #!/usr/bin/env bash
 
-# by default I want "switch" to be my entire system state, both home-manager and my system level nix configuration
-# I could change my mind on that, but we'll see. That's why I put the m in different scripts.
+# TODO check that we're actually on nixos, otherwise throw an error
 
-# TODO if we aren't on nixos, only switch home-manager
-
-# if we are on nixos, default to switching nixos and home-manager
-exec switch_nixos_and_home_manager.sh
-
-
+# TODO update nixos to use home-manager module for this script to actually sync the state of the system
+# This will be useful to ensure both my system level and user (or home) level states are in sync
+NIXOS_CONFIG=$(pwd)/nixpkgs/configuration.nix sudo -E nixos-rebuild switch
