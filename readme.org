@@ -212,22 +212,36 @@
 *** exwm
     #+begin_src emacs-lisp
       (use-package exwm
-	:config
+	:init
+	(setq exwm-input-global-keys
+	      `(([?\s-r] . exwm-reset)
+		([?\s-i] . exwm-input-release-keyboard)
+		;; convenience keybinding, meant to mimic `esc' in Vim bindings
+		([?\s-\[] . exwm-reset)))
+	(defun exwm-rename-buffer ()
+	  (interactive)
+	  (exwm-workspace-rename-buffer
+	   (concat exwm-class-name ":"
+		   (if (<= (length exwm-title) 50) exwm-title
+		     (concat (substring exwm-title 0 49) "...")))))
+
+	;; Add these hooks in a suitable place (e.g., as done in exwm-config-default)
+	(add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
+	(add-hook 'exwm-update-title-hook 'exwm-rename-buffer)	:config
 	(require 'exwm)
 
 	(exwm-enable)
 	;; stop exwm from catching SPC leader key.
 	;; the double whitespace is intentional
 	;; credit https://github.com/matthuszagh/emacs/blob/5827a8d2ca4e97bf37cfa71dabf9346043573798/layers/exwm-layer.el#L112
-	:postsetup
-	;; (add-to-list 'exwm-input-prefix-keys ?\  ) ;; this breaks being able to add spaces in textboxes lol
-	;; see
-	(push ?\s-\  exwm-input-prefix-keys)
-	(evil-set-initial-state 'exwm-mode 'normal)
-	:customize
-	;; TODO update class names (i.e. "Firefox" instead of "*EXWM*<5>" 
-	;; https://github.com/matthuszagh/emacs/blob/5827a8d2ca4e97bf37cfa71dabf9346043573798/layers/exwm-layer.el#L140
+	(add-to-list 'exwm-input-prefix-keys ?\  )
 	)
+    #+end_src
+*** ediff
+    #+begin_src emacs-lisp
+      (use-package ediff
+	:config
+	(setq ediff-window-setup-function 'ediff-setup-windows-plain))
     #+end_src
 *** which-key
     #+begin_src emacs-lisp
@@ -307,7 +321,7 @@
     #+begin_src emacs-lisp
       (use-package dired
 	:general
-      (my-leader-def
+	(my-leader-def
 	  :states '(normal visual emacs motion)
 	  :prefix "SPC"
 	  :keymaps 'override
