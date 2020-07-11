@@ -209,6 +209,26 @@
     #+begin_src emacs-lisp
       (require 'use-package)
     #+end_src
+*** exwm
+    #+begin_src emacs-lisp
+      (use-package exwm
+	:config
+	(require 'exwm)
+
+	(exwm-enable)
+	;; stop exwm from catching SPC leader key.
+	;; the double whitespace is intentional
+	;; credit https://github.com/matthuszagh/emacs/blob/5827a8d2ca4e97bf37cfa71dabf9346043573798/layers/exwm-layer.el#L112
+	:postsetup
+	;; (add-to-list 'exwm-input-prefix-keys ?\  ) ;; this breaks being able to add spaces in textboxes lol
+	;; see
+	(push ?\s-\  exwm-input-prefix-keys)
+	(evil-set-initial-state 'exwm-mode 'normal)
+	:customize
+	;; TODO update class names (i.e. "Firefox" instead of "*EXWM*<5>" 
+	;; https://github.com/matthuszagh/emacs/blob/5827a8d2ca4e97bf37cfa71dabf9346043573798/layers/exwm-layer.el#L140
+	)
+    #+end_src
 *** which-key
     #+begin_src emacs-lisp
       (use-package which-key
