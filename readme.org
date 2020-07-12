@@ -178,7 +178,7 @@
 	 (let ((emacs-async-running (length (seq-filter (lambda (s) (s-contains? "emacs<" s))
 							(mapcar 'process-name (process-list)))))
 	       (current-second (ts-second (ts-now))))
-	   (when (or skip-debounces (and (even-second-p current-second) (< emacs-async-running 2)))
+	   (when (or skip-debounces (and (even-second-p current-second) (eq emacs-async-running 0)))
 	     (async-start
 	      (lambda ()
 		(require 'projectile)
