@@ -201,7 +201,7 @@
 						   ;; TODO show only largest value completed ago (ex. 5d 5h 55m 3s ago == 5d ago)
 						   ;; NOTE preserve the second level granularity of started though!
 						   (if (and date status)
-						       (format "[lorri (%s)]: %s - %s ago" (projectile-project-name) status
+						       (format "[lorri (%s)]: %s %s ago" (projectile-project-name) status
 							       (replace-regexp-in-string "\\([0-9]+\\) \\([a-z]\\)[a-z]+[, ]?[ ]?" "\\1\\2"  (ts-human-format-duration (ts-difference (ts-now) (ts-parse date)))) )
 						     "[lorri]: failed to parse")))))
 		  (if parsed-lorri-log-line
