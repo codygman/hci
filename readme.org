@@ -172,52 +172,45 @@
 	 (async-start
 	  (lambda ()
 	    (require 'projectile)
+	    (let* ((all-recent-lorri-activity-for-project 
+		   (let ((project-name (projectile-project-name)))
+		     (if project-name
+			 (let ((cmd (format "journalctl --user -u lorri | grep -v identified | grep %s | tail -n1" (projectile-project-name))))
+			   ;; (message "all-recent-lorri-activity debug cmd: %s" cmd)
+			   (shell-command-to-string cmd))
+		       nil)))
+		  (parsed-lorri-log-line  (progn 
+					    (string-match
+					     "]: \\([a-z]\\{3\\} [0-9]\\{2\\} [0-9:.]+\\).+build status, message: BuildEvent(\\([a-z]+\\) {"
+					     all-recent-lorri-activity-for-project)
 
-	    (defun all-recent-lorri-activity-for-project () 
-	      (let ((project-name (projectile-project-name)))
-		(if project-name
-		    (let ((cmd (format "journalctl --user -u lorri | grep -v identified | grep %s | tail -n1" (projectile-project-name))))
-		      ;; (message "all-recent-lorri-activity debug cmd: %s" cmd)
-		      (shell-command-to-string cmd))
-		  nil
-		  )
-		))
+					    (if (and
+						 (match-string 1 all-recent-lorri-activity-for-project)
+						 (match-string 2 all-recent-lorri-activity-for-project))
+						(format "[lorri] %s: %s"
+							(match-string 1 all-recent-lorri-activity-for-project)
+							(match-string 2 all-recent-lorri-activity-for-project))
+					      nil)
+					    )))
+	      (if parsed-lorri-log-line
+		  parsed-lorri-log-line	
+		"[lorri (no project)]")))
 
-	    (defun parse-lorri-log-line (output)
-	      (string-match
-	       "]: \\([a-z]\\{3\\} [0-9]\\{2\\} [0-9:.]+\\).+build status, message: BuildEvent(\\([a-z]+\\) {"
-	       output)
-
-	      (if (and
-		   (match-string 1 output)
-		   (match-string 2 output))
-		  (format "[lorri] %s: %s"
-			  (match-string 1 output)
-			  (match-string 2 output))
-		nil)
-	      )
-
-	    (let ((full-output (all-recent-lorri-activity-for-project)))
-	      ;; (message "full output: %s" full-output)
-	      (let ((result (if full-output
-				(parse-lorri-log-line full-output)	
-			      "[lorri (no project)]")))))
-	    )
 	  (lambda (result)
 	    ;; TODO not sure if this is modifying things
+	    (message "result is: %s" result)
 	    (setq most-recent-lorri-status result)
 	    (force-mode-line-update t)
 	    (sit-for 0.1) ;; hopefully this forces a redisplay?
-	    )
-	  ))
+	    )))
 
-       ;; use setq-default to set it for /all/ modes
-       ;; TODO make this use an association list otherwise only the active buffers modeline will be correct 
-       (setq most-recent-lorri-status "[lorri]: unknown")
-       (add-hook 'post-command-hook 'most-recent-lorri-event-for-project)
-       ;; (add-hook 'after-save-hook 'most-recent-lorri-event-for-project)
-       ;; (eval-after-load 'magit (add-to-list 'magit-mode-hook 'most-recent-lorri-event-for-project))
-       ;; (add-to-list 'find-file-hook 'most-recent-lorri-event-for-project)
+	  ;; use setq-default to set it for /all/ modes
+	  ;; TODO make this use an association list otherwise only the active buffers modeline will be correct 
+	  (setq most-recent-lorri-status "[lorri]: unknown")
+	  (add-hook 'post-command-hook 'most-recent-lorri-event-for-project)
+	  ;; (add-hook 'after-save-hook 'most-recent-lorri-event-for-project)
+	  ;; (eval-after-load 'magit (add-to-list 'magit-mode-hook 'most-recent-lorri-event-for-project))
+	  ;; (add-to-list 'find-file-hook 'most-recent-lorri-event-for-project)
      #+end_src
 **** actual mode line format
     #+begin_src emacs-lisp
