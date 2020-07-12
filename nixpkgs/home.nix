@@ -3,8 +3,9 @@
 let
   sources = import ./nix/sources.nix;
   emacs-overlay = sources.emacs-overlay {};
-  # mylorri = sources.lorri;
+  mylorripkg = sources.lorri;
   pkgs = import sources.nixpkgs { overlays = [ (import sources.emacs-overlay) ];};
+  mylorri = pkgs.callPackage mylorripkg {};
   home-manager = import sources.home-manager {};
   myEnv = builtins.getEnv "MYENV";
   lib = pkgs.lib;
@@ -113,7 +114,7 @@ in
     packages = with pkgs; [
       # cachix # not sure what was wrong here
       # ghcide # having this by default would be nice for the ghc I'm using most at the time
-      # mylorri # TODO
+      mylorri # TODO
       # niv # not defined?
       # will need to ensure cachix by ci and cachix version here match
       cmake
@@ -138,7 +139,7 @@ in
 
   services = {
     lorri = {
-      # package = mylorri;
+      package = mylorri;
       enable = true;
     };
     redshift = {
