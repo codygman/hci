@@ -187,7 +187,7 @@
 					     (let ((date (match-string 1 all-recent-lorri-activity-for-project))
 						   (status (match-string 2 all-recent-lorri-activity-for-project)))
 					       (if (and date status)
-						   (format "%s: %s - %s" date status (projectile-project-name))
+						   (format "[lorri (%s)]: %s - %s" (projectile-project-name) status date )
 						 "[lorri]: failed to parse")))))
 		   (if parsed-lorri-log-line
 		       parsed-lorri-log-line
