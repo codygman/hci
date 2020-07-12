@@ -171,14 +171,14 @@
        (defun fifth-second-p (x)
 	 (if x (zerop (mod x 5)) nil))
 
-       (defun most-recent-lorri-event-for-project ()
+       (defun most-recent-lorri-event-for-project (&optional skip-debounces)
 	 ;; TODO make this return "lorri stopped" if daemon isn't even running
 	 ;; orrrr...... highlight lorri text as red  when stopped, green when started
 	 ;; if we have more than 3 external async sandbox emacs running, don't start more
 	 (let ((emacs-async-running (length (seq-filter (lambda (s) (s-contains? "emacs<" s))
 							(mapcar 'process-name (process-list)))))
 	       (current-second (ts-second (ts-now))))
-	   (when (and (fifth-second-p current-second) (< emacs-async-running 10))
+	   (when (or skip-debounces (and (fifth-second-p current-second) (< emacs-async-running 10)))
 	     (async-start
 	      (lambda ()
 		(require 'projectile)
@@ -197,6 +197,9 @@
 
 						 (let* ((date (match-string 1 all-recent-lorri-activity-for-project))
 							(status (match-string 2 all-recent-lorri-activity-for-project)))
+						   ;; TODO if completed, just show minutes ago completed
+						   ;; TODO show only largest value completed ago (ex. 5d 5h 55m 3s ago == 5d ago)
+						   ;; NOTE preserve the second level granularity of started though!
 						   (if (and date status)
 						       (format "[lorri (%s)]: %s - %s ago" (projectile-project-name) status
 							       (replace-regexp-in-string "\\([0-9]+\\) \\([a-z]\\)[a-z]+[,]?" "\\1\\2"  (ts-human-format-duration (ts-difference (ts-now) (ts-parse date)))) )
@@ -213,14 +216,17 @@
 		(sit-for 0.1) ;; hopefully this forces a redisplay?
 		)))))
 
+       (defun most-recent-lorri-event-for-project-no-debounce ()
+	 (most-recent-lorri-event-for-project t))
+
 	 ;; use setq-default to set it for /all/ modes
 	 ;; TODO make this use an association list otherwise only the active buffers modeline will be correct 
 	 (setq most-recent-lorri-status "[lorri()]: unknown")
 	 (add-hook 'post-command-hook 'most-recent-lorri-event-for-project)
-	 (advice-add 'most-recent-lorri-event-for-project :after #'direnv-update-directory-environment)
-	 ;; (add-hook 'after-save-hook 'most-recent-lorri-event-for-project)
-	 ;; (eval-after-load 'magit (add-to-list 'magit-mode-hook 'most-recent-lorri-event-for-project))
-	 ;; (add-to-list 'find-file-hook 'most-recent-lorri-event-for-project)
+	 (advice-add 'most-recent-lorri-event-for-project-no-debounce :after #'direnv-update-directory-environment)
+	 ;; (add-hook 'after-save-hook 'most-recent-lorri-event-for-project) ;; TODO do we need this too? Does debounced post-command-hook cover this?
+	 ;; (eval-after-load 'magit (add-to-list 'magit-mode-hook 'most-recent-lorri-event-for-project)) ;; TODO we should add this... debounce or no?
+	 (add-to-list 'find-file-hook 'most-recent-lorri-event-for-project-no-debounce)
      #+end_src
 **** actual mode line format
     #+begin_src emacs-lisp
