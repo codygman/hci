@@ -166,13 +166,20 @@
 *** mode line
 **** helper functions, set initial state, add hooks
      #+begin_src emacs-lisp
+       (require 'ts)
+
+       (defun even-second-p (x)
+	 (if x (zerop (mod x 2)) nil))
+
        (defun most-recent-lorri-event-for-project ()
 	 ;; TODO make this return "lorri stopped" if daemon isn't even running
 	 ;; orrrr...... highlight lorri text as red  when stopped, green when started
 	 ;; if we have more than 3 external async sandbox emacs running, don't start more
 	 (let ((emacs-async-running (length (seq-filter (lambda (s) (s-contains? "emacs<" s))
-					  (mapcar 'process-name (process-list))))))
-	   (when (< emacs-async-running 3)
+							(mapcar 'process-name (process-list)))))
+	       (current-second (ts-second (ts-now))))
+	   (when (and (even-second-p current-second) (< emacs-async-running 10))
+	     (message "starting async emacs to get lorri status")
 	     (async-start
 	      (lambda ()
 		(require 'projectile)
@@ -207,14 +214,14 @@
 		(sit-for 0.1) ;; hopefully this forces a redisplay?
 		)))))
 
-       ;; use setq-default to set it for /all/ modes
-       ;; TODO make this use an association list otherwise only the active buffers modeline will be correct 
-       (setq most-recent-lorri-status "[lorri()]: unknown")
-       (add-hook 'post-command-hook 'most-recent-lorri-event-for-project)
-       (advice-add 'most-recent-lorri-event-for-project :after #'direnv-update-directory-environment)
-       ;; (add-hook 'after-save-hook 'most-recent-lorri-event-for-project)
-       ;; (eval-after-load 'magit (add-to-list 'magit-mode-hook 'most-recent-lorri-event-for-project))
-       ;; (add-to-list 'find-file-hook 'most-recent-lorri-event-for-project)
+	 ;; use setq-default to set it for /all/ modes
+	 ;; TODO make this use an association list otherwise only the active buffers modeline will be correct 
+	 (setq most-recent-lorri-status "[lorri()]: unknown")
+	 (add-hook 'post-command-hook 'most-recent-lorri-event-for-project)
+	 (advice-add 'most-recent-lorri-event-for-project :after #'direnv-update-directory-environment)
+	 ;; (add-hook 'after-save-hook 'most-recent-lorri-event-for-project)
+	 ;; (eval-after-load 'magit (add-to-list 'magit-mode-hook 'most-recent-lorri-event-for-project))
+	 ;; (add-to-list 'find-file-hook 'most-recent-lorri-event-for-project)
      #+end_src
 **** actual mode line format
     #+begin_src emacs-lisp
