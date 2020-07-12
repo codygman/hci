@@ -168,8 +168,8 @@
      #+begin_src emacs-lisp
        (require 'ts)
 
-       (defun fifth-second-p (x)
-	 (if x (zerop (mod x 5)) nil))
+       (defun even-second-p (x)
+	 (if x (zerop (mod x 2)) nil))
 
        (defun most-recent-lorri-event-for-project (&optional skip-debounces)
 	 ;; TODO make this return "lorri stopped" if daemon isn't even running
@@ -178,7 +178,7 @@
 	 (let ((emacs-async-running (length (seq-filter (lambda (s) (s-contains? "emacs<" s))
 							(mapcar 'process-name (process-list)))))
 	       (current-second (ts-second (ts-now))))
-	   (when (or skip-debounces (and (fifth-second-p current-second) (< emacs-async-running 5)))
+	   (when (or skip-debounces (and (even-second-p current-second) (< emacs-async-running 2)))
 	     (async-start
 	      (lambda ()
 		(require 'projectile)
