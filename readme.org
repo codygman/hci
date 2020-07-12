@@ -607,6 +607,314 @@ I've *really* missed this one.... =C-x o= gets old fast
 *** DONE spc b d kill buffer
 *** DONE compilation mode bindings (SPC c c/SPC c C)
 *** DONE =SPC w {u,r}= for winner undo/redo
+*** TODO add simple lorri modeline for projects
+**** TODO add simple output of lorri status
+***** We can get lorri's overall status with 
+      #+name: lorri-full-output
+      #+begin_src emacs-lisp :noweb yes
+      (shell-command-to-string "systemctl --user status lorri")
+      #+end_src
+***** then we can filter that with
+      #+name: lorri-filtered-output
+      #+begin_src emacs-lisp :noweb yes :var full-output=lorri-full-output
+	(progn () (string-match "Active: \\(.+\\)$" full-output)
+	       (match-string 1 full-output))
+      #+end_src
+
+      #+RESULTS: lorri-filtered-output
+      : inactive (dead)
+
+      #+RESULTS:
+***** and finally update the modeline
+****** my default modeline is
+      #+begin_src emacs-lisp :results raw
+      (print mode-line-format)
+      #+end_src
+
+      #+RESULTS:
+      (%e mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification     mode-line-position evil-mode-line-tag (vc-mode vc-mode)    mode-line-modes mode-line-misc-info mode-line-end-spaces)
+****** Now... updating the modeline isn't quite so straight-forward
+******* Here's one of the simpler examples I found
+	#+begin_src emacs-lisp
+	  ;; use setq-default to set it for /all/ modes
+	  (setq mode-line-format
+	    (list
+	      ;; the buffer name; the file name as a tool tip
+	      '(:eval (propertize "%b " 'face 'font-lock-keyword-face
+		  'help-echo (buffer-file-name)))
+
+	      ;; line and column
+	      "(" ;; '%02' to set to 2 chars at least; prevents flickering
+		(propertize "%02l" 'face 'font-lock-type-face) ","
+		(propertize "%02c" 'face 'font-lock-type-face) 
+	      ") "
+
+	      ;; relative position, size of file
+	      "["
+	      (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
+	      "/"
+	      (propertize "%I" 'face 'font-lock-constant-face) ;; size
+	      "] "
+
+	      ;; the current major mode for the buffer.
+	      "["
+
+	      '(:eval (propertize "%m" 'face 'font-lock-string-face
+			'help-echo buffer-file-coding-system))
+	      "] "
+
+
+	      "[" ;; insert vs overwrite mode, input-method in a tooltip
+	      '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
+			'face 'font-lock-preprocessor-face
+			'help-echo (concat "Buffer is in "
+				     (if overwrite-mode "overwrite" "insert") " mode")))
+
+	      ;; was this buffer modified since the last save?
+	      '(:eval (when (buffer-modified-p)
+			(concat ","  (propertize "Mod"
+				       'face 'font-lock-warning-face
+				       'help-echo "Buffer has been modified"))))
+
+	      ;; is this buffer read-only?
+	      '(:eval (when buffer-read-only
+			(concat ","  (propertize "RO"
+				       'face 'font-lock-type-face
+				       'help-echo "Buffer is read-only"))))  
+	      "] "
+
+	      ;; add the time, with the date and the emacs uptime in the tooltip
+	      '(:eval (propertize (format-time-string "%H:%M")
+			'help-echo
+			(concat (format-time-string "%c; ")
+				(emacs-uptime "Uptime:%hh"))))
+	      " --"
+	      ;; i don't want to see minor-modes; but if you want, uncomment this:
+	      ;; minor-mode-alist  ;; list of minor modes
+	      "%-" ;; fill with '-'
+	      ))
+	#+end_src
+
+	#+RESULTS:
+	| (:eval (propertize %b  'face 'font-lock-keyword-face 'help-echo (buffer-file-name))) | ( | %02l | , | %02c | ) | [ | %p | / | %I | ] | [ | (:eval (propertize %m 'face 'font-lock-string-face 'help-echo buffer-file-coding-system)) | ] | [ | (:eval (propertize (if overwrite-mode Ovr Ins) 'face 'font-lock-preprocessor-face 'help-echo (concat Buffer is in  (if overwrite-mode overwrite insert)  mode))) | (:eval (when (buffer-modified-p) (concat , (propertize Mod 'face 'font-lock-warning-face 'help-echo Buffer has been modified)))) | (:eval (when buffer-read-only (concat , (propertize RO 'face 'font-lock-type-face 'help-echo Buffer is read-only)))) | ] | (:eval (propertize (format-time-string %H:%M) 'help-echo (concat (format-time-string %c; ) (emacs-uptime Uptime:%hh)))) | -- | %- |
+
+******* Now i'll just add my naieve lorri status to the front of that
+	#+begin_src emacs-lisp
+	  ;; use setq-default to set it for /all/ modes
+	  (setq-default mode-line-format
+		(list
+		 '(:eval (propertize (progn ()
+					    (let ((full-output (shell-command-to-string "systemctl --user status lorri")))
+					      (string-match "Active: \\(.+\\)$" full-output)
+					      (format "lorri: %s    " (match-string 1 full-output)))
+					    )))
+
+		 ;; the buffer name; the file name as a tool tip
+		 '(:eval (propertize "%b " 'face 'font-lock-keyword-face
+				     'help-echo (buffer-file-name)))
+
+		 ;; line and column
+		 "(" ;; '%02' to set to 2 chars at least; prevents flickering
+		 (propertize "%02l" 'face 'font-lock-type-face) ","
+		 (propertize "%02c" 'face 'font-lock-type-face) 
+		 ") "
+
+		 ;; relative position, size of file
+		 "["
+		 (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
+		 "/"
+		 (propertize "%I" 'face 'font-lock-constant-face) ;; size
+		 "] "
+
+		 ;; the current major mode for the buffer.
+		 "["
+
+		 '(:eval (propertize "%m" 'face 'font-lock-string-face
+				     'help-echo buffer-file-coding-system))
+		 "] "
+
+
+		 "[" ;; insert vs overwrite mode, input-method in a tooltip
+		 '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
+				     'face 'font-lock-preprocessor-face
+				     'help-echo (concat "Buffer is in "
+							(if overwrite-mode "overwrite" "insert") " mode")))
+
+		 ;; was this buffer modified since the last save?
+		 '(:eval (when (buffer-modified-p)
+			   (concat ","  (propertize "Mod"
+						    'face 'font-lock-warning-face
+						    'help-echo "Buffer has been modified"))))
+
+		 ;; is this buffer read-only?
+		 '(:eval (when buffer-read-only
+			   (concat ","  (propertize "RO"
+						    'face 'font-lock-type-face
+						    'help-echo "Buffer is read-only"))))  
+		 "] "
+
+		 ;; add the time, with the date and the emacs uptime in the tooltip
+		 '(:eval (propertize (format-time-string "%H:%M")
+				     'help-echo
+				     (concat (format-time-string "%c; ")
+					     (emacs-uptime "Uptime:%hh"))))
+		 " --"
+		 ;; i don't want to see minor-modes; but if you want, uncomment this:
+		 ;; minor-mode-alist  ;; list of minor modes
+		 "%-" ;; fill with '-'
+		 ))
+	#+end_src
+
+	#+RESULTS:
+	| (:eval (propertize (progn nil (let ((full-output (shell-command-to-string systemctl --user status lorri))) (string-match Active: \(.+\)$ full-output) (format lorri: %s     (match-string 1 full-output)))))) | (:eval (propertize %b  'face 'font-lock-keyword-face 'help-echo (buffer-file-name))) | ( | %02l | , | %02c | ) | [ | %p | / | %I | ] | [ | (:eval (propertize %m 'face 'font-lock-string-face 'help-echo buffer-file-coding-system)) | ] | [ | (:eval (propertize (if overwrite-mode Ovr Ins) 'face 'font-lock-preprocessor-face 'help-echo (concat Buffer is in  (if overwrite-mode overwrite insert)  mode))) | (:eval (when (buffer-modified-p) (concat , (propertize Mod 'face 'font-lock-warning-face 'help-echo Buffer has been modified)))) | (:eval (when buffer-read-only (concat , (propertize RO 'face 'font-lock-type-face 'help-echo Buffer is read-only)))) | ] | (:eval (propertize (format-time-string %H:%M) 'help-echo (concat (format-time-string %c; ) (emacs-uptime Uptime:%hh)))) | -- | %- |
+
+******* That's a pretty nice result, but what we really want is to know the last output of the log for that directory
+******** all lorri activity for given projectile project
+	 #+begin_src emacs-lisp :results raw
+	   (defun all-recent-lorri-activity-for-project () 
+	   (let ((cmd (format "journalctl --user -u lorri | grep %s | tail -n1" (projectile-project-name))))
+	     (message "all-recent-lorri-activity debug cmd: %s" cmd)
+	     (shell-command-to-string cmd)))
+	   
+	 #+end_src
+
+	 #+RESULTS:
+	 all-recent-lorri-activity-for-project
+******** filter out what we need from that
+
+	 #+begin_src emacs-lisp :results raw
+	   (defun most-recent-lorri-event-for-project ()
+	     (let ((full-output (all-recent-lorri-activity-for-project))
+		   (rgx
+		    "]: [a-z]\\{3\\} [0-9]\\{2\\} \\([0-9:.]+\\).+build status, message: BuildEvent(\\([a-z]+\\) {"))
+	       (string-match rgx full-output)
+	       (format "[lorri] %s: %s"
+		       (match-string 1 full-output)
+		       (match-string 2 full-output)
+		       )) )
+	 #+end_src
+
+	 #+RESULTS:
+	 most-recent-lorri-event-for-project
+	 most-recent-lorri-event-for-project
+	 lorri: nil at XXXX   
+******** that leaves us in total with
+	 #+begin_src emacs-lisp :results raw
+	   (defun all-recent-lorri-activity-for-project () 
+	     (let ((cmd (format "journalctl --user -u lorri | grep %s | tail -n1" (projectile-project-name))))
+	       (message "all-recent-lorri-activity debug cmd: %s" cmd)
+	       (shell-command-to-string cmd)))
+
+	   (defun most-recent-lorri-event-for-project ()
+	     (let ((full-output (all-recent-lorri-activity-for-project))
+		   (rgx
+		    "]: [a-z]\\{3\\} [0-9]\\{2\\} \\([0-9:.]+\\).+build status, message: BuildEvent(\\([a-z]+\\) {"))
+	       (string-match rgx full-output)
+	       (format "[lorri] %s: %s"
+		       (match-string 1 full-output)
+		       (match-string 2 full-output)
+		       )) )
+
+	 #+end_src
+******** and our new modeline code as
+	#+begin_src emacs-lisp
+	  (defun all-recent-lorri-activity-for-project () 
+	    (let ((project-name (projectile-project-name)))
+	      (if project-name
+		  (let ((cmd (format "journalctl --user -u lorri | grep -v identified | grep %s | tail -n1" (projectile-project-name))))
+		    ;; (message "all-recent-lorri-activity debug cmd: %s" cmd)
+		    (shell-command-to-string cmd))
+		nil
+		  )
+	    ))
+
+	  (defun most-recent-lorri-event-for-project ()
+	    (let ((full-output (all-recent-lorri-activity-for-project))
+		  (rgx
+		   "]: \\([a-z]\\{3\\} [0-9]\\{2\\} [0-9:.]+\\).+build status, message: BuildEvent(\\([a-z]+\\) {"))
+	      ;; (message "full output: %s" full-output)
+	      (if full-output
+		  (progn (string-match rgx full-output)
+			 (if (and
+			      (match-string 1 full-output)
+			      (match-string 2 full-output))
+			     (format "[lorri] %s: %s"
+				     (match-string 1 full-output)
+				     (match-string 2 full-output))
+			   nil))
+		"[lorri (no project)]")
+		))
+
+	  ;; use setq-default to set it for /all/ modes
+	  ;; TODO make this use an association list otherwise only the active buffers modeline will be correct 
+	  (setq most-recent-lorri-status "[lorri]: unknown")
+	  (add-hook 'after-save-hook 'most-recent-lorri-event-for-project)
+	  (setq-default mode-line-format
+			(list
+			 ;; TODO fix performance issues prob because of tons of errors thrown
+			 '(:eval (propertize (format "hi %s          " 'most-recent-lorri-status)))
+
+			 ;; the buffer name; the file name as a tool tip
+			 '(:eval (propertize "%b " 'face 'font-lock-keyword-face
+					     'help-echo (buffer-file-name)))
+
+			 ;; line and column
+			 "(" ;; '%02' to set to 2 chars at least; prevents flickering
+			 (propertize "%02l" 'face 'font-lock-type-face) ","
+			 (propertize "%02c" 'face 'font-lock-type-face) 
+			 ") "
+
+			 ;; relative position, size of file
+			 "["
+			 (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
+			 "/"
+			 (propertize "%I" 'face 'font-lock-constant-face) ;; size
+			 "] "
+
+			 ;; the current major mode for the buffer.
+			 "["
+
+			 '(:eval (propertize "%m" 'face 'font-lock-string-face
+					     'help-echo buffer-file-coding-system))
+			 "] "
+
+
+			 "[" ;; insert vs overwrite mode, input-method in a tooltip
+			 '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
+					     'face 'font-lock-preprocessor-face
+					     'help-echo (concat "Buffer is in "
+								(if overwrite-mode "overwrite" "insert") " mode")))
+
+			 ;; was this buffer modified since the last save?
+			 '(:eval (when (buffer-modified-p)
+				   (concat ","  (propertize "Mod"
+							    'face 'font-lock-warning-face
+							    'help-echo "Buffer has been modified"))))
+
+			 ;; is this buffer read-only?
+			 '(:eval (when buffer-read-only
+				   (concat ","  (propertize "RO"
+							    'face 'font-lock-type-face
+							    'help-echo "Buffer is read-only"))))  
+			 "] "
+
+			 ;; add the time, with the date and the emacs uptime in the tooltip
+			 '(:eval (propertize (format-time-string "%H:%M")
+					     'help-echo
+					     (concat (format-time-string "%c; ")
+						     (emacs-uptime "Uptime:%hh"))))
+			 " --"
+			 ;; i don't want to see minor-modes; but if you want, uncomment this:
+			 ;; minor-mode-alist  ;; list of minor modes
+			 "%-" ;; fill with '-'
+			 ))
+
+	#+end_src
+
+	#+RESULTS:
+	| (:eval (propertize (format hi %s           'most-recent-lorri-status))) | (:eval (propertize %b  'face 'font-lock-keyword-face 'help-echo (buffer-file-name))) | ( | %02l | , | %02c | ) | [ | %p | / | %I | ] | [ | (:eval (propertize %m 'face 'font-lock-string-face 'help-echo buffer-file-coding-system)) | ] | [ | (:eval (propertize (if overwrite-mode Ovr Ins) 'face 'font-lock-preprocessor-face 'help-echo (concat Buffer is in  (if overwrite-mode overwrite insert)  mode))) | (:eval (when (buffer-modified-p) (concat , (propertize Mod 'face 'font-lock-warning-face 'help-echo Buffer has been modified)))) | (:eval (when buffer-read-only (concat , (propertize RO 'face 'font-lock-type-face 'help-echo Buffer is read-only)))) | ] | (:eval (propertize (format-time-string %H:%M) 'help-echo (concat (format-time-string %c; ) (emacs-uptime Uptime:%hh)))) | -- | %- |
+
+**** TODO filter output to be based on current project if in a project
 *** TODO turn off garbage emacs file generation in current directory
 *** TODO yasnippet and source code block completion omfg
     
