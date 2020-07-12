@@ -69,6 +69,7 @@ in
         flycheck-haskell
         general
         projectile
+        ts
         with-simulated-input
         which-key
       ];

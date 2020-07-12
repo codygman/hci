@@ -172,26 +172,28 @@
 	 (async-start
 	  (lambda ()
 	    (require 'projectile)
+	    (require 'ts)
 	    (let* ((all-recent-lorri-activity-for-project
 		    (if (projectile-project-name)
 			(let ((cmd
-			       (format "journalctl --user -u lorri | grep -v identified | grep %s | tail -n1" (projectile-project-name))))
+			       (format "journalctl --user -u lorri --output=short-iso| grep -v identified | grep %s | tail -n1" (projectile-project-name))))
 			  ;; (message "all-recent-lorri-activity debug cmd: %s" cmd)
 			  (shell-command-to-string cmd))
 		      nil))
-		      (parsed-lorri-log-line  (progn
+		   (parsed-lorri-log-line  (progn
 					     (string-match
-					      "]: \\([a-z]\\{3\\} [0-9]\\{2\\} [0-9:.]+\\).+build status, message: BuildEvent(\\([a-z]+\\) {"
+					      "\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9:.]+T.+-[0-9]\\{4\\}\\).+build status, message: BuildEvent(\\([a-z]+\\) {"
 					      all-recent-lorri-activity-for-project)
 
-					     (let ((date (match-string 1 all-recent-lorri-activity-for-project))
-						   (status (match-string 2 all-recent-lorri-activity-for-project)))
+					     (let* ((date (match-string 1 all-recent-lorri-activity-for-project))
+						    (status (match-string 2 all-recent-lorri-activity-for-project)))
 					       (if (and date status)
-						   (format "[lorri (%s)]: %s - %s" (projectile-project-name) status date )
+						   (format "[lorri (%s)]: %s - %s ago" (projectile-project-name) status
+							   (replace-regexp-in-string "\\([0-9]+\\) \\([a-z]\\)[a-z]+[,]?" "\\1\\2"  (ts-human-format-duration (ts-difference (ts-now) (ts-parse date)))) )
 						 "[lorri]: failed to parse")))))
-		   (if parsed-lorri-log-line
-		       parsed-lorri-log-line
-		     "[lorri (no project)]")))
+	      (if parsed-lorri-log-line
+		  parsed-lorri-log-line
+		"[lorri (no project)]")))
 
 	  (lambda (result)
 	    ;; TODO not sure if this is modifying things
