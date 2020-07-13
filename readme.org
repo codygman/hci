@@ -1135,7 +1135,9 @@ I've *really* missed this one.... =C-x o= gets old fast
 			  mode-line-end-spaces))
 	#+end_src
 ****** okay, it's pretty good as of  commit cd25dc00d2327c727bf5b72ed7ba85c465092f5f
-
+*** TODO move back to ivy since helm-rg has bugs in my current emacs system
+*** TODO =SPC *= search word at point through project
+*** TODO =SPC s p= search project
 *** TODO turn off garbage emacs file generation in current directory
 *** TODO yasnippet and source code block completion omfg
     
@@ -1176,8 +1178,6 @@ https://emacs.stackexchange.com/questions/5529/how-to-right-align-some-items-in-
 
 https://seagle0128.github.io/doom-modeline/
 https://github.com/seagle0128/doom-modeline/issues/363#issuecomment-656423259
-*** TODO =SPC *= search word at point through project
-*** TODO =SPC s p= search project
 *** TODO extended flycheck
 **** TODO error navigation using =]e= and =[e=
 **** TODO hlint
