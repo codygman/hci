@@ -230,6 +230,7 @@
      #+end_src
 **** actual mode line format
     #+begin_src emacs-lisp
+      (require 'lsp-mode)
       (setq-default mode-line-format
 		    (list
 		     mode-line-front-space
