@@ -242,6 +242,7 @@
 					 'help-echo (buffer-file-name)))
 		     (flycheck-mode flycheck-mode-line)
 		     '(:eval (format "%s" most-recent-lorri-status))
+		     " "
 		     '(:propertize ("" mode-name))
 		     " "
 		     global-mode-string
