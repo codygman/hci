@@ -259,7 +259,7 @@
 			  :width 'normal)
     #+end_src
 
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (add-hook 'text-mode-hook
 		(lambda ()
 		  (variable-pitch-mode 1)))
@@ -519,87 +519,88 @@
 	  )
 	)
     #+end_src
-*** Helm
-#+begin_src emacs-lisp
-  (use-package helm-swoop
-    :init
-    (setq helm-swoop-split-with-multiple-windows t
-	  helm-swoop-split-direction 'split-window-vertically
-	  helm-swoop-speed-or-color t
-	  helm-swoop-split-window-function 'helm-default-display-buffer
-	  helm-swoop-pre-input-function (lambda () ""))
-    :general
+*** Ivy
+**** ivy
+    #+begin_src emacs-lisp
+      (use-package ivy
+	:diminish (ivy-mode . "")
+	:init (ivy-mode 1)
+	:config
+	(setq ivy-use-virtual-buffers t
+	      ivy-count-format "%d/%d ")
+	)
+    #+end_src
+***** posframe
+    #+begin_src emacs-lisp
+      (use-package ivy-posframe
+	:after ivy
+	:diminish
+	:init (ivy-posframe-mode 1)
+	:config 
+	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
+	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
+	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
+	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
+	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))) 
+	 (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-window-center))) 
+	)
+    #+end_src
+**** counsel
+    #+begin_src emacs-lisp
+      (use-package counsel
+	:after ivy
+	:diminish
+	:config
+	(defun ivy-with-thing-at-point (cmd)
+	  (let ((ivy-initial-inputs-alist
+		 (list
+		  (cons cmd (thing-at-point 'symbol)))))
+	    (funcall cmd)))
+
+	;; Example 1
+	(defun counsel-rg-thing-at-point ()
+	  (interactive)
+	  (ivy-with-thing-at-point 'counsel-rg))
+
+	:general
+	;; TODO change rest of general def's to use this instead of nmap?
+	(my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
+	  "ff" 'counsel-find-file
+	  ":" '(counsel-M-x :which-key "M-x")
+	  "bb" '(switch-to-buffer :which-key "Switch to buffer")
+	  "bd" '(my/kill-this-buffer :which-key "Kill Buffer")
+	  "*" '(counsel-rg-thing-at-point :which-key "Search at point")
+	  "sp" '(counsel-rg :which-key "Search project")
+	  "ss"  '(swiper :which-key "swiper")
+	  "sS"  '(swiper-thing-at-point :which-key "swiper at point")
+	  )
+	)
+    #+end_src
+***** counsel-projectile 
+    #+begin_src emacs-lisp
+      (use-package counsel-projectile 
+	:after ivy
+	:diminish
+	:config
+	:general
 	(my-leader-def
 	  :states '(normal visual emacs motion)
 	  :prefix "SPC"
 	  :keymaps 'override
 	  :non-normal-prefix "M-SPC"
 	  :prefix "SPC"
-	:prefix "SPC"
-	"ss" '(helm-swoop :which-key "helm swoop")
+	  "pp"  '(counsel-projectile-switch-project :which-key "switch project")
+	  "pb"  '(counsel-projectile-switch-to-buffer :which-key "switch buffer")
+	  "pf" 'counsel-projectile-find-file
+	  "SPC" 'counsel-projectile-find-file
+	  )
 	)
-    )
-
-    (use-package helm
-      :init
-      (setq helm-M-x-fuzzy-match t
-	    helm-mode-fuzzy-match t
-	    helm-buffers-fuzzy-matching t
-	    helm-recentf-fuzzy-match t
-	    helm-locate-fuzzy-match t
-	    helm-semantic-fuzzy-match t
-	    helm-imenu-fuzzy-match t
-	    helm-completion-in-region-fuzzy-match t
-	    helm-candidate-number-list 80
-	    ;; helm-split-window-in-side-p t
-	    helm-move-to-line-cycle-in-source t
-	    helm-echo-input-in-header-line t
-	    helm-autoresize-max-height 0
-	    helm-autoresize-min-height 20
-	    helm-always-two-windows t
-	    )
-      :general
-      ;; TODO change rest of general def's to use this instead of nmap?
-      (my-leader-def
-	  :states '(normal visual emacs motion)
-	  :prefix "SPC"
-	  :keymaps 'override
-	  :non-normal-prefix "M-SPC"
-	"ff" 'helm-find-files
-	":" '(helm-M-x :which-key "M-x")
-	"bb" '(switch-to-buffer :which-key "Switch to buffer")
-	"bd" '(my/kill-this-buffer :which-key "Kill Buffer")
-	)
-      :config
-      ;; (use-package helm-flx)
-      ;; (use-package helm-fuzzier)
-      (use-package helm-rg)
-      (helm-mode 1)
-      ;; (helm-flx-mode 1)
-      ;; (helm-fuzzier-mode 1)
-      :bind (:map helm-map
-		  ("<tab>" . helm-execute-persistent-action)
-		  ("C-h" . helm-find-files-up-one-level)
-		  ("<backtab>" . helm-find-files-up-one-level)
-		  ("C-z" . helm-select-action)
-		  )
-      )
-
-    (use-package helm-projectile
-      :general
-	(my-leader-def
-	  :states '(normal visual emacs motion)
-	  :prefix "SPC"
-	  :keymaps 'override
-	  :non-normal-prefix "M-SPC"
-	  :prefix "SPC"
-	"pp"  '(helm-projectile-switch-project :which-key "switch project")
-	"pb"  '(helm-projectile-switch-to-buffer :which-key "switch buffer")
-	"pf" 'helm-projectile-find-file
-	"SPC" 'helm-projectile-find-file
-	)
-      )
-#+end_src
+    #+end_src
 *** nix-mode
     #+begin_src emacs-lisp
       (use-package nix
@@ -1135,7 +1136,7 @@ I've *really* missed this one.... =C-x o= gets old fast
 			  mode-line-end-spaces))
 	#+end_src
 ****** okay, it's pretty good as of  commit cd25dc00d2327c727bf5b72ed7ba85c465092f5f
-*** TODO move back to ivy since helm-rg has bugs in my current emacs system
+*** DONE move back to ivy since helm-rg has bugs in my current emacs system
 *** TODO =SPC *= search word at point through project
 *** TODO =SPC s p= search project
 *** TODO turn off garbage emacs file generation in current directory

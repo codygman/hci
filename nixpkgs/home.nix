@@ -44,12 +44,11 @@ in
         evil
         evil-magit
         evil-collection
-        helm
-        helm-projectile
-        helm-rg
-        helm-swoop
-        helm-flx
-        helm-fuzzier
+        ivy
+        ivy-posframe
+        counsel
+        swiper
+        counsel-projectile
         ( lsp-mode.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {
             src = pkgs.fetchFromGitHub {
