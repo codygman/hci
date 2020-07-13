@@ -708,7 +708,7 @@ I've *really* missed this one.... =C-x o= gets old fast
 *** DONE spc b d kill buffer
 *** DONE compilation mode bindings (SPC c c/SPC c C)
 *** DONE =SPC w {u,r}= for winner undo/redo
-*** TODO add simple lorri modeline for projects
+*** DONE add simple lorri modeline for projects
 **** TODO add simple output of lorri status
 ***** We can get lorri's overall status with 
       #+name: lorri-full-output
@@ -1135,7 +1135,7 @@ I've *really* missed this one.... =C-x o= gets old fast
 	#+end_src
 ****** okay, it's pretty good as of  commit cd25dc00d2327c727bf5b72ed7ba85c465092f5f
 
-*** todo turn off garbage emacs file generation in current directory
+*** TODO turn off garbage emacs file generation in current directory
 *** TODO yasnippet and source code block completion omfg
     
 also maybe look at my experiment here again: [[file:~/code/minimal-emacs-literate-workflow/init.el::;; prevent gc during startup][minimal-emacs-literate-workflow config]]
@@ -1169,6 +1169,12 @@ SPC SPC is undefined
 maybe smex or something is doing this?
 
 this never showed up again
+*** TODO right align time in modeline
+**** resouces
+https://emacs.stackexchange.com/questions/5529/how-to-right-align-some-items-in-the-modeline
+
+https://seagle0128.github.io/doom-modeline/
+https://github.com/seagle0128/doom-modeline/issues/363#issuecomment-656423259
 *** TODO =SPC *= search word at point through project
 *** TODO =SPC s p= search project
 *** TODO extended flycheck
