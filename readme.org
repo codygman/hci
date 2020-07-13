@@ -717,10 +717,19 @@
       (use-package company
 	:init
 	(add-hook 'haskell-mode-hook 'company-mode)
+	:config
+	(global-company-mode)
 	:bind (:map haskell-mode-map
 		    ("TAB" . company-indent-or-complete-common)))
 
 
+    #+end_src
+*** yasnippet
+    #+begin_src emacs-lisp
+  (use-package yasnippet
+    :config
+    (yas-global-mode t)
+    (yas-reload-all))
     #+end_src
 *** helper functions
 **** toggle maximize buffer

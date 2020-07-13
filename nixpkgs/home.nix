@@ -73,6 +73,7 @@ in
         ts
         with-simulated-input
         which-key
+        yasnippet
       ];
     };
 
