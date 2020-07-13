@@ -283,18 +283,68 @@
       (toggle-scroll-bar -1)
       (menu-bar-mode -1)
     #+end_src
+*** Make collaboration easier
+    #+begin_src emacs-lisp
+      (global-display-line-numbers-mode)
+      (setq-default display-line-numbers-width 4 
+		    ;; display-line-numbers-widen t ;; this is kinda vs code like.. I think I don't like it?
+		    display-line-numbers-widen nil ;; this is kinda vs code like.. I think I don't like it?
+		    )
+      (set-face-attribute 'line-number nil
+			  ;; :font "Iosevka Term Slab"
+			  :background "gray11"
+			  :foreground "light slate grey"
+			  )
+      (set-face-attribute 'line-number-current-line nil
+			  ;; :font "Iosevka Term Slab"
+			  :background "lightyellow4"
+			  :foreground "black"
+			  )
+
+
+    #+end_src
+
 *** Misc
     #+begin_src emacs-lisp
       ;; always follow symlinks and DONT PROMPT ME
       (setq vc-follow-symlinks t)
 
       (defalias 'yes-or-no-p 'y-or-n-p)
+
+      (setq make-backup-files nil)
+      (setq tags-revert-without-query 1)
     #+end_src
 ** Package configuration
 *** use-package
     #+begin_src emacs-lisp
       (require 'use-package)
     #+end_src
+*** org
+    #+begin_src emacs-lisp
+      (use-package org)
+    #+end_src
+**** org babel
+    #+begin_src emacs-lisp
+      (use-package ob
+        :after ob-restclient
+	:config
+	(setq org-confirm-babel-evaluate nil)
+	(org-babel-do-load-languages
+	 'org-babel-load-languages
+	 '((emacs-lisp . nil)
+	   (elisp . nil)
+	   (shell . t)
+	   (restclient . t)
+	   (haskell . t)
+	   ))
+
+	)
+    #+end_src
+***** ob-restclient 
+    #+begin_src emacs-lisp
+      (use-package ob-restclient)
+    #+end_src
+
 *** which-key
     #+begin_src emacs-lisp
       (use-package which-key

@@ -63,6 +63,7 @@ in
         lsp-ui
         magit
         nix-mode
+        ob-restclient
         direnv
         doom-themes
         flycheck
