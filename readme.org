@@ -203,7 +203,7 @@
 						   (if (and date status)
 						       (format "[lorri (%s)]: %s %s ago" (projectile-project-name) status
 							       (replace-regexp-in-string "\\([0-9]+\\) \\([a-z]\\)[a-z]+[, ]?[ ]?" "\\1\\2"  (ts-human-format-duration (ts-difference (ts-now) (ts-parse date)))) )
-						     "[lorri]: failed to parse")))))
+						     "[lorri]: parse error")))))
 		  (if parsed-lorri-log-line
 		      parsed-lorri-log-line
 		    "[lorri (no project)]")))
@@ -231,6 +231,9 @@
 **** actual mode line format
     #+begin_src emacs-lisp
       (require 'lsp-mode)
+      (display-time-mode 1)
+      (setq display-time-24hr-format t)
+
       (setq-default mode-line-format
 		    (list
 		     mode-line-front-space
@@ -238,8 +241,10 @@
 		     '(:eval (propertize "%b " 'face 'font-lock-keyword-face
 					 'help-echo (buffer-file-name)))
 		     (flycheck-mode flycheck-mode-line)
-		     '(:eval (format "%s     " most-recent-lorri-status))
-		    (lsp-mode-line)
+		     '(:eval (format "%s" most-recent-lorri-status))
+		     '(:propertize ("" mode-name))
+		     " "
+		     global-mode-string
 		     mode-line-end-spaces
 		     ))
     #+end_src
