@@ -114,6 +114,7 @@ in
     packages = with pkgs; [
       # cachix # not sure what was wrong here
       # ghcide # having this by default would be nice for the ghc I'm using most at the time
+      # home-manager.home-manager
       mylorri # TODO
       # niv # not defined?
       # will need to ensure cachix by ci and cachix version here match
