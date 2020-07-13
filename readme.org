@@ -1206,12 +1206,14 @@ I've *really* missed this one.... =C-x o= gets old fast
 *** DONE =SPC *= search word at point through project
 *** DONE =SPC s p= search project
 *** DONE turn off garbage emacs file generation in current directory
-*** TODO yasnippet and source code block completion omfg
+*** DONE simple yasnippet and source code block completion omfg
     
 also maybe look at my experiment here again: [[file:~/code/minimal-emacs-literate-workflow/init.el::;; prevent gc during startup][minimal-emacs-literate-workflow config]]
 
 snippets
 https://git.sr.ht/~codygman/emacs-config/tree/master/snippets/org-mode
+*** TODO look at more extended yasnippet config
+    - indent for completion for instance
 *** TODO use fixed width font for org source buffers
   - otherwise code doesn't align
   - I've done this before elsewhere, maybe see https://git.sr.ht/~codygman/emacs-config/tree/master
