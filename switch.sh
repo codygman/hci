@@ -10,11 +10,11 @@ if [ -z "$IN_GIT_HOOK" ] && [ -z "$INSIDE_EMACS" ]; then
 	NIXOS_CONFIG=$(pwd)/nixpkgs/configuration.nix sudo -E nixos-rebuild switch
     else
 	echo "we are not on nixos, calling home-manager switch"
-	home-manager switch
+	home-manager -f nixpkgs/home.nix switch
     fi
 else
     # TODO when we move to nixos-rebuild build/update commands to use that env we don't have to use home-manager here
     # and it will result in a more reproducible environment
     echo "in git hook, just running home-manager switch"
-    home-manager switch
+    home-manager -f nixpkgs/home.nix switch
 fi
