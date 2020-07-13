@@ -344,6 +344,13 @@
     #+begin_src emacs-lisp
       (use-package ob-restclient)
     #+end_src
+*** ediff
+    #+begin_src emacs-lisp
+      (use-package ediff
+	:config
+	(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+	)
+    #+end_src
 
 *** which-key
     #+begin_src emacs-lisp
@@ -1187,9 +1194,9 @@ I've *really* missed this one.... =C-x o= gets old fast
 	#+end_src
 ****** okay, it's pretty good as of  commit cd25dc00d2327c727bf5b72ed7ba85c465092f5f
 *** DONE move back to ivy since helm-rg has bugs in my current emacs system
-*** TODO =SPC *= search word at point through project
-*** TODO =SPC s p= search project
-*** TODO turn off garbage emacs file generation in current directory
+*** DONE =SPC *= search word at point through project
+*** DONE =SPC s p= search project
+*** DONE turn off garbage emacs file generation in current directory
 *** TODO yasnippet and source code block completion omfg
     
 also maybe look at my experiment here again: [[file:~/code/minimal-emacs-literate-workflow/init.el::;; prevent gc during startup][minimal-emacs-literate-workflow config]]
