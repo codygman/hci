@@ -5,6 +5,7 @@ let
   emacs-overlay = sources.emacs-overlay {};
   mylorripkg = sources.lorri;
   pkgs = import sources.nixpkgs { overlays = [ (import sources.emacs-overlay) ];};
+  myHaskellNixPkgs = pkgs;
   mylorri = pkgs.callPackage mylorripkg {};
   home-manager = import sources.home-manager {};
   myEnv = builtins.getEnv "MYENV";
@@ -63,6 +64,7 @@ in
         lsp-ui
         magit
         nix-mode
+        ob-diagrams
         ob-restclient
         direnv
         doom-themes
@@ -124,8 +126,46 @@ in
       fd
       firefox
       gcc
-      gcc
-      ghc
+      # myHaskellNixPkgs.diagrams-builder
+
+      # try jailbreaking
+      (myHaskellNixPkgs.diagrams-builder.overrideAttrs
+        (oldAttrs: {
+          haskell-src-exts = myHaskellNixPkgs.haskellPackages.callHackageDirect 
+            { pkg = "haskell-src-exts";
+              ver = "1.22.0";
+              sha256 = "0jwp8vhk3ncfxprbmg0jx001g7mh1kyp16973mjkjqz0d60zarwi";
+            } {};
+          haskell-src-exts-simple = myHaskellNixPkgs.haskellPackages.callHackageDirect 
+            { pkg = "haskell-src-exts-simple";
+              ver = "1.22.0.0";
+              sha256 = "1ixx2bpc7g6lclzrdjrnyf026g581rwm0iji1mn1iv03yzl3y215";
+            } {};
+          diagrams-postscript = pkgs.haskell.lib.dontCheck ( # NOTE: not actually for sure ignoring deps is okay
+            pkgs.haskell.lib.doJailbreak (
+              myHaskellNixPkgs.haskellPackages.callHackageDirect 
+                { pkg = "diagrams-postscript";
+                  ver = "1.4.1";
+                  sha256 = "0174y4s6rx6cckkbhph22ybl96h00wjqqkzkrcni7ylxcvgf37bd";
+                } {}));
+          diagrams-builder = pkgs.haskell.lib.doJailbreak (
+            pkgs.haskell.lib.dontCheck (
+              myHaskellNixPkgs.haskell.packages.ghc883.diagrams-builder));
+        }))
+
+      # TODO ghcWithHoogle
+      (myHaskellNixPkgs.haskell.packages.ghc883.ghcWithPackages (p: [
+        # p.diagrams
+        # Yep, need diagrams-builder-cairo
+        # p.diagrams-builder #oops this is broken and likely needed for ob-diagrams
+        # ( pkgs.haskellPackages.callCabal2nix "diagrams-builder" (sources.diagrams-builder ) )
+        # ( pkgs.haskellPackages.callCabal2nix "diagrams-builder" (sources.diagrams-builder { jailbreak = true; }) )
+
+        # ( (pkgs.haskellPackages.callCabal2nix "diagrams-builder" (sources.diagrams-builder )) { jailbreak = true; }  )
+        # p.diagrams-contrib
+        p.lens
+        # p.hoogle
+      ]))
       gnumake
       graphviz
       libnotify

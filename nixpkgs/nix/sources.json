@@ -1,4 +1,16 @@
 {
+    "diagrams-builder": {
+        "branch": "master",
+        "description": "Utilities for creating diagram-building tools",
+        "homepage": null,
+        "owner": "diagrams",
+        "repo": "diagrams-builder",
+        "rev": "e02105683f6b9de2fb624a927d2aea927bf77c1f",
+        "sha256": "170rkm5gkg5wnfqvrcgyg00m142assq5zwailjis2qynmmhrba9f",
+        "type": "tarball",
+        "url": "https://github.com/diagrams/diagrams-builder/archive/e02105683f6b9de2fb624a927d2aea927bf77c1f.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "emacs-overlay": {
         "branch": "master",
         "description": "Bleeding edge emacs overlay [maintainer=@adisbladis] ",
@@ -35,6 +47,19 @@
         "url": "https://github.com/target/lorri/archive/11693cfd38e7a8d1bf5c16c4e7f6c24c4f8b0479.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "myHaskellPkgs": {
+        "branch": "master",
+        "description": "Nix Packages collection",
+        "homepage": null,
+        "owner": "NixOS",
+        "ref": "061697807e2faa9dc642c23ffa9ade68f91dfc40",
+        "repo": "nixpkgs",
+        "rev": "36adeebde6cc1035f2f3a58a131376b2294f2f12",
+        "sha256": "0zyda02lzc3lvwbwhhl2s3cnymf8h4p2wp72wkb8jyiycqhh9114",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/36adeebde6cc1035f2f3a58a131376b2294f2f12.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "niv": {
         "branch": "master",
         "description": "Easy dependency management for Nix projects",
@@ -47,16 +72,28 @@
         "url": "https://github.com/nmattia/niv/archive/f73bf8d584148677b01859677a63191c31911eae.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "nixos2003": {
+        "branch": "nixos-20.03",
+        "description": "Nix Packages collection",
+        "homepage": null,
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "aaa66d8d887c73f643246ac1a684fcb1521543b8",
+        "sha256": "0qvrhc7hv8h4yqa4jh64y6v5j3nza53ivkbq6j72g434c3yp2h50",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/aaa66d8d887c73f643246ac1a684fcb1521543b8.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "nixpkgs": {
-        "branch": "nixos-19.09",
+        "branch": "nixos-unstable",
         "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",
         "homepage": "https://github.com/NixOS/nixpkgs",
         "owner": "NixOS",
         "repo": "nixpkgs-channels",
-        "rev": "289466dd6a11c65a7de4a954d6ebf66c1ad07652",
-        "sha256": "0r5ja052s86fr54fm1zlhld3fwawz2w1d1gd6vbvpjrpjfyajibn",
+        "rev": "c71518e75bf067fb639d44264fdd8cf80f53d75a",
+        "sha256": "0hwa79prsqgvfwd3ah54nl0wh73q215z7np4k6y0pd6zr3m17vxs",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs-channels/archive/289466dd6a11c65a7de4a954d6ebf66c1ad07652.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs-channels/archive/c71518e75bf067fb639d44264fdd8cf80f53d75a.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }

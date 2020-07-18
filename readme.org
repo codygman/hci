@@ -335,6 +335,7 @@
 	   (elisp . nil)
 	   (shell . t)
 	   (restclient . t)
+	   (diagrams . t)
 	   (haskell . t)
 	   ))
 
