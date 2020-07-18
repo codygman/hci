@@ -443,7 +443,17 @@
     #+begin_src emacs-lisp
       (use-package savehist
 	:init
-	(setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+	(setq savehist-additional-variables
+	      '( kill-ring
+		 search-ring
+		 regexp-search-ring
+		 magit-read-rev-history
+		 search-ring
+		 minibuffer-history
+		 read-expression-history
+		 ivy-history
+		 counsel-compile-history
+		 ))
 	(setq savehist-file "~/.emacs.d/savehist")
 	:config
 	(savehist-mode 1)
