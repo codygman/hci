@@ -331,8 +331,7 @@
 	(setq org-confirm-babel-evaluate nil)
 	(org-babel-do-load-languages
 	 'org-babel-load-languages
-	 '((emacs-lisp . nil)
-	   (elisp . nil)
+	 '((emacs-lisp . t)
 	   (shell . t)
 	   (restclient . t)
 	   (haskell . t)
