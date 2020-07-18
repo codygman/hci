@@ -562,8 +562,8 @@
 	  :keymaps 'override
 	  :non-normal-prefix "M-SPC"
 	  :prefix "SPC"
-	  "cc" '(recompile :which-key "M-x recompile")
-	  "cC" '(compile :which-key "M-x compile")
+	  "cc" '(counsel-compile :which-key "Counsel Compile")
+	  "cC" '(recompile :which-key "M-x recompile")
 	  )
 	)
 
