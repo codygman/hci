@@ -59,11 +59,30 @@ in
             };
           });
         }) )
-        lsp-haskell
-        lsp-ui
+        ( lsp-haskell.override (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            src = pkgs.fetchFromGitHub {
+              owner = "emacs-lsp";
+              repo = "lsp-haskell";
+              rev = "17d7d4c6615b5e6c7442828720730bfeda644af8";
+              sha256 = "1kkp63ppmi3p0p6qkfpkr8p5cx8qggmsj73dwphv90mdq0nrfsx8";
+            };
+          });
+        }) )
+        ( lsp-ui.override (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            src = pkgs.fetchFromGitHub {
+              owner = "emacs-lsp";
+              repo = "lsp-ui";
+              rev = "7d5326430eb88a58e111cb22ffa42c7d131e5052";
+              sha256 = "1f2dxxajckwqvpl8cxsp019404sncllib5z2af0gzs7y0fs7b2dq";
+            };
+          });
+        }) )
         magit
         nix-mode
         ob-restclient
+        ox-gfm
         direnv
         doom-themes
         flycheck
