@@ -41,11 +41,13 @@ in
         company-lsp
         use-package
         haskell-mode
+        elm-mode
         evil
         evil-magit
         evil-collection
         ivy
         ivy-posframe
+        ivy-rich
         counsel
         swiper
         counsel-projectile
