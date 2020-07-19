@@ -25,6 +25,7 @@ import Polysemy.Trace
 import           Turtle
 import Prelude hiding (FilePath)
 import qualified System.FilePath as SysFilepath
+import qualified Data.Map as Map
 
 data ShellCommand m a where
   WhichCmd :: SysFilepath.FilePath -> ShellCommand m (Maybe FilePath)
@@ -34,14 +35,23 @@ data ShellCommand m a where
 
 makeSem ''ShellCommand
 
-runShellCommandPure :: Member Trace r => Sem (ShellCommand : r) a -> Sem r a
-runShellCommandPure = interpret \case
+runShellCommandPure :: Member Trace r => Map.Map SysFilepath.FilePath () -> Sem (ShellCommand : r) a -> Sem r a
+runShellCommandPure filepathMap = interpret \case
   EchoCmd str -> pure ()
   WhichCmd str -> pure (Just $ decodeString str)
-  TestPathCmd str -> do
+  TestPathCmd filepath -> do
+    case Map.lookup filepath filepathMap of
+      Just _ -> do
+        trace $ "testPathCmd: filepath exists: " <> filepath
+        pure True
+      Nothing -> do
+        trace $ "testPathCmd: filepath doesn't exist: " <> filepath
+        pure False
+        
+    -- maybe (pure False) (const $ pure True) $ Map.lookup filepath filepathMap
     -- PROBLEM: If I always return False here I can't test the pure version of `symlinkIfNotExist`)
-    trace $ "Pure testpathcmd: returning False for: " <> str
-    pure False
+    -- trace $ "Pure testpathcmd: returning False for: " <> str
+    -- pure False
   SymlinkCmd _ _ -> pure ()
 
 runShellCommandIO :: (Member (Embed IO) r, Member Trace r) => Sem (ShellCommand : r) a -> Sem r a
@@ -60,10 +70,10 @@ symlinkIfNotExist from to = do
   fromExists <- testPathCmd (encodeString from)
   toExists <- testPathCmd (encodeString to)
   case (fromExists, toExists) of
-    (_, True) -> trace $ "destination already exists at: " <> encodeString to -- TODO warn when symlink is a different from
-    (False, False)  -> trace "source does not exist"
+    (_, True) -> trace $ "symlinkIfNotExist: destination already exists at: " <> encodeString to -- TODO warn when symlink is a different from
+    (False, False)  -> trace "symlinkIfNotExist: source does not exist"
     (True, False)  -> do
-      trace "creating symlink"
+      trace "symlinkIfNotExist: creating symlink"
       symlinkCmd (encodeString from) (encodeString to)
 
 main :: IO ()
@@ -71,37 +81,57 @@ main = do
   putStrLn "Pure interpreter"
 
   putStrLn "1."
-  Main.echoCmd "hi" & runShellCommandPure & runTraceList & run & print 
+  Main.echoCmd "hi" & runShellCommandPure Map.empty & runTraceList & run & print 
   putStrLn ""
 
   putStrLn "2. The pure interpretation of whichCmd always gives Nothing"
-  Main.whichCmd "nonexistent" & runShellCommandPure & runTraceList & run & print
+  Main.whichCmd "nonexistent" & runShellCommandPure Map.empty & runTraceList & run & print
   putStrLn ""
 
   putStrLn "3. The pure interpretation of TestPath always gives False"
-  testPathCmd "nonexistent" & runShellCommandPure & runTraceList & run & print
+  testPathCmd "nonexistent" & runShellCommandPure Map.empty & runTraceList & run & print
   putStrLn ""
 
-  putStrLn "4. Creates a symlink if one doesn't already exist"
-  symlinkIfNotExist "nonexistent from" "nonexistent to" & runShellCommandPure & runTraceList & run & print
+  putStrLn "4. Creates a symlink if one doesn't already exist (State: no filepaths, so expect source does not exist)"
+  symlinkIfNotExist "nonexistent from" "nonexistent to" & runShellCommandPure Map.empty & runTraceList & run & print
+  putStrLn ""
+
+  putStrLn "5. Creates a symlink if one doesn't already exist (State: happy path, source exists, destination does not)"
+  let source = "/etc/issue"
+      destination = "bar"
+      state :: Map.Map SysFilepath.FilePath ()
+      state = Map.fromList [ (encodeString source, ())
+                           -- , (destination, ()) -- this not being in the map at the moment means it doesn't exist
+                           ]
+    in symlinkIfNotExist source destination & runShellCommandPure state & runTraceList & run & print
+  putStrLn ""
+
+  putStrLn "6. Warns destination exists and doesn't create symlink"
+  let source = "/etc/issue"
+      destination = "existent"
+      state :: Map.Map SysFilepath.FilePath ()
+      state = Map.fromList [ (encodeString source, ())
+                           , (encodeString destination, ()) -- this not being in the map at the moment means it doesn't exist
+                           ]
+    in symlinkIfNotExist source destination & runShellCommandPure state & runTraceList & run & print
   putStrLn ""
 
 
   
-  putStrLn "Impure interpreter"
+  -- putStrLn "Impure interpreter"
 
-  putStrLn "1."
-  Main.echoCmd "hi" & runShellCommandIO & runTraceList & runM
-  putStrLn ""
+  -- putStrLn "1."
+  -- Main.echoCmd "hi" & runShellCommandIO & runTraceList & runM
+  -- putStrLn ""
 
-  putStrLn "2. Test a nonexistent command gives nothing"
-  Main.whichCmd "nonexistent" & runShellCommandIO & runTraceList & runM >>= print
-  putStrLn ""
+  -- putStrLn "2. Test a nonexistent command gives nothing"
+  -- Main.whichCmd "nonexistent" & runShellCommandIO & runTraceList & runM >>= print
+  -- putStrLn ""
 
-  putStrLn "3. Test an existing command gives Just"
-  Main.whichCmd "ghc" & runShellCommandIO & runTraceList & runM >>= print
-  putStrLn ""
+  -- putStrLn "3. Test an existing command gives Just"
+  -- Main.whichCmd "ghc" & runShellCommandIO & runTraceList & runM >>= print
+  -- putStrLn ""
 
-  putStrLn "4. Creates a symlink if source filepath exists and destination doesn't already exist"
-  symlinkIfNotExist "/etc/issue" "bar" & runShellCommandIO & runTraceList & runM >>= print
-  putStrLn ""
+  -- putStrLn "4. Creates a symlink if source filepath exists and destination doesn't already exist"
+  -- symlinkIfNotExist "/etc/issue" "bar" & runShellCommandIO & runTraceList & runM >>= print
+  -- putStrLn ""
