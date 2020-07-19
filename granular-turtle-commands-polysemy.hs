@@ -30,34 +30,59 @@ data ShellCommand m a where
   WhichCmd :: SysFilepath.FilePath -> ShellCommand m (Maybe FilePath)
   EchoCmd :: String -> ShellCommand m ()
   TestPathCmd :: SysFilepath.FilePath -> ShellCommand m Bool
+  SymlinkCmd :: SysFilepath.FilePath -> SysFilepath.FilePath -> ShellCommand m ()
 
 makeSem ''ShellCommand
 
-runShellCommandPure :: Sem (ShellCommand : r) a -> Sem r a
+runShellCommandPure :: Member Trace r => Sem (ShellCommand : r) a -> Sem r a
 runShellCommandPure = interpret \case
   EchoCmd str -> pure ()
   WhichCmd str -> pure (Just $ decodeString str)
-  TestPathCmd str -> pure True
+  TestPathCmd str -> do
+    trace $ "Pure testpathcmd: returning False for: " <> str
+    pure False
+  SymlinkCmd _ _ -> pure ()
 
-runShellCommandIO :: Member (Embed IO) r => Sem (ShellCommand : r) a -> Sem r a
+runShellCommandIO :: (Member (Embed IO) r, Member Trace r) => Sem (ShellCommand : r) a -> Sem r a
 runShellCommandIO = interpret \case
   EchoCmd str -> embed $ putStrLn str
-  WhichCmd filePath -> embed $ which (fromString filePath)
+  WhichCmd filepath -> embed $ which (fromString filepath)
+  TestPathCmd filepath -> do
+    res <- embed $ testpath (fromString filepath)
+    trace $ "test path for" <> filepath <> " returned: " <> show res
+    pure res
+  SymlinkCmd from to -> do
+    symlink (decodeString from) (decodeString to)
+
+symlinkIfNotExist :: (Member Trace r, Member ShellCommand r) => FilePath -> FilePath -> Sem r ()
+symlinkIfNotExist from to = do
+  fromExists <- testPathCmd (encodeString from)
+  toExists <- testPathCmd (encodeString to)
+  case (fromExists, toExists) of
+    (_, True) -> trace $ "destination already exists at: " <> encodeString to -- TODO warn when symlink is a different from
+    (False, False)  -> trace "source does not exist"
+    (True, False)  -> do
+      trace "creating symlink"
+      symlinkCmd (encodeString from) (encodeString to)
 
 main :: IO ()
 main = do
   putStrLn "Pure interpreter"
 
   putStrLn "1."
-  Main.echoCmd "hi" & runShellCommandPure  & run & print 
+  Main.echoCmd "hi" & runShellCommandPure & runTraceList & run & print 
   putStrLn ""
 
   putStrLn "2. The pure interpretation of whichCmd always gives Nothing"
-  Main.whichCmd "nonexistent" & runShellCommandPure & runM >>= print
+  Main.whichCmd "nonexistent" & runShellCommandPure & runTraceList & run & print
   putStrLn ""
 
-  putStrLn "3. The pure interpretation of TestPath always gives True"
-  testPathCmd "nonexistent" & runShellCommandPure & runM >>= print
+  putStrLn "3. The pure interpretation of TestPath always gives False"
+  testPathCmd "nonexistent" & runShellCommandPure & runTraceList & run & print
+  putStrLn ""
+
+  putStrLn "4. Creates a symlink if one doesn't already exist"
+  symlinkIfNotExist "nonexistent from" "nonexistent to" & runShellCommandPure & runTraceList & run & print
   putStrLn ""
 
 
@@ -65,13 +90,17 @@ main = do
   putStrLn "Impure interpreter"
 
   putStrLn "1."
-  Main.echoCmd "hi" & runShellCommandIO  & runM
+  Main.echoCmd "hi" & runShellCommandIO & runTraceList & runM
   putStrLn ""
 
   putStrLn "2. Test a nonexistent command gives nothing"
-  Main.whichCmd "nonexistent" & runShellCommandIO  & runM >>= print
+  Main.whichCmd "nonexistent" & runShellCommandIO & runTraceList & runM >>= print
   putStrLn ""
 
   putStrLn "3. Test an existing command gives Just"
-  Main.whichCmd "ghc" & runShellCommandIO  & runM >>= print
+  Main.whichCmd "ghc" & runShellCommandIO & runTraceList & runM >>= print
+  putStrLn ""
+
+  putStrLn "4. Creates a symlink if source filepath exists and destination doesn't already exist"
+  symlinkIfNotExist "/etc/issue" "bar" & runShellCommandIO & runTraceList & runM >>= print
   putStrLn ""
