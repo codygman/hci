@@ -28,25 +28,34 @@ import qualified System.FilePath as SysFilepath
 import qualified Data.Map as Map
 
 data ShellCommand m a where
-  WhichCmd :: SysFilepath.FilePath -> ShellCommand m (Maybe FilePath)
+  WhichCmd :: FilePath -> ShellCommand m (Maybe FilePath)
   EchoCmd :: String -> ShellCommand m ()
-  TestPathCmd :: SysFilepath.FilePath -> ShellCommand m Bool
-  SymlinkCmd :: SysFilepath.FilePath -> SysFilepath.FilePath -> ShellCommand m ()
+  TestPathCmd :: FilePath -> ShellCommand m Bool
+  SymlinkCmd :: FilePath -> FilePath -> ShellCommand m ()
 
 makeSem ''ShellCommand
 
-runShellCommandPure :: Member Trace r => Map.Map SysFilepath.FilePath () -> Sem (ShellCommand : r) a -> Sem r a
-runShellCommandPure filepathMap = interpret \case
+runShellCommandPure :: Member Trace r => PureFilePathState -> Sem (ShellCommand : r) a -> Sem r a
+runShellCommandPure filePathState = interpret \case
   EchoCmd str -> pure ()
-  WhichCmd str -> pure (Just $ decodeString str)
+  WhichCmd str -> pure (Just str)
   TestPathCmd filepath -> do
-    case Map.lookup filepath filepathMap of
-      Just _ -> do
-        trace $ "testPathCmd: filepath exists: " <> filepath
-        pure True
-      Nothing -> do
-        trace $ "testPathCmd: filepath doesn't exist: " <> filepath
-        pure False
+    case filePathState of
+      NoFilePathsExist -> pure False
+      AllFilePathsExist -> pure True
+      CustomFilePaths filepathMap -> do
+        case Map.lookup filepath filepathMap of
+          Just val -> do
+            case val of
+              FilePathExists -> do
+                trace $ "testPathCmd: filepath exists: " <> show filepath
+                pure True
+              FilePathDoesNotExist -> do
+                trace $ "testPathCmd: filepath exists: " <> show filepath
+                pure False
+          Nothing -> do
+            -- TODO this is bad.... maybe... probably
+            error $ "Your filepathMap doesn't have an entry for " <> show filepath
         
     -- maybe (pure False) (const $ pure True) $ Map.lookup filepath filepathMap
     -- PROBLEM: If I always return False here I can't test the pure version of `symlinkIfNotExist`)
@@ -57,62 +66,66 @@ runShellCommandPure filepathMap = interpret \case
 runShellCommandIO :: (Member (Embed IO) r, Member Trace r) => Sem (ShellCommand : r) a -> Sem r a
 runShellCommandIO = interpret \case
   EchoCmd str -> embed $ putStrLn str
-  WhichCmd filepath -> embed $ which (fromString filepath)
+  WhichCmd filepath -> embed $ which filepath
   TestPathCmd filepath -> do
-    res <- embed $ testpath (fromString filepath)
-    trace $ "test path for" <> filepath <> " returned: " <> show res
+    res <- embed $ testpath filepath
+    trace $ "test path for" <> show filepath <> " returned: " <> show res
     pure res
   SymlinkCmd from to -> do
-    symlink (decodeString from) (decodeString to)
+    symlink from to
 
 symlinkIfNotExist :: (Member Trace r, Member ShellCommand r) => FilePath -> FilePath -> Sem r ()
 symlinkIfNotExist from to = do
-  fromExists <- testPathCmd (encodeString from)
-  toExists <- testPathCmd (encodeString to)
+  fromExists <- testPathCmd from
+  toExists <- testPathCmd to
   case (fromExists, toExists) of
     (_, True) -> trace $ "symlinkIfNotExist: destination already exists at: " <> encodeString to -- TODO warn when symlink is a different from
     (False, False)  -> trace "symlinkIfNotExist: source does not exist"
     (True, False)  -> do
       trace "symlinkIfNotExist: creating symlink"
-      symlinkCmd (encodeString from) (encodeString to)
+      symlinkCmd from to
+
+data FilePathExistence = FilePathExists | FilePathDoesNotExist deriving (Ord, Eq, Show)
+
+data PureFilePathState = NoFilePathsExist | AllFilePathsExist | CustomFilePaths (Map.Map FilePath FilePathExistence)
 
 main :: IO ()
 main = do
   putStrLn "Pure interpreter"
 
   putStrLn "1."
-  Main.echoCmd "hi" & runShellCommandPure Map.empty & runTraceList & run & print 
+  Main.echoCmd "hi" & runShellCommandPure NoFilePathsExist & runTraceList & run & print 
   putStrLn ""
 
   putStrLn "2. The pure interpretation of whichCmd always gives Nothing"
-  Main.whichCmd "nonexistent" & runShellCommandPure Map.empty & runTraceList & run & print
+  Main.whichCmd "nonexistent" & runShellCommandPure NoFilePathsExist & runTraceList & run & print
   putStrLn ""
 
   putStrLn "3. The pure interpretation of TestPath always gives False"
-  testPathCmd "nonexistent" & runShellCommandPure Map.empty & runTraceList & run & print
+  testPathCmd "nonexistent" & runShellCommandPure NoFilePathsExist & runTraceList & run & print
   putStrLn ""
 
   putStrLn "4. Creates a symlink if one doesn't already exist (State: no filepaths, so expect source does not exist)"
-  symlinkIfNotExist "nonexistent from" "nonexistent to" & runShellCommandPure Map.empty & runTraceList & run & print
+  symlinkIfNotExist "nonexistent from" "nonexistent to" & runShellCommandPure NoFilePathsExist & runTraceList & run & print
   putStrLn ""
 
   putStrLn "5. Creates a symlink if one doesn't already exist (State: happy path, source exists, destination does not)"
-  let source = "/etc/issue"
-      destination = "bar"
-      state :: Map.Map SysFilepath.FilePath ()
-      state = Map.fromList [ (encodeString source, ())
-                           -- , (destination, ()) -- this not being in the map at the moment means it doesn't exist
-                           ]
+  let source = decodeString "/etc/issue"
+      destination = decodeString "bar"
+      state = CustomFilePaths $
+        Map.fromList [ (source, FilePathExists)
+                     , (destination, FilePathDoesNotExist)
+                     ]
     in symlinkIfNotExist source destination & runShellCommandPure state & runTraceList & run & print
   putStrLn ""
 
   putStrLn "6. Warns destination exists and doesn't create symlink"
-  let source = "/etc/issue"
-      destination = "existent"
-      state :: Map.Map SysFilepath.FilePath ()
-      state = Map.fromList [ (encodeString source, ())
-                           , (encodeString destination, ()) -- this not being in the map at the moment means it doesn't exist
-                           ]
+  let source :: FilePath = decodeString "/etc/issue"
+      destination :: FilePath = decodeString "existent"
+      state = CustomFilePaths $
+        Map.fromList [ (source, FilePathExists)
+                     , (destination, FilePathExists)
+                     ]
     in symlinkIfNotExist source destination & runShellCommandPure state & runTraceList & run & print
   putStrLn ""
 
