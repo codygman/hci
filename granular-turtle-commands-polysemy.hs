@@ -39,6 +39,7 @@ runShellCommandPure = interpret \case
   EchoCmd str -> pure ()
   WhichCmd str -> pure (Just $ decodeString str)
   TestPathCmd str -> do
+    -- PROBLEM: If I always return False here I can't test the pure version of `symlinkIfNotExist`)
     trace $ "Pure testpathcmd: returning False for: " <> str
     pure False
   SymlinkCmd _ _ -> pure ()
