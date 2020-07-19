@@ -56,11 +56,6 @@ runShellCommandPure filePathState = interpret \case
           Nothing -> do
             -- TODO this is bad.... maybe... probably
             error $ "Your filepathMap doesn't have an entry for " <> show filepath
-        
-    -- maybe (pure False) (const $ pure True) $ Map.lookup filepath filepathMap
-    -- PROBLEM: If I always return False here I can't test the pure version of `symlinkIfNotExist`)
-    -- trace $ "Pure testpathcmd: returning False for: " <> str
-    -- pure False
   SymlinkCmd _ _ -> pure ()
 
 runShellCommandIO :: (Member (Embed IO) r, Member Trace r) => Sem (ShellCommand : r) a -> Sem r a
@@ -130,21 +125,30 @@ main = do
   putStrLn ""
 
 
-  
-  -- putStrLn "Impure interpreter"
+  putStrLn "7. Warns source exists and doesn't create symlink"
+  let source :: FilePath = decodeString "/etc/issue"
+      destination :: FilePath = decodeString "existent"
+      state = CustomFilePaths $
+        Map.fromList [ (source, FilePathDoesNotExist)
+                     , (destination, FilePathDoesNotExist)
+                     ]
+    in symlinkIfNotExist source destination & runShellCommandPure state & runTraceList & run & print
+  putStrLn ""
 
-  -- putStrLn "1."
-  -- Main.echoCmd "hi" & runShellCommandIO & runTraceList & runM
-  -- putStrLn ""
+  putStrLn "Impure interpreter"
 
-  -- putStrLn "2. Test a nonexistent command gives nothing"
-  -- Main.whichCmd "nonexistent" & runShellCommandIO & runTraceList & runM >>= print
-  -- putStrLn ""
+  putStrLn "1."
+  Main.echoCmd "hi" & runShellCommandIO & runTraceList & runM
+  putStrLn ""
 
-  -- putStrLn "3. Test an existing command gives Just"
-  -- Main.whichCmd "ghc" & runShellCommandIO & runTraceList & runM >>= print
-  -- putStrLn ""
+  putStrLn "2. Test a nonexistent command gives nothing"
+  Main.whichCmd "nonexistent" & runShellCommandIO & runTraceList & runM >>= print
+  putStrLn ""
 
-  -- putStrLn "4. Creates a symlink if source filepath exists and destination doesn't already exist"
-  -- symlinkIfNotExist "/etc/issue" "bar" & runShellCommandIO & runTraceList & runM >>= print
-  -- putStrLn ""
+  putStrLn "3. Test an existing command gives Just"
+  Main.whichCmd "ghc" & runShellCommandIO & runTraceList & runM >>= print
+  putStrLn ""
+
+  putStrLn "4. Creates a symlink if source filepath exists and destination doesn't already exist"
+  symlinkIfNotExist "/etc/issue" "bar" & runShellCommandIO & runTraceList & runM >>= print
+  putStrLn ""
