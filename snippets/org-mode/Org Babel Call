@@ -1,0 +1,4 @@
+# key: callb
+# name: Org Babel Call
+# --
+#+call: $1$0
