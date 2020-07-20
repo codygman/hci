@@ -35,8 +35,21 @@ data ShellCommand m a where
   EchoCmd :: String -> ShellCommand m ()
   TestPathCmd :: FilePath -> ShellCommand m Bool
   SymlinkCmd :: FilePath -> FilePath -> ShellCommand m ()
-
 makeSem ''ShellCommand
+
+symlinkIfNotExist :: (Member Trace r, Member ShellCommand r) => FilePath -> FilePath -> Sem r ()
+symlinkIfNotExist from to = do
+  fromExists <- testPathCmd from
+  toExists <- testPathCmd to
+  case (fromExists, toExists) of
+    (_, True) -> trace $ "symlinkIfNotExist: destination already exists at: " <> encodeString to -- TODO warn when symlink is a different from
+    (False, False) -> trace "symlinkIfNotExist: source does not exist"
+    (True, False) -> do
+      trace "symlinkIfNotExist: creating symlink"
+      symlinkCmd from to
+
+
+
 
 runShellCommandPure :: Member Trace r => PureFilePathState -> Sem (ShellCommand : r) a -> Sem r a
 runShellCommandPure filePathState = interpret \case
@@ -75,20 +88,11 @@ runShellCommandIO = interpret \case
   SymlinkCmd from to -> do
     symlink from to
 
-symlinkIfNotExist :: (Member Trace r, Member ShellCommand r) => FilePath -> FilePath -> Sem r ()
-symlinkIfNotExist from to = do
-  fromExists <- testPathCmd from
-  toExists <- testPathCmd to
-  case (fromExists, toExists) of
-    (_, True) -> trace $ "symlinkIfNotExist: destination already exists at: " <> encodeString to -- TODO warn when symlink is a different from
-    (False, False) -> trace "symlinkIfNotExist: source does not exist"
-    (True, False) -> do
-      trace "symlinkIfNotExist: creating symlink"
-      symlinkCmd from to
-
 data FilePathExistence = FilePathExists | FilePathDoesNotExist deriving (Ord, Eq, Show)
 
-data PureFilePathState = NoFilePathsExist | AllFilePathsExist | CustomFilePaths (Map.Map FilePath FilePathExistence)
+data PureFilePathState = NoFilePathsExist
+                       | AllFilePathsExist
+                       | CustomFilePaths (Map.Map FilePath FilePathExistence)
 
 main :: IO ()
 main = do
