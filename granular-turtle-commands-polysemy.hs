@@ -37,6 +37,16 @@ data ShellCommand m a where
   SymlinkCmd :: FilePath -> FilePath -> ShellCommand m ()
 makeSem ''ShellCommand
 
+data InstallStatus = AlreadyInstalled
+                   | InstallSuccess
+                   | NotInstalled
+                   deriving Show
+                   -- | ErrorInstalling -- TODO
+
+data HomeManager m a where
+  HomeManagerInstall :: HomeManager m InstallStatus
+makeSem ''HomeManager
+
 symlinkIfNotExist :: (Member Trace r, Member ShellCommand r) => FilePath -> FilePath -> Sem r ()
 symlinkIfNotExist from to = do
   fromExists <- testPathCmd from
@@ -48,8 +58,50 @@ symlinkIfNotExist from to = do
       trace "symlinkIfNotExist: creating symlink"
       symlinkCmd from to
 
+maybeInstallHomeManager :: (Member Trace r, Member ShellCommand r) => Sem r InstallStatus
+maybeInstallHomeManager = do
+  trace "we might install it"
+  homeManagerInstalled <- whichCmd "home-manager"
+  case homeManagerInstalled of
+    Just _ -> pure AlreadyInstalled
+    Nothing -> do
+      installHomeManager -- TODO don't just ignore status here
+  pure NotInstalled
 
+newtype PureHomeManagerState = HomeManagerState InstallStatus
 
+runHomeManagerPure :: Member Trace r => PureHomeManagerState -> Sem (HomeManager : r) InstallStatus -> Sem r InstallStatus
+runHomeManagerPure homeManagerState = interpret \case
+  HomeManagerInstall -> do
+    case homeManagerState of
+      HomeManagerState AlreadyInstalled -> do
+        trace "HomeManagerInstall: home-manager already installed"
+        pure AlreadyInstalled
+      HomeManagerState InstallSuccess -> error "invalid state" -- TODO probably bad also
+      HomeManagerState NotInstalled -> do
+        trace "HomeManagerInstall: installing home-manager"
+        -- For now we'll say the pure version always succeeds installing
+        pure InstallSuccess
+
+runHomeManagerIO :: Member Trace r => Sem (HomeManager : r) a -> Sem r a
+runHomeManagerIO = interpret \case
+  HomeManagerInstall -> do
+    -- The problem here is now we have duplicate logic around the install state
+    -- of home manager between the IO and pure interpreters
+    -- This is bad. If the interpreters don't stay simple, the tests of the pure variant
+    -- aren't very useful as far as I can see.
+    -- This means we need some sort of state 
+    -- Maybe we can rename `HomeManagerInstall` to `HomeManagerMaybeInstall`
+    -- Does that help us though? The problem here is how do we make sure that dispatching logic
+    -- of already installed, install not installed, etc is done in a differnt function?
+    -- then what's know known as HomeManagerInstall just calls that function in both the
+    -- pure and impure variants
+    -- Maybe it's just my naming that's making it confusing
+    trace "runHomeManagerIO: install home manager"
+
+data PureFilePathState = NoFilePathsExist
+                       | AllFilePathsExist
+                       | CustomFilePaths (Map.Map FilePath FilePathExistence)
 
 runShellCommandPure :: Member Trace r => PureFilePathState -> Sem (ShellCommand : r) a -> Sem r a
 runShellCommandPure filePathState = interpret \case
@@ -90,69 +142,73 @@ runShellCommandIO = interpret \case
 
 data FilePathExistence = FilePathExists | FilePathDoesNotExist deriving (Ord, Eq, Show)
 
-data PureFilePathState = NoFilePathsExist
-                       | AllFilePathsExist
-                       | CustomFilePaths (Map.Map FilePath FilePathExistence)
+
+
 
 main :: IO ()
 main = do
+
+  putStrLn "* Pure HomeManager"
+  putStrLn "** If not installed, home-manager is installed"
+  homeManagerInstall & runHomeManagerPure (HomeManagerState NotInstalled) & runTraceList & run & print
+  
   -- TODO turn these pure interpreter things into hspec tests
-  putStrLn "Pure interpreter"
-  putStrLn "1."
-  Main.echoCmd "hi" & runShellCommandPure NoFilePathsExist & runTraceList & run & print
-  putStrLn ""
-  putStrLn "2. The pure interpretation of whichCmd always gives Nothing"
-  Main.whichCmd "nonexistent" & runShellCommandPure NoFilePathsExist & runTraceList & run & print
-  putStrLn ""
-  putStrLn "3. The pure interpretation of TestPath always gives False"
-  testPathCmd "nonexistent" & runShellCommandPure NoFilePathsExist & runTraceList & run & print
-  putStrLn ""
-  putStrLn "4. Creates a symlink if one doesn't already exist (State: no filepaths, so expect source does not exist)"
-  symlinkIfNotExist "nonexistent from" "nonexistent to" & runShellCommandPure NoFilePathsExist & runTraceList & run & print
-  putStrLn ""
-  putStrLn "5. Creates a symlink if one doesn't already exist (State: happy path, source exists, destination does not)"
-  let source = decodeString "/etc/issue"
-      destination = decodeString "bar"
-      state =
-        CustomFilePaths $
-          Map.fromList
-            [ (source, FilePathExists),
-              (destination, FilePathDoesNotExist)
-            ]
-   in symlinkIfNotExist source destination & runShellCommandPure state & runTraceList & run & print
-  putStrLn ""
-  putStrLn "6. Warns destination exists and doesn't create symlink"
-  let source :: FilePath = decodeString "/etc/issue"
-      destination :: FilePath = decodeString "existent"
-      state =
-        CustomFilePaths $
-          Map.fromList
-            [ (source, FilePathExists),
-              (destination, FilePathExists)
-            ]
-   in symlinkIfNotExist source destination & runShellCommandPure state & runTraceList & run & print
-  putStrLn ""
-  putStrLn "7. Warns source exists and doesn't create symlink"
-  let source :: FilePath = decodeString "/etc/issue"
-      destination :: FilePath = decodeString "existent"
-      state =
-        CustomFilePaths $
-          Map.fromList
-            [ (source, FilePathDoesNotExist),
-              (destination, FilePathDoesNotExist)
-            ]
-   in symlinkIfNotExist source destination & runShellCommandPure state & runTraceList & run & print
-  putStrLn ""
-  putStrLn "Impure interpreter"
-  putStrLn "1."
-  Main.echoCmd "hi" & runShellCommandIO & runTraceList & runM
-  putStrLn ""
-  putStrLn "2. Test a nonexistent command gives nothing"
-  Main.whichCmd "nonexistent" & runShellCommandIO & runTraceList & runM >>= print
-  putStrLn ""
-  putStrLn "3. Test an existing command gives Just"
-  Main.whichCmd "ghc" & runShellCommandIO & runTraceList & runM >>= print
-  putStrLn ""
-  putStrLn "4. Creates a symlink if source filepath exists and destination doesn't already exist"
-  symlinkIfNotExist "/etc/issue" "bar" & runShellCommandIO & runTraceList & runM >>= print
-  putStrLn ""
+  -- putStrLn "Pure interpreter"
+  -- putStrLn "1."
+  -- Main.echoCmd "hi" & runShellCommandPure NoFilePathsExist & runTraceList & run & print
+  -- putStrLn ""
+  -- putStrLn "2. The pure interpretation of whichCmd always gives Nothing"
+  -- Main.whichCmd "nonexistent" & runShellCommandPure NoFilePathsExist & runTraceList & run & print
+  -- putStrLn ""
+  -- putStrLn "3. The pure interpretation of TestPath always gives False"
+  -- testPathCmd "nonexistent" & runShellCommandPure NoFilePathsExist & runTraceList & run & print
+  -- putStrLn ""
+  -- putStrLn "4. Creates a symlink if one doesn't already exist (State: no filepaths, so expect source does not exist)"
+  -- symlinkIfNotExist "nonexistent from" "nonexistent to" & runShellCommandPure NoFilePathsExist & runTraceList & run & print
+  -- putStrLn ""
+  -- putStrLn "5. Creates a symlink if one doesn't already exist (State: happy path, source exists, destination does not)"
+  -- let source = decodeString "/etc/issue"
+  --     destination = decodeString "bar"
+  --     state =
+  --       CustomFilePaths $
+  --         Map.fromList
+  --           [ (source, FilePathExists),
+  --             (destination, FilePathDoesNotExist)
+  --           ]
+  --  in symlinkIfNotExist source destination & runShellCommandPure state & runTraceList & run & print
+  -- putStrLn ""
+  -- putStrLn "6. Warns destination exists and doesn't create symlink"
+  -- let source :: FilePath = decodeString "/etc/issue"
+  --     destination :: FilePath = decodeString "existent"
+  --     state =
+  --       CustomFilePaths $
+  --         Map.fromList
+  --           [ (source, FilePathExists),
+  --             (destination, FilePathExists)
+  --           ]
+  --  in symlinkIfNotExist source destination & runShellCommandPure state & runTraceList & run & print
+  -- putStrLn ""
+  -- putStrLn "7. Warns source exists and doesn't create symlink"
+  -- let source :: FilePath = decodeString "/etc/issue"
+  --     destination :: FilePath = decodeString "existent"
+  --     state =
+  --       CustomFilePaths $
+  --         Map.fromList
+  --           [ (source, FilePathDoesNotExist),
+  --             (destination, FilePathDoesNotExist)
+  --           ]
+  --  in symlinkIfNotExist source destination & runShellCommandPure state & runTraceList & run & print
+  -- putStrLn ""
+  -- putStrLn "Impure interpreter"
+  -- putStrLn "1."
+  -- Main.echoCmd "hi" & runShellCommandIO & runTraceList & runM
+  -- putStrLn ""
+  -- putStrLn "2. Test a nonexistent command gives nothing"
+  -- Main.whichCmd "nonexistent" & runShellCommandIO & runTraceList & runM >>= print
+  -- putStrLn ""
+  -- putStrLn "3. Test an existing command gives Just"
+  -- Main.whichCmd "ghc" & runShellCommandIO & runTraceList & runM >>= print
+  -- putStrLn ""
+  -- putStrLn "4. Creates a symlink if source filepath exists and destination doesn't already exist"
+  -- symlinkIfNotExist "/etc/issue" "bar" & runShellCommandIO & runTraceList & runM >>= print
+  -- putStrLn ""
