@@ -110,7 +110,15 @@ data PureFilePathState
 runShellCommandPure :: Member Trace r => PureFilePathState -> Sem (ShellCommand : r) a -> Sem r a
 runShellCommandPure filePathState = interpret \case
   EchoCmd str -> pure ()
-  WhichCmd str -> pure (Just str)
+  WhichCmd str -> do
+    -- TODO lambdacase this?
+    case filePathState of
+      NoFilePathsExist -> pure Nothing
+      AllFilePathsExist -> pure (Just str)
+      CustomFilePaths filepathMap -> maybe (pure Nothing) pure $ do
+        filePathExistence <- Map.lookup str $ filepathMap
+        guard (filePathExistence == FilePathExists)
+        pure . Just $ str
   TestPathCmd filepath -> do
     -- TODO lambdacase this?
     case filePathState of
@@ -150,10 +158,41 @@ main :: IO ()
 main = do
   putStrLn "* Pure HomeManager"
   putStrLn "** homeManagerInstall installs homeManager"
-  homeManagerInstall & runHomeManagerPure (HomeManagerState NotInstalled) & runTraceList & run & print
+  homeManagerInstall
+    & runHomeManagerPure (HomeManagerState NotInstalled)
+    & runTraceList
+    & run
+    & print
   putStrLn ""
-  putStrLn "** If not installed, home-manager is installed - maybeInstallHomeManager"
-  maybeInstallHomeManager & runShellCommandPure AllFilePathsExist & runHomeManagerPure (HomeManagerState NotInstalled) & runTraceList & run & print
+  putStrLn "** maybeInstallHomeManager: On a clean system where no filepaths exist, home manager is installed"
+  maybeInstallHomeManager
+    & runShellCommandPure
+      NoFilePathsExist
+    & runHomeManagerPure (HomeManagerState NotInstalled)
+    & runTraceList
+    & run
+    & print
+  putStrLn ""
+  putStrLn "** maybeInstallHomeManager: On a system where home-manager exists according to which, return Alreadyinstalled"
+  maybeInstallHomeManager
+    & runShellCommandPure
+      NoFilePathsExist
+    -- note the duplication between NoFilePathsExist and (HomeManagerState NotInstalled)
+    -- well, in a sense....
+    -- runShellCommandPure should perhaps not be exposed here
+    -- and should only be used interally within the interface
+    -- that HomeManager exposes
+    -- then that should have invoke runShellCommandPure and
+    -- be involved in details at the level of "NoFilePathsExist" aka "no file paths exist on filesystem when running which" here
+    & runHomeManagerPure (HomeManagerState NotInstalled)
+    & runTraceList
+    & run
+    & print
+
+
+
+
+  
 -- TODO turn these pure interpreter things into hspec tests
 -- putStrLn "Pure interpreter"
 -- putStrLn "1."
