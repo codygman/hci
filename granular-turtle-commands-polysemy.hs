@@ -58,15 +58,13 @@ symlinkIfNotExist from to = do
       trace "symlinkIfNotExist: creating symlink"
       symlinkCmd from to
 
-maybeInstallHomeManager :: (Member Trace r, Member ShellCommand r) => Sem r InstallStatus
+maybeInstallHomeManager :: (Member Trace r, Member ShellCommand r, Member HomeManager r) => Sem r InstallStatus
 maybeInstallHomeManager = do
   trace "we might install it"
   homeManagerInstalled <- whichCmd "home-manager"
   case homeManagerInstalled of
     Just _ -> pure AlreadyInstalled
-    Nothing -> do
-      installHomeManager -- TODO don't just ignore status here
-  pure NotInstalled
+    Nothing -> homeManagerInstall
 
 newtype PureHomeManagerState = HomeManagerState InstallStatus
 
@@ -98,6 +96,7 @@ runHomeManagerIO = interpret \case
     -- pure and impure variants
     -- Maybe it's just my naming that's making it confusing
     trace "runHomeManagerIO: install home manager"
+    pure InstallSuccess
 
 data PureFilePathState = NoFilePathsExist
                        | AllFilePathsExist
@@ -149,8 +148,11 @@ main :: IO ()
 main = do
 
   putStrLn "* Pure HomeManager"
-  putStrLn "** If not installed, home-manager is installed"
+  putStrLn "** homeManagerInstall installs homeManager"
   homeManagerInstall & runHomeManagerPure (HomeManagerState NotInstalled) & runTraceList & run & print
+  putStrLn ""
+  putStrLn "** If not installed, home-manager is installed - maybeInstallHomeManager"
+  maybeInstallHomeManager & runShellCommandPure AllFilePathsExist & runHomeManagerPure (HomeManagerState NotInstalled) & runTraceList & run & print
   
   -- TODO turn these pure interpreter things into hspec tests
   -- putStrLn "Pure interpreter"
