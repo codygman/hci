@@ -254,10 +254,12 @@
       ;; Set default font
       (set-face-attribute 'default nil
 			  :family "Source Code Pro"
-			  :height 160
+			  :height 130
 			  :weight 'normal
 			  :width 'normal)
     #+end_src
+
+    #+RESULTS:
 
     #+begin_src emacs-lisp :tangle no
       (add-hook 'text-mode-hook
