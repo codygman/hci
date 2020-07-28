@@ -170,16 +170,14 @@ in
       latitude = "32.7767";
       longitude = "96.7970";
       brightness = {
-        # Day and night mixed up, lol
-        day = "0.4";
-        night = "0.8";
+        day = "1.0";
+        night = "0.1";
       };
       tray = false;
       provider = "manual";
       temperature = {
-        # Day and night mixed up, lol
-        night = 5501;
-        day = 3501;
+        day = 5501;
+        night = 3501;
       };
       extraOptions = ["-v"];
     };
