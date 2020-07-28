@@ -564,8 +564,8 @@
 	  :keymaps 'override
 	  :non-normal-prefix "M-SPC"
 	  :prefix "SPC"
-	  "cc" '(recompile :which-key "M-x recompile")
-	  "cC" '(compile :which-key "M-x compile")
+	  "cc" '(counsel-compile :which-key "Counsel Compile")
+	  "cC" '(recompile :which-key "M-x recompile")
 	  )
 	)
 
@@ -611,7 +611,8 @@
 	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
 	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
 	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))) 
-	 (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-window-center))) 
+	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-window-center))) 
+	(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-point))) 
 	)
     #+end_src
 **** counsel

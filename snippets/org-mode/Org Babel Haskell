@@ -1,0 +1,6 @@
+# key: hs
+# name: Org Babel Haskell
+# --
+#+begin_src haskell$1
+$2
+#+end_src$0
