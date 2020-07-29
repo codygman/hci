@@ -536,7 +536,14 @@
         
 	(direnv-mode))
     #+end_src
-*** color theme
+*** Visuals
+**** Transparency
+     #+begin_src emacs-lisp
+ (set-frame-parameter (selected-frame) 'alpha '(95 . 50))
+ (add-to-list 'default-frame-alist '(alpha . (95 . 50)))
+     #+end_src
+
+**** color theme
     #+begin_src emacs-lisp
       ;; TODO figure out why use-package doesn't work here
       (load-theme 'doom-one t)
