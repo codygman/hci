@@ -538,12 +538,13 @@
 **** Org mode
      
      #+begin_src emacs-lisp
-     (setq line-spacing 0.15)
+     (setq-default line-spacing 0.1)
        (add-hook 'text-mode-hook
 		 (lambda ()
 		   (variable-pitch-mode 1)))
 
        (defun org-mode-visuals ()
+         (olivetti-mode 1)
 	 (setq header-line-format " ")
 	 ;; want to keep ivy fixed width
 	 ;; https://github.com/abo-abo/swiper/issues/1549
