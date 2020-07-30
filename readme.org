@@ -169,6 +169,11 @@
       (setq package-archives nil)
     #+end_src
 ** Core Emacs Configuration
+*** auth source
+#+begin_src emacs-lisp
+ (setq auth-sources '("~/.authinfo"))
+#+end_src
+
 *** mode line
 **** helper functions, set initial state, add hooks
      #+begin_src emacs-lisp
@@ -457,6 +462,12 @@
 	)
 
     #+end_src
+
+*** forge
+#+begin_src emacs-lisp
+(use-package forge
+  :after magit)
+#+end_src
 
 *** magit
     #+begin_src emacs-lisp

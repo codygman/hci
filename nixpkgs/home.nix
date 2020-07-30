@@ -45,6 +45,16 @@ in
         evil
         evil-magit
         evil-collection
+        ( forge.override (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            src = pkgs.fetchFromGitHub {
+              owner = "magit";
+              repo = "forge";
+              rev = "2c487465d0b78ffe34252b47fcc06e27039330c4";
+              sha256 = "08c44ljvni2rr8d8ph3rzw7qrj7czx94m50bx455d8vv0snx0sv6";
+            };
+          });
+        }) )
         ivy
         ivy-posframe
         ivy-rich
@@ -104,6 +114,11 @@ in
       enable = true;
       userName = "codygman";
       userEmail = lib.mkDefault "cody@codygman.dev";
+      extraConfig = {
+        github = {
+          user = "codygman";
+        };
+      };
     };
     direnv = {
       enable = true;
@@ -171,13 +186,13 @@ in
       latitude = "32.7767";
       longitude = "96.7970";
       brightness = {
-        day = "1.0";
-        night = "0.1";
+        day = "0.4";
+        night = "0.4";
       };
       tray = false;
       provider = "manual";
       temperature = {
-        day = 5501;
+        day = 3501;
         night = 3501;
       };
       extraOptions = ["-v"];
