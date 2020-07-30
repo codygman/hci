@@ -90,6 +90,7 @@ in
         flycheck
         flycheck-haskell
         general
+        olivetti
         projectile
         ts
         with-simulated-input

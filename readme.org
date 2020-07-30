@@ -61,6 +61,7 @@
 ***** SOMEDAY (maybe) jira and others
 ** Be nice to use
    If it's not subjectively nice for me to use, then I probably won't use it as much as I should.
+
 * TODO Reproducible Quickstart (warning: not idempotent, don't run more than once)
 ** Assumes =codygman/hci= repo cloned and setup
 *** start emacs in a nix shell
@@ -119,6 +120,7 @@
 ****** the message is technically correct here, but a little misleading for the home-manager centric case where we'd the ideal message would be:
        "Please uninstall the system level version of 'nox' if you want home-manager to manage it, otherwise remove it from your home-manager configuration"
 ** TODO make running this a no-op if already installed
+
 * Getting Help
   
   With a many systems on top of systems, complexity abound, and the stakes sometimes high for not being able to figure something out for a given piece of that system seeking out help in the best places and getting it quickly is paramount.
@@ -149,12 +151,16 @@
 
 ** straight.el
 *** https://github.com/raxod502/straight.el/issues
+
 * Configuration
+
 ** Prevent use-package from installing anything
+
 *** Set ensure-function to nil
     #+begin_src emacs-lisp
       (setq use-package-ensure-function 'ignore)
     #+end_src
+
 *** Set package-archives to nil so there's nothing to install from
 
     Package should already be there, to add a new one add it to home.nix
@@ -260,12 +266,7 @@
     #+end_src
 
     #+RESULTS:
-
-    #+begin_src emacs-lisp :tangle no
-      (add-hook 'text-mode-hook
-		(lambda ()
-		  (variable-pitch-mode 1)))
-    #+end_src
+    
 *** Set a custom custom-file
     #+begin_src emacs-lisp
       (setq custom-file "~/.emacs-custom.el")
@@ -281,7 +282,7 @@
     #+end_src
 *** Make collaboration easier
     #+begin_src emacs-lisp
-      (global-display-line-numbers-mode)
+      (add-hook 'prog-mode-hook 'display-line-numbers-mode)
       (setq-default display-line-numbers-width 4 
 		    ;; display-line-numbers-widen t ;; this is kinda vs code like.. I think I don't like it?
 		    display-line-numbers-widen nil ;; this is kinda vs code like.. I think I don't like it?
@@ -310,6 +311,7 @@
       (setq make-backup-files nil)
       (setq tags-revert-without-query 1)
     #+end_src
+
 ** Package configuration
 *** use-package
     #+begin_src emacs-lisp
@@ -530,19 +532,62 @@
         
 	(direnv-mode))
     #+end_src
+
 *** Visuals
+
+**** Org mode
+     
+     #+begin_src emacs-lisp
+     (setq line-spacing 0.15)
+       (add-hook 'text-mode-hook
+		 (lambda ()
+		   (variable-pitch-mode 1)))
+
+       (defun org-mode-visuals ()
+	 (setq header-line-format " ")
+	 ;; want to keep ivy fixed width
+	 ;; https://github.com/abo-abo/swiper/issues/1549
+	 (setq ivy-switch-buffer-faces-alist '((dired-mode . ivy-subdir)))
+	 (lambda () (progn
+		      (set-face-attribute 'header-line nil  :height 400)
+		      (setq left-margin-width 4)
+		      (setq right-margin-width 4)
+		      (set-window-buffer nil (current-buffer))))
+	 (setq org-startup-indented t
+	       org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
+	       org-ellipsis "  " ;; folding symbol
+	       org-pretty-entities t
+	       org-hide-emphasis-markers t
+	       ;; show actually italicized text instead of /italicized text/
+	       org-agenda-block-separator ""
+	       org-fontify-whole-heading-line t
+	       org-fontify-done-headline t
+	       org-fontify-quote-and-verse-blocks t)
+	 (mapc
+	  (lambda (face) ;; Rescale and inherit the properties from the fixed-pitch font.
+	    (set-face-attribute face nil :inherit 'fixed-pitch))
+	  (list 'org-code 'org-link 'org-block 'org-table 'org-property-value 'org-formula
+		'org-tag 'org-verbatim 'org-date 'company-tooltip
+		'org-special-keyword 'org-block-begin-line
+		'org-block-end-line 'org-meta-line
+		'org-document-info-keyword))
+
+	 )
+       (add-hook 'org-mode-hook 'org-mode-visuals)
+     #+end_src
 **** Hide annoying things
     #+begin_src emacs-lisp
       (tool-bar-mode -1)
       (toggle-scroll-bar -1)
       (menu-bar-mode -1)
     #+end_src
-
 **** Transparency
-     #+begin_src emacs-lisp
+
+#+begin_src emacs-lisp :results silent
  (set-frame-parameter (selected-frame) 'alpha '(95 . 50))
  (add-to-list 'default-frame-alist '(alpha . (95 . 50)))
-     #+end_src
+#+end_src
+
 **** color theme
     #+begin_src emacs-lisp
       ;; TODO figure out why use-package doesn't work here
