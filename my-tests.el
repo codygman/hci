@@ -248,7 +248,7 @@
 	(litter-file2-exists (file-symlink-p (emacs-d-directory-for "testdata/.#loremipsum.txt")))
 	)
     (should (not litter-file1-exists))
-    ;; (should (not litter-file2-exists))
+    (should (not litter-file2-exists))
     ))
 
 ;; (ert-deftest haskell-nix-stack-workflow-isolated-flycheck-works () )
