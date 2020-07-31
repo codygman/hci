@@ -178,7 +178,9 @@
 		   (variable-pitch-mode 1)))
 
        (defun org-mode-visuals ()
+      (setq org-indent-mode-turns-off-org-adapt-indentation nil)
 	 (org-indent-mode 1)
+	 (olivetti-mode 1)
 	 (setq org-startup-indented t
 	       org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
 	       org-ellipsis "  " ;; folding symbol

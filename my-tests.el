@@ -227,10 +227,14 @@
   ;; (execute-kbd-macro (kbd "o")) ;; start insert newline after text
   (let ((file-contents
 	 (buffer-substring-no-properties (point-min) (point-max)))
-	(correctly-indented-file-contents "***** TODO The text above isn't aligned properly! 
-Aggressive indent mode or something fixes this I think?")
+	(correctly-indented-file-contents "
+***** TODO The text above isn't aligned properly! 
+      Aggressive indent mode or something fixes this I think?
+")
 	)
-    (should (string-equal correctly-indented-file-contents file-contents)))
+    (should (string-equal
+	     (string-trim correctly-indented-file-contents)
+	     (string-trim file-contents))))
   )
 
 
