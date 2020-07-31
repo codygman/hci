@@ -25,3 +25,4 @@
 /testdata/haskell-nix-stack-workflow/app/#Main.hs#
 /testdata/haskell-nix-stack-workflow/.direnv/
 /testdata/#loremipsum.txt#
+/xvfb-error.log
