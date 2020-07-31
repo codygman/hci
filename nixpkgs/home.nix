@@ -41,6 +41,7 @@ in
         company-lsp
         use-package
         haskell-mode
+        ejc-sql
         elm-mode
         evil
         evil-magit
@@ -165,6 +166,7 @@ in
       ghc
       gnumake
       graphviz
+      leiningen
       libnotify
       nox
       ripgrep

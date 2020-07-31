@@ -845,12 +845,100 @@ https://github.com/kostafey/ejc-sql/issues/136
 **** problem
      nrepl on nix tries to create a =.nrepl-port= file in the nix store... that's a no go
 **** minimum repro (requires =clomacs= emacs mode)
-     #+begin_src emacs-lisp
+     #+begin_src emacs-lisp :tangle no
+     (require 'clomacs)
        (clomacs-with-nrepl "ejc-sql"
                            (lambda ()
                              (message "hi")))
      #+end_src
 
+     #+RESULTS:
+***** error
+ #+begin_example
+ ...
+ Retrieving nrepl/nrepl/0.7.0/nrepl-0.7.0.jar from clojars
+ java.io.IOException: Permission denied. Please check your access rights for /nix/store/p6mmpcpznilfx2wjlly9f3m43sryfbgn-emacs-packages-deps/share/emacs/site-lisp/elpa/ejc-sql-20200607.2010/.nrepl-port
+  at leiningen.repl$repl.invokeStatic (repl.clj:385)
+  ...
+ #+end_example
+
+
+**** can I set the nrepl port directory with server settings?
+
+     [[file:/nix/store/p6mmpcpznilfx2wjlly9f3m43sryfbgn-emacs-packages-deps/share/emacs/site-lisp/elpa/clomacs-20191201.200/clomacs.el::(defun clomacs-jack-in-cljs (params wrapped-eval attributes nrepl-ready-callback)][helpful docs]]
+
+     #+begin_src emacs-lisp :tangle no
+              (require 'clomacs)
+                (clomacs-with-nrepl "ejc-sql"
+                                    (lambda ()
+                                      (message "hi"))
+                                    :params '(:project-dir "/tmp")
+                                    )
+
+              (clomacs-launch-nrepl "ejc-sql" (lambda nil (message "hi")) '(:project-dir "/tmp") nil :clj)
+              ;; gives us same error
+
+              (defun clomacs-launch-nrepl (lib-name
+                                           wrapped-eval
+                                           attributes
+                                           nrepl-ready-callback
+                                           backend)
+                (let* ((starting-msg (format
+                                      "Starting nREPL server for %s..."
+                                      (propertize (or lib-name "current-buffer")
+                                                  'face 'font-lock-keyword-face)))
+                       (project-dir "/tmp")
+                       (params (if project-dir (list :project-dir project-dir))))
+                  ;; simple run lein
+                  (pcase backend
+                    (:clj (clomacs-jack-in-clj params
+                                               wrapped-eval
+                                               attributes
+                                               nrepl-ready-callback))
+                    (:cljs (clomacs-jack-in-cljs params
+                                                 wrapped-eval
+                                                 attributes
+                                                 nrepl-ready-callback))
+                    (_ (error "Unknown backend %s" backend)))
+                  (message starting-msg))
+                nil)
+         
+       ;; we get a new error if we just set
+     #+end_src
+
+**** config attempt WIP
+     #+begin_src emacs-lisp
+       (use-package ejc-sql
+         :config
+         (defun clomacs-launch-nrepl (lib-name
+                                      wrapped-eval
+                                      attributes
+                                      nrepl-ready-callback
+                                      backend)
+           (let* ((starting-msg (format
+                                 "Starting nREPL server for %s..."
+                                 (propertize (or lib-name "current-buffer")
+                                             'face 'font-lock-keyword-face)))
+                  (project-dir "/tmp")
+                  (params (if project-dir (list :project-dir project-dir))))
+             ;; simple run lein
+             (pcase backend
+               (:clj (clomacs-jack-in-clj params
+                                          wrapped-eval
+                                          attributes
+                                          nrepl-ready-callback))
+               (:cljs (clomacs-jack-in-cljs params
+                                            wrapped-eval
+                                            attributes
+                                            nrepl-ready-callback))
+               (_ (error "Unknown backend %s" backend)))
+             (message starting-msg))
+           nil)
+         )
+
+
+
+     #+end_src
 
 * NOTE 
   :PROPERTIES:
