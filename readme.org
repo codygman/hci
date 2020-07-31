@@ -234,6 +234,11 @@
 #+begin_src emacs-lisp
  (setq auth-sources '("~/.authinfo"))
 #+end_src
+*** Keep emacs from littering
+#+begin_src
+(setq auto-save-file-name-transforms
+`((".*" "~/.emacs-saves/" t)))
+#+end_src
 
 *** mode line
 **** helper functions, set initial state, add hooks
