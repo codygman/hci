@@ -393,7 +393,44 @@
     #+end_src
 *** org
     #+begin_src emacs-lisp
-      (use-package org)
+      (use-package org
+        :init 
+        (defun my-day-org-agenda ()
+          (interactive)
+          (let ((org-agenda-span 'day))
+            (org-agenda nil "a")
+            (progn (switch-to-buffer "*Org Agenda*") (delete-other-windows))
+            ))
+        :config
+        (setq
+         org-agenda-files '("~/org/")
+         org-directory "~/org"
+         org-capture-templates
+              '(("t" "Todo" entry (file+headline "~/org/inbox.org" "Inbox")
+                 "* TODO %?\n  %i\n  %a")
+                ("j" "Journal" entry (file+datetree "~/org/journal.org")
+                 "* %?\nEntered on %U\n  %i\n  %a")))
+        :general
+        (my-leader-def
+          :states '(normal visual emacs motion)
+          :prefix "SPC"
+          :keymaps 'override
+          :non-normal-prefix "M-SPC"
+          :prefix "SPC"
+          "oc"  '(counsel-org-capture :which-key "counsel org capture")
+          "oa"  '(my-day-org-agenda :which-key "org-agenda")
+          "oA"  '(org-agenda :which-key "org-agenda")
+          ))
+
+      (use-package evil-org
+        :after org
+        :config
+        (add-hook 'org-mode-hook 'evil-org-mode)
+        (add-hook 'evil-org-mode-hook
+                  (lambda ()
+                    (evil-org-set-key-theme)))
+        (require 'evil-org-agenda)
+        (evil-org-agenda-set-keys))
     #+end_src
 **** org babel
     #+begin_src emacs-lisp

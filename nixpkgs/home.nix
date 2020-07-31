@@ -44,6 +44,7 @@ in
         elm-mode
         evil
         evil-magit
+        evil-org
         evil-collection
         ( forge.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {
