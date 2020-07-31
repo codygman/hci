@@ -244,11 +244,8 @@
   (goto-char (point-max))
   (insert "foobarhahahahhaha")
   (sit-for 3) ;; TODO come back and lower me
-  (let ((litter-file1-exists (file-exists-p (emacs-d-directory-for "testdata/#loremipsum.txt#")))
-	(litter-file2-exists (file-symlink-p (emacs-d-directory-for "testdata/.#loremipsum.txt")))
-	)
+  (let ((litter-file1-exists (file-exists-p (emacs-d-directory-for "testdata/#loremipsum.txt#"))))
     (should (not litter-file1-exists))
-    (should (not litter-file2-exists))
     ))
 
 ;; (ert-deftest haskell-nix-stack-workflow-isolated-flycheck-works () )
