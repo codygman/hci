@@ -172,22 +172,13 @@
 *** Visuals
 **** Org mode
      #+begin_src emacs-lisp
-     (setq-default line-spacing 0.1)
+       (setq-default line-spacing 0.1)
        (add-hook 'text-mode-hook
 		 (lambda ()
 		   (variable-pitch-mode 1)))
 
        (defun org-mode-visuals ()
-         (olivetti-mode 1)
-	 (setq header-line-format " ")
-	 ;; want to keep ivy fixed width
-	 ;; https://github.com/abo-abo/swiper/issues/1549
-	 (setq ivy-switch-buffer-faces-alist '((dired-mode . ivy-subdir)))
-	 (lambda () (progn
-		      (set-face-attribute 'header-line nil  :height 400)
-		      (setq left-margin-width 4)
-		      (setq right-margin-width 4)
-		      (set-window-buffer nil (current-buffer))))
+	 (message "loading org-mode-visuals")
 	 (org-indent-mode 1)
 	 (olivetti-mode 1)
 	 (setq org-startup-indented t
@@ -200,6 +191,15 @@
 	       org-fontify-whole-heading-line t
 	       org-fontify-done-headline t
 	       org-fontify-quote-and-verse-blocks t)
+	 (setq header-line-format " ")
+	 ;; want to keep ivy fixed width
+	 ;; https://github.com/abo-abo/swiper/issues/1549
+	 (setq ivy-switch-buffer-faces-alist '((dired-mode . ivy-subdir)))
+	 (lambda () (progn
+		      (set-face-attribute 'header-line nil  :height 400)
+		      (setq left-margin-width 4)
+		      (setq right-margin-width 4)
+		      (set-window-buffer nil (current-buffer)))) 
 	 (mapc
 	  (lambda (face) ;; Rescale and inherit the properties from the fixed-pitch font.
 	    (set-face-attribute face nil :inherit 'fixed-pitch))
