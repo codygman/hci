@@ -9,10 +9,6 @@
 (describe
  "Codygman's hci"
 
- (it "should always fail when I throw this error"
-     (error "test-feature.el failed")
-     )
-
  (describe "Set a baseline with simple tests"
 
 	   (it "emacs version should be 28.0.50"
