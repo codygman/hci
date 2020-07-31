@@ -46,8 +46,8 @@ in
             src = pkgs.fetchFromGitHub {
               owner = "kostafey";
               repo = "ejc-sql";
-              rev = "v0.4.1";
-              sha256 = "1gvbw4iqnsbs6fj713gjd9s0l1xxqmvq98ixsh59p0wh68a1nhhl";
+              rev = "15675ca3bd71e0411956e440be8d660f28ae27d8";
+              sha256 = "0vd64lhxlq8gdx295s1hf30ml5rddqjz2r78hl9vgjdzqwdjcipp";
             };
           });
         }) )
