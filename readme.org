@@ -179,8 +179,6 @@
 
        (defun org-mode-visuals ()
 	 (org-indent-mode 1)
-	 (aggressive-indent-mode 1)
-	 (olivetti-mode 1)
 	 (setq org-startup-indented t
 	       org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
 	       org-ellipsis "  " ;; folding symbol
