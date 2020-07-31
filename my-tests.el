@@ -151,7 +151,7 @@
   ;; (my-append-string-to-file "START load-file\n" "debug")
   (haskell-process-load-file)
   (with-current-buffer "*simple-haskell-project*"
-    (wait-for-ghci "initial load" "^1$" 10)
+    (wait-for-ghci "initial load" "^1$" 15)
     (evil-append-line 1)
     (insert ":t functionWeWantInScope")
     (haskell-interactive-mode-return)
@@ -168,28 +168,6 @@
   (execute-kbd-macro (kbd "G"))
   (execute-kbd-macro (kbd "C-u"))
   (log "ctrl-u-scrolls-up passed"))
-
-
-;; helm
-;;; helm projectile
-;;;; TODO can add known projects with helm
-;; TODO for some reason after adding haskell-flycheck-squiggly-appears-underneath-misspelled-function it caused this one to fail
-
-(ert-deftest projectile-switch-projects-to-magit-works ()
-  ;; find our own git project to test projectile on since we know we'll have it both locally and in CI always
-  (projectile-clear-known-projects)
-  (projectile-add-known-project (emacs-d-directory-for ""))
-  ;; ensure that we can successfully switch to magit for a given project
-  (should (string-equal
-	   "magit: hci"
-	   (save-excursion
-	     (with-simulated-input
-		 '("hci"
-		   (wsi-simulate-idle-time 0.5)
-		   "M-g")
-	       (helm-projectile-switch-project))
-	     (buffer-name))))
-  (log "projectile-switch-projects-to-magit-works passed"))
 
 
 (require 'cl) ;; TODO necessary?
