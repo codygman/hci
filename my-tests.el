@@ -242,6 +242,12 @@
   (log "haskell-flycheck-squiggly-appears-underneath-misspelled-function passed"))
 
 
+(ert-deftest dont-create-autosave-file-in-same-directory ()
+  (find-file (emacs-d-directory-for "testdata/loremipsum.txt"))
+  (let ((litter-file-exists (file-exists-p (emacs-d-directory-for "testdata/#loremipsum.txt#"))))
+    (should (not litter-file-exists))
+    ))
+
 ;; (ert-deftest haskell-nix-stack-workflow-isolated-flycheck-works () )
   ;; (kill-all-buffers-except-ert)
   ;; (cd (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/"))
