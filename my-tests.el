@@ -223,55 +223,62 @@
   (find-file (emacs-d-directory-for "testdata/aggressive-indent.org"))
   (execute-kbd-macro (kbd "gg")) ;; top of file
   (execute-kbd-macro (kbd "j")) ;; move down to text
-  (execute-kbd-macro (kbd "o")) ;; start insert newline after text
+  (call-interactively 'aggressive-indent-indent-region-and-on)
+  ;; (execute-kbd-macro (kbd "o")) ;; start insert newline after text
+  (let ((file-contents
+	 (buffer-substring-no-properties (point-min) (point-max)))
+	(correctly-indented-file-contents "***** TODO The text above isn't aligned properly! 
+Aggressive indent mode or something fixes this I think?")
+	)
+    (should (string-equal correctly-indented-file-contents file-contents)))
   )
 
 
 ;; (ert-deftest haskell-nix-stack-workflow-isolated-flycheck-works () )
-  ;; (kill-all-buffers-except-ert)
-  ;; (cd (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/"))
-  ;; TODO bust lorri cache and try this... it won't work. There always needs ot be a cached build or things will fail at the project discovery and configuration level. Any way around this?
-  ;; (direnv-allow);; TODO this doesn't actually work if you direnv deny this project :/
-  ;; (find-file (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/app/Main.hs"))
-  ;; (sit-for 2)
-  ;; (should (executable-find "hpack"))
-  ;; (direnv-update-directory-environment (emacs-d-directory-for "testdata/simple-haskell-project/"))
-  ;; (trace-function 'direnv-update-directory-environment)
-  ;; (message "exec-path: %s\n" exec-path)
+;; (kill-all-buffers-except-ert)
+;; (cd (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/"))
+;; TODO bust lorri cache and try this... it won't work. There always needs ot be a cached build or things will fail at the project discovery and configuration level. Any way around this?
+;; (direnv-allow);; TODO this doesn't actually work if you direnv deny this project :/
+;; (find-file (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/app/Main.hs"))
+;; (sit-for 2)
+;; (should (executable-find "hpack"))
+;; (direnv-update-directory-environment (emacs-d-directory-for "testdata/simple-haskell-project/"))
+;; (trace-function 'direnv-update-directory-environment)
+;; (message "exec-path: %s\n" exec-path)
 
-  ;; (when (not flycheck-ghc-args)
-  ;;   (log "no flycheck ghc args set, killing and re-opening buffer")
-  ;;   (set-buffer-modified-p nil)
-  ;;   (kill-this-buffer)
-  ;;   (flycheck-haskell-clear-config-cache)
-  ;;   (flycheck-haskell-configure)
-  ;;   (sit-for 1)
-  ;;   (find-file (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/app/Main.hs")))
+;; (when (not flycheck-ghc-args)
+;;   (log "no flycheck ghc args set, killing and re-opening buffer")
+;;   (set-buffer-modified-p nil)
+;;   (kill-this-buffer)
+;;   (flycheck-haskell-clear-config-cache)
+;;   (flycheck-haskell-configure)
+;;   (sit-for 1)
+;;   (find-file (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/app/Main.hs")))
 
-  ;; (flycheck-mode nil)
-  ;; (flycheck-haskell-clear-config-cache)
-  ;; (funcall-interactively (flycheck-haskell-configure))
-  ;; (flycheck-mode 1)
+;; (flycheck-mode nil)
+;; (flycheck-haskell-clear-config-cache)
+;; (funcall-interactively (flycheck-haskell-configure))
+;; (flycheck-mode 1)
 
-  ;; (replace-string "someFunc" "someFuncooooo")
-  ;; (execute-kbd-macro (kbd "4h"))
-  ;; ;; sit for long enough for a flycheck syntax check to start
-  ;; (sit-for .5)
-  ;; (with-timeout (2 (message "5 seconds passed, skipping haskell-flycheck-squiggly-appears-underneath-misspelled-function"))
-  ;;   (while flycheck-current-syntax-check
-  ;;     (sit-for 1)
-  ;;     )
-  ;;   )
-  ;; (sit-for 5)
+;; (replace-string "someFunc" "someFuncooooo")
+;; (execute-kbd-macro (kbd "4h"))
+;; ;; sit for long enough for a flycheck syntax check to start
+;; (sit-for .5)
+;; (with-timeout (2 (message "5 seconds passed, skipping haskell-flycheck-squiggly-appears-underneath-misspelled-function"))
+;;   (while flycheck-current-syntax-check
+;;     (sit-for 1)
+;;     )
+;;   )
+;; (sit-for 5)
 
-  ;; (should (eq 'flycheck-error (get-char-property (point) 'face)))
-  ;; ;; NOTE keeping this buffer open somehow made projectile-switch-projects-to-magit-works fail
-  ;; ;; TODO can we make this local?
-  ;; (set-buffer-modified-p nil)
+;; (should (eq 'flycheck-error (get-char-property (point) 'face)))
+;; ;; NOTE keeping this buffer open somehow made projectile-switch-projects-to-magit-works fail
+;; ;; TODO can we make this local?
+;; (set-buffer-modified-p nil)
 
-  ;; (kill-this-buffer)
+;; (kill-this-buffer)
 
-  ;; (log "haskell-nix-stack-workflow-isolated-flycheck-works passed"))
+;; (log "haskell-nix-stack-workflow-isolated-flycheck-works passed"))
 
 ;; (ert-deftest nix-highlighting-works-in-nix-file ()
 ;;   (find-file (emacs-d-directory-for "testdata/sample.nix"))

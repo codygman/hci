@@ -36,6 +36,7 @@ in
       package = pkgs.emacsGit;
       extraPackages = epkgs: with epkgs; [
         async
+        aggressive-indent
         buttercup
         company
         company-lsp
