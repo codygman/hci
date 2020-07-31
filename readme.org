@@ -235,9 +235,9 @@
  (setq auth-sources '("~/.authinfo"))
 #+end_src
 *** Keep emacs from littering
-#+begin_src
-(setq auto-save-file-name-transforms
-`((".*" "~/.emacs-saves/" t)))
+#+begin_src emacs-lisp
+(setq auto-save-default nil)
+(setq make-backup-files nil)
 #+end_src
 
 *** mode line
