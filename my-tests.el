@@ -146,23 +146,6 @@
   
   )
 
-(ert-deftest ghci-has-locals-in-scope ()
-  (interactive)
-  (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
-  ;; (my-append-string-to-file "START load-file\n" "debug")
-  (haskell-process-load-file)
-  (with-current-buffer "*simple-haskell-project*"
-    (wait-for-ghci "initial load" "^1$" 30) ;; TODO see if you can lower me later
-    (evil-append-line 1)
-    (insert ":t functionWeWantInScope")
-    (haskell-interactive-mode-return)
-    (wait-for-ghci ":t functionWeWantInScope" "^func.+)$" 5)
-    (evil-previous-line 1)
-    (copy-line 1))
-  (should (string-equal
-           (string-trim (substring-no-properties (nth 0 kill-ring)))
-           "functionWeWantInScope :: ()")))
-
 ;; evil
 (ert-deftest ctrl-u-scrolls-up ()
   (find-file (emacs-d-directory-for "testdata/loremipsum.txt"))
