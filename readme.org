@@ -839,6 +839,19 @@
 	  (kill-buffer-and-window)
 	(kill-buffer))))
      #+end_src
+*** TODO ejc-sql
+**** meta
+https://github.com/kostafey/ejc-sql/issues/136
+**** problem
+     nrepl on nix tries to create a =.nrepl-port= file in the nix store... that's a no go
+**** minimum repro (requires =clomacs= emacs mode)
+     #+begin_src emacs-lisp
+       (clomacs-with-nrepl "ejc-sql"
+                           (lambda ()
+                             (message "hi")))
+     #+end_src
+
+
 * NOTE 
   :PROPERTIES:
   :header-args:    :tangle no
