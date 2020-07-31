@@ -5,6 +5,9 @@
 
 echo "running emacs with xvfb-run"
 xvfb-run -e xvfb-error.log emacs --load load-init-then-run-ert.el
+emacsExitCode=$?;
+echo "emacs exit code will be: $emacsExitCode"
+
 echo "xvfb-run error file contents:"
 cat xvfb-error.log
 # if [ -z "$IN_GIT_HOOK" ] && [ -z "$INSIDE_EMACS" ]; then
@@ -14,8 +17,6 @@ cat xvfb-error.log
 #     echo "in git hook, skipping ert test since we don't have TTY"
 # fi
 
-emacsExitCode=$?;
-echo "emacs exit code will be: $emacsExitCode"
 
 # TODO improve git commit hooks and track with git via https://medium.com/@anandmohit7/improving-development-workflow-using-git-hooks-8498f5aa3345
 
