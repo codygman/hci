@@ -131,9 +131,10 @@
   (goto-char (point-max))
   (evil-append-line 1)
   (insert "1")
-  (haskell-interactive-mode-return)
   (log (format "max timeout for %s is %d" action max-ghci-wait))
-  (with-timeout (max-ghci-wait (error "action '%s' took more than %.1f seconds in ghci '%s'" action max-ghci-wait (buffer-name)))
+  (haskell-interactive-mode-return)
+  (with-timeout ( max-ghci-wait
+		 (error "action '%s' took more than %.1f seconds in ghci '%s'" action max-ghci-wait (buffer-name)))
     (while (not (re-search-backward expected-output-rgx nil t))
       (goto-char (point-max))
       (sit-for 0.1)
