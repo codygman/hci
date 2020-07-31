@@ -152,7 +152,7 @@
   ;; (my-append-string-to-file "START load-file\n" "debug")
   (haskell-process-load-file)
   (with-current-buffer "*simple-haskell-project*"
-    (wait-for-ghci "initial load" "^1$" 15)
+    (wait-for-ghci "initial load" "^1$" 30) ;; TODO see if you can lower me later
     (evil-append-line 1)
     (insert ":t functionWeWantInScope")
     (haskell-interactive-mode-return)
