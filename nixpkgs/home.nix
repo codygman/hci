@@ -41,7 +41,16 @@ in
         company-lsp
         use-package
         haskell-mode
-        ejc-sql
+        ( ejc-sql.override (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            src = pkgs.fetchFromGitHub {
+              owner = "kostafey";
+              repo = "ejc-sql";
+              rev = "v0.4.1";
+              sha256 = "1gvbw4iqnsbs6fj713gjd9s0l1xxqmvq98ixsh59p0wh68a1nhhl";
+            };
+          });
+        }) )
         elm-mode
         evil
         evil-magit
