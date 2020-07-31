@@ -19,5 +19,6 @@ if [ -z "$GITHUB_ACTIONS" ]; then
     echo "We are running locally, running ert tests..."
     bash run-ert-tests.sh
 else 
-    echo "in github action, ert tests will be run directly"
+    echo "in github action, let's try to run ert tests anyway"
+    bash run-ert-tests.sh
 fi
