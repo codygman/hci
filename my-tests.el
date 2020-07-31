@@ -89,6 +89,10 @@
   ;;     )
     ;; ))
 
+(ert-deftest always-fail ()
+  (error "my-tests.el: always fail failed")
+  )
+
 (ert-deftest use-package-installed ()
   (should (fboundp 'use-package)))
 
