@@ -393,6 +393,10 @@
     #+end_src
 *** org
     #+begin_src emacs-lisp
+    (use-package org-capture
+    :after org
+    :hook
+    (org-capture-mode . evil-insert-state))
       (use-package org
         :init 
         (defun my-day-org-agenda ()
