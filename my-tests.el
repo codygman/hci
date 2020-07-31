@@ -220,12 +220,12 @@
 
   (log "haskell-flycheck-squiggly-appears-underneath-misspelled-function passed"))
 
-(ert-deftest aggressive-indent-fixes-old-wrong-indentation-after-creating-newline ()
-  (find-file (emacs-d-directory-for "testdata/aggressive-indent.org"))
+(ert-deftest indent-region-fixes-old-wrong-indentation-when-called-in-org ()
+  (find-file (emacs-d-directory-for "testdata/test-indent.org"))
+  (outline-show-all)
   (execute-kbd-macro (kbd "gg")) ;; top of file
   (execute-kbd-macro (kbd "j")) ;; move down to text
-  (call-interactively 'aggressive-indent-indent-region-and-on)
-  ;; (execute-kbd-macro (kbd "o")) ;; start insert newline after text
+  (evil-indent (line-beginning-position) (line-end-position))
   (let ((file-contents
 	 (buffer-substring-no-properties (point-min) (point-max)))
 	(correctly-indented-file-contents "
