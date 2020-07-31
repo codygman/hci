@@ -159,6 +159,7 @@ in
       # will need to ensure cachix by ci and cachix version here match
       cmake
       coreutils
+      dbeaver
       fd
       firefox
       gcc

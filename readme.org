@@ -940,6 +940,21 @@ https://github.com/kostafey/ejc-sql/issues/136
 
      #+end_src
 
+**** got close I think
+
+A session with the same parameters exists (/tmp:localhost:42451).  You can connect a sibling instead.  Proceed? (y or n) y
+[nREPL] Starting server via /home/cody/.nix-profile/bin/lein update-in :dependencies conj \[nrepl\ \"0.8.0-alpha3\"\] -- update-in :plugins conj \[cider/cider-nrepl\ \"0.25.3-SNAPSHOT\"\] -- repl :headless :host localhost
+Starting nREPL server for ejc-sql...
+Entering debugger...
+[nREPL] server started on 33047
+[nREPL] Establishing direct connection to localhost:33047 ...
+[nREPL] Direct connection to localhost:33047 established
+nrepl-send-sync-request: Wrong type argument: stringp, nil
+[nREPL] server started on 45381
+[nREPL] Establishing direct connection to localhost:45381 ...
+[nREPL] Direct connection to localhost:45381 established
+nrepl-send-sync-request: Wrong type argument: stringp, nil
+
 * NOTE 
   :PROPERTIES:
   :header-args:    :tangle no
