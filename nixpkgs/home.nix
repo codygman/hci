@@ -173,6 +173,7 @@ in
       sqlite
       sqlite
       stack
+      xvfb_run
     ];
   };
 
