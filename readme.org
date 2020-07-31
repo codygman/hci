@@ -178,7 +178,6 @@
 		   (variable-pitch-mode 1)))
 
        (defun org-mode-visuals ()
-	 (message "loading org-mode-visuals")
 	 (org-indent-mode 1)
 	 (olivetti-mode 1)
 	 (setq org-startup-indented t
