@@ -393,8 +393,18 @@
     #+end_src
 *** org
     #+begin_src emacs-lisp
-      (use-package org)
+      (use-package org
+        :config
+        (setq org-files "~/org"
+              org-agenda-files '("~/org")
+              org-refile-targets '((nil :maxlevel . 5)
+                                   (org-agenda-files :maxlevel . 2))
+              org-outline-path-complete-in-steps nil         ; Refile in a single go
+              org-refile-use-outline-path t                  ; Show full paths for refiling
+              ))
+
     #+end_src
+
 **** org babel
     #+begin_src emacs-lisp
       (use-package ob
