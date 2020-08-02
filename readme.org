@@ -507,6 +507,19 @@
     #+begin_src emacs-lisp
       (use-package evil-magit :after evil :config (evil-magit-init))
     #+end_src
+*** eshell
+    #+begin_src emacs-lisp
+      (use-package eshell
+	:general
+      (my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
+	  :prefix "SPC"
+	  "ot" 'eshell
+	  ))
+    #+end_src
 *** dired
     #+begin_src emacs-lisp
       (use-package dired
