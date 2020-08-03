@@ -182,6 +182,9 @@ in
       package = mylorri;
       enable = true;
     };
+    syncthing = {
+      enable = true;
+    };
     redshift = {
       enable = true;
       latitude = "32.7767";
