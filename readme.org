@@ -791,7 +791,7 @@
 
       (use-package lsp-haskell
         :init
-        (setq lsp-haskell-process-path-hie "ghcide")
+        (setq lsp-haskell-process-path-hie "haskell-language-server")
         (setq lsp-haskell-process-args-hie nil)
         )
       (general-def
