@@ -43,3 +43,8 @@
   (execute-kbd-macro (kbd "G"))
   (execute-kbd-macro (kbd "C-u"))
   (log "ctrl-u-scrolls-up passed"))
+
+(ert-deftest org-version-keybind-works ()
+  ;; if this doesn't cause an error, consider success for now
+  (execute-kbd-macro (kbd "SPC o v RET")) 
+  )

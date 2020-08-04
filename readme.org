@@ -24,7 +24,17 @@ It's for adding new tricky features with less surface area (ex. org keybindings 
     #+end_src
 *** org
     #+begin_src emacs-lisp
-      (use-package org)
+      (use-package org
+        :general
+        (my-leader-def
+          :states '(normal visual emacs motion)
+          :prefix "SPC"
+          :keymaps 'override
+          :non-normal-prefix "M-SPC"
+          :prefix "SPC"
+          "ov" 'org-version
+          )
+        )
     #+end_src
 **** org babel
     #+begin_src emacs-lisp
