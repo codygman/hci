@@ -3,8 +3,6 @@
 ./switch.sh
 # echo "running emacs: $(which emacs)"
 # Before running tests, clean the stack directory for our haskell test project
-pushd testdata/simple-haskell-project && stack clean && popd
-
 echo "run buttercup tests"
 EMACSFOR="PERSONAL" emacs -Q -f package-initialize  --load load-init-then-test.el -batch --debug-init
 buttercupExitCode=$?;
