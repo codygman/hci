@@ -1,6 +1,4 @@
 (require 'org)
-(require 'use-package)
-
 ;; duplicate in init.el
 (defun emacs-d-directory-for (path)
   (if (eq nil (getenv "GITHUB_WORKSPACE"))
