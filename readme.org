@@ -181,45 +181,60 @@
 *** Visuals
 **** Org mode
      #+begin_src emacs-lisp
-       (setq-default line-spacing 0.1)
-       (add-hook 'text-mode-hook
-		 (lambda ()
-		   (variable-pitch-mode 1)))
+              (setq-default line-spacing 0.1)
+              (add-hook 'text-mode-hook
+                        (lambda ()
+                          (variable-pitch-mode 1)))
 
-       (defun org-mode-visuals ()
-      (setq org-indent-mode-turns-off-org-adapt-indentation nil)
-	 (org-indent-mode 1)
-	 (olivetti-mode 1)
-	 (setq org-startup-indented t
-	       org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
-	       org-ellipsis "  " ;; folding symbol
-	       org-pretty-entities t
-	       org-hide-emphasis-markers t
-	       ;; show actually italicized text instead of /italicized text/
-	       org-agenda-block-separator ""
-	       org-fontify-whole-heading-line t
-	       org-fontify-done-headline t
-	       org-fontify-quote-and-verse-blocks t)
-	 (setq header-line-format " ")
-	 ;; want to keep ivy fixed width
-	 ;; https://github.com/abo-abo/swiper/issues/1549
-	 (setq ivy-switch-buffer-faces-alist '((dired-mode . ivy-subdir)))
-	 (lambda () (progn
-		      (set-face-attribute 'header-line nil  :height 400)
-		      (setq left-margin-width 4)
-		      (setq right-margin-width 4)
-		      (set-window-buffer nil (current-buffer)))) 
-	 (mapc
-	  (lambda (face) ;; Rescale and inherit the properties from the fixed-pitch font.
-	    (set-face-attribute face nil :inherit 'fixed-pitch))
-	  (list 'org-code 'org-link 'org-block 'org-table 'org-property-value 'org-formula
-		'org-tag 'org-verbatim 'org-date 'company-tooltip
-		'org-special-keyword 'org-block-begin-line
-		'org-block-end-line 'org-meta-line
-		'org-document-info-keyword))
+              (defun org-mode-visuals ()
+                (setq org-indent-mode-turns-off-org-adapt-indentation nil)
+                (org-indent-mode 1)
+                (olivetti-mode 1)
+                (setq org-startup-indented t
+                      org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
+                      org-ellipsis "  " ;; folding symbol
+                      org-pretty-entities t
+                      org-hide-emphasis-markers t
+                      ;; show actually italicized text instead of /italicized text/
+                      org-agenda-block-separator ""
+                      org-fontify-whole-heading-line t
+                      org-fontify-done-headline t
+                      org-fontify-quote-and-verse-blocks t)
+                (setq header-line-format " ")
+                ;; want to keep ivy fixed width
+                ;; https://github.com/abo-abo/swiper/issues/1549
+                (setq ivy-switch-buffer-faces-alist '((dired-mode . ivy-subdir)))
+                (lambda () (progn
+                             (set-face-attribute 'header-line nil  :height 400)
+                             (setq left-margin-width 4)
+                             (setq right-margin-width 4)
+                             (set-window-buffer nil (current-buffer)))) 
 
-	 )
-       (add-hook 'org-mode-hook 'org-mode-visuals)
+                (dolist (face '(org-block-begin-line 
+                                org-block-end-line 
+                                org-verbatim 
+                                org-block 
+                                org-code
+                                org-link
+                                org-block
+                                org-table
+                                org-property-value
+                                org-formula
+                                org-tag
+                                org-verbatim
+                                org-date
+                                company-tooltip
+                                org-special-keyword
+                                org-block-begin-line
+                                org-block-end-line
+                                org-meta-line
+                                org-document-info-keyword
+                                ))
+
+                  (set-face-attribute face nil :inherit 'fixed-pitch)
+
+                  ))
+                (add-hook 'org-mode-hook 'org-mode-visuals)
      #+end_src
 **** Hide annoying things
     #+begin_src emacs-lisp
