@@ -82,17 +82,14 @@ It's for adding new tricky features with less surface area (ex. org keybindings 
 **** org babel
     #+begin_src emacs-lisp
       (use-package ob
-        :after ob-restclient
-	:config
-	(setq org-confirm-babel-evaluate nil)
-	(org-babel-do-load-languages
-	 'org-babel-load-languages
-	 '((emacs-lisp . t)
-	   (shell . t)
-	   (restclient . t)
-	   (haskell . t)
-	   ))
-	)
+        :config
+        (setq org-confirm-babel-evaluate nil)
+        (org-babel-do-load-languages
+         'org-babel-load-languages
+         '((emacs-lisp . t)
+           (shell . t)
+           ))
+        )
     #+end_src
 *** evil and evil collection
     #+begin_src emacs-lisp
