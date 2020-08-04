@@ -22,26 +22,7 @@ It's for adding new tricky features with less surface area (ex. org keybindings 
     #+begin_src emacs-lisp
       (require 'use-package)
     #+end_src
-*** org
-    #+begin_src emacs-lisp
-      (use-package org)
-    #+end_src
-**** org babel
-    #+begin_src emacs-lisp
-      (use-package ob
-        :after ob-restclient
-	:config
-	(setq org-confirm-babel-evaluate nil)
-	(org-babel-do-load-languages
-	 'org-babel-load-languages
-	 '((emacs-lisp . t)
-	   (shell . t)
-	   (restclient . t)
-	   (haskell . t)
-	   ))
-	)
-    #+end_src
-*** general (Best leave this loading near the top)
+*** general 
     #+begin_src emacs-lisp
       (use-package general
 	:after which-key
@@ -83,6 +64,35 @@ It's for adding new tricky features with less surface area (ex. org keybindings 
 	  "wv"  '(split-window-right :which-key "split right a window")
 	  "ws"  '(split-window-below :which-key "split bottom")
 	  )
+	)
+    #+end_src
+*** org
+    #+begin_src emacs-lisp
+      (use-package org
+        :general
+        (my-leader-def
+          :states '(normal visual emacs motion)
+          :prefix "SPC"
+          :keymaps 'override
+          :non-normal-prefix "M-SPC"
+          :prefix "SPC"
+          "ov" 'org-version
+          )
+        )
+    #+end_src
+**** org babel
+    #+begin_src emacs-lisp
+      (use-package ob
+        :after ob-restclient
+	:config
+	(setq org-confirm-babel-evaluate nil)
+	(org-babel-do-load-languages
+	 'org-babel-load-languages
+	 '((emacs-lisp . t)
+	   (shell . t)
+	   (restclient . t)
+	   (haskell . t)
+	   ))
 	)
     #+end_src
 *** evil and evil collection
