@@ -25,7 +25,6 @@ It's for adding new tricky features with less surface area (ex. org keybindings 
 *** general 
     #+begin_src emacs-lisp
       (use-package general
-	:after which-key
 	:init
 	(setq evil-want-keybinding nil
 	      evil-want-C-d-scroll t
