@@ -202,9 +202,6 @@
 	       org-fontify-done-headline t
 	       org-fontify-quote-and-verse-blocks t)
 	 (setq header-line-format " ")
-	 ;; want to keep ivy fixed width
-	 ;; https://github.com/abo-abo/swiper/issues/1549
-	 (setq ivy-switch-buffer-faces-alist '((dired-mode . ivy-subdir)))
 	 (lambda () (progn
 		      (set-face-attribute 'header-line nil  :height 400)
 		      (setq left-margin-width 4)
@@ -546,7 +543,7 @@
 		 search-ring
 		 minibuffer-history
 		 read-expression-history
-		 ivy-history
+		 helm-history
 		 counsel-compile-history
 		 ))
 	(setq savehist-file "~/.emacs.d/savehist")
@@ -683,89 +680,88 @@
 	  )
 	)
     #+end_src
-*** Ivy
-**** ivy
-    #+begin_src emacs-lisp
-      (use-package ivy
-	:diminish (ivy-mode . "")
-	:init (ivy-mode 1)
-	:config
-	(setq ivy-use-virtual-buffers t
-	      ivy-count-format "%d/%d ")
-	)
-    #+end_src
-***** posframe
-    #+begin_src emacs-lisp
-      (use-package ivy-posframe
-	:after ivy
-	:diminish
-	:init (ivy-posframe-mode 1)
-	:config 
-	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
-	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
-	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
-	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
-	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))) 
-	(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-window-center))) 
-	;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-point))) 
-	)
-    #+end_src
-**** counsel
-    #+begin_src emacs-lisp
-      (use-package counsel
-	:after ivy
-	:diminish
-	:config
-	(defun ivy-with-thing-at-point (cmd)
-	  (let ((ivy-initial-inputs-alist
-		 (list
-		  (cons cmd (thing-at-point 'symbol)))))
-	    (funcall cmd)))
-
-	;; Example 1
-	(defun counsel-rg-thing-at-point ()
-	  (interactive)
-	  (ivy-with-thing-at-point 'counsel-rg))
-
-	:general
-	;; TODO change rest of general def's to use this instead of nmap?
-	(my-leader-def
-	  :states '(normal visual emacs motion)
-	  :prefix "SPC"
-	  :keymaps 'override
-	  :non-normal-prefix "M-SPC"
-	  "ff" 'counsel-find-file
-	  ":" '(counsel-M-x :which-key "M-x")
-	  "bb" '(switch-to-buffer :which-key "Switch to buffer")
-	  "bd" '(my/kill-this-buffer :which-key "Kill Buffer")
-	  "*" '(counsel-rg-thing-at-point :which-key "Search at point")
-	  "sp" '(counsel-rg :which-key "Search project")
-	  "ss"  '(swiper :which-key "swiper")
-	  "sS"  '(swiper-thing-at-point :which-key "swiper at point")
-	  )
-	)
-    #+end_src
-***** counsel-projectile 
-    #+begin_src emacs-lisp
-      (use-package counsel-projectile 
-	:after ivy
-	:diminish
-	:config
-	:general
+*** Helm
+#+begin_src emacs-lisp
+  (use-package helm-swoop
+    :init
+    (setq helm-swoop-split-with-multiple-windows t
+	  helm-swoop-split-direction 'split-window-vertically
+	  helm-swoop-speed-or-color t
+	  helm-swoop-split-window-function 'helm-default-display-buffer
+	  helm-swoop-pre-input-function (lambda () ""))
+    :general
 	(my-leader-def
 	  :states '(normal visual emacs motion)
 	  :prefix "SPC"
 	  :keymaps 'override
 	  :non-normal-prefix "M-SPC"
 	  :prefix "SPC"
-	  "pp"  '(counsel-projectile-switch-project :which-key "switch project")
-	  "pb"  '(counsel-projectile-switch-to-buffer :which-key "switch buffer")
-	  "pf" 'counsel-projectile-find-file
-	  "SPC" 'counsel-projectile-find-file
-	  )
+	:prefix "SPC"
+	"ss" '(helm-swoop :which-key "helm swoop")
 	)
-    #+end_src
+    )
+
+    (use-package helm
+      :init
+      (setq helm-M-x-fuzzy-match t
+	    helm-mode-fuzzy-match t
+	    helm-buffers-fuzzy-matching t
+	    helm-recentf-fuzzy-match t
+	    helm-locate-fuzzy-match t
+	    helm-semantic-fuzzy-match t
+	    helm-imenu-fuzzy-match t
+	    helm-completion-in-region-fuzzy-match t
+	    helm-candidate-number-list 80
+	    ;; helm-split-window-in-side-p t
+	    helm-move-to-line-cycle-in-source t
+	    helm-echo-input-in-header-line t
+	    helm-autoresize-max-height 0
+	    helm-autoresize-min-height 20
+	    helm-always-two-windows t
+	    )
+      :general
+      ;; TODO change rest of general def's to use this instead of nmap?
+      (my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
+	"ff" 'helm-find-files
+	":" '(helm-M-x :which-key "M-x")
+	"bb" '(switch-to-buffer :which-key "Switch to buffer")
+	"bd" '(my/kill-this-buffer :which-key "Kill Buffer")
+	"sp" '(helm-projectile-rg :which-key "Search Projectile Project")
+	)
+      :config
+      ;; (use-package helm-flx)
+      ;; (use-package helm-fuzzier)
+      (use-package helm-rg)
+      (helm-mode 1)
+      ;; (helm-flx-mode 1)
+      ;; (helm-fuzzier-mode 1)
+      :bind (:map helm-map
+		  ("<tab>" . helm-execute-persistent-action)
+		  ("C-h" . helm-find-files-up-one-level)
+		  ("<backtab>" . helm-find-files-up-one-level)
+		  ("C-z" . helm-select-action)
+		  )
+      )
+
+    (use-package helm-projectile
+      :general
+	(my-leader-def
+	  :states '(normal visual emacs motion)
+	  :prefix "SPC"
+	  :keymaps 'override
+	  :non-normal-prefix "M-SPC"
+	  :prefix "SPC"
+	"pp"  '(helm-projectile-switch-project :which-key "switch project")
+	"pb"  '(helm-projectile-switch-to-buffer :which-key "switch buffer")
+	"pf" 'helm-projectile-find-file
+	"SPC" 'helm-projectile-find-file
+	)
+      )
+#+end_src
 *** nix-mode
     #+begin_src emacs-lisp
       (use-package nix
