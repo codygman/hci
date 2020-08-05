@@ -868,9 +868,20 @@
 ** Random Things TODO
 *** BIG NOTE: crib from [[file:~/code/minimal-emacs-literate-workflow/init.el::;; prevent gc during startup][minimal-emacs-literate-workflow config]]
     also https://git.sr.ht/~codygman/emacs-config/tree/master
+*** TODO setup chatting programs with matterbridge
+    - irc (just use rcirc, erc, or something)
+    
+      Then within that same client I should be able to access:
+
+    - Discord 
+    - functional programming slack
+    - teams
+
 *** TODO try helm again and see if helm-rg is fixed
 https://www.reddit.com/r/emacs/comments/htbjeb/helmprojectilerg_is_not_working_as_expected_not/
 https://github.com/cosmicexplorer/helm-rg/pull/25 (it's merged into master)
+
+Hm, need to fix =SPC b b= not working because I guess helm isn't loaded yet.. it works after doing any other helm related thing
 
 seems to be working pretty well... what about helm posframe?
 
