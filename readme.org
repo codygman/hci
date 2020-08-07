@@ -530,9 +530,9 @@
 	(defun exwm-rename-buffer ()
 	  (interactive)
 	  (exwm-workspace-rename-buffer
-	   (concat exwm-class-name ":"
-		   (if (<= (length exwm-title) 50) exwm-title
-		     (concat (substring exwm-title 0 49) "...")))))
+	   (concat exwm-class-name ": "
+		   (if (<= (length exwm-title) 75) exwm-title
+		     (concat (substring exwm-title 0 74) "...")))))
 
 	;; Add these hooks in a suitable place (e.g., as done in exwm-config-default)
 	(add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
