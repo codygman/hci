@@ -37,6 +37,7 @@ in
       extraPackages = epkgs: with epkgs; [
         async
         buttercup
+        counsel
         company
         company-lsp
         use-package
@@ -68,6 +69,7 @@ in
           });
         }) )
         helm-swoop
+        ivy
         ( lsp-mode.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {
             src = pkgs.fetchFromGitHub {
