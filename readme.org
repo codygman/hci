@@ -424,6 +424,7 @@
       (use-package ob-restclient)
     #+end_src
 *** exwm
+**** config
     #+begin_src emacs-lisp
       (use-package exwm
 	:init
@@ -451,6 +452,36 @@
 	(add-to-list 'exwm-input-prefix-keys ?\  )
 	)
     #+end_src
+**** notes
+***** make sure by default clicking links opens in same tab, or when I use =f= in firefox to highlight/select a link using vimium or saka
+#+begin_example 
+# default for this was 2 for me, set to 0
+browser.link.open_newwindow.restriction
+
+# default was 0 for me, need to set to 1
+browser.link.open_newwindow.restriction
+#+end_example
+
+****** see 
+       #+begin_example 
+         Hello iSkyiera
+
+         In the Location bar, type about:config and press Enter. The about:config "This might void your warranty!" warning page may appear.
+
+         Click I'll be careful, I promise!, to continue to the about:config page.
+
+         At the Search area type(or copy/paste the next)
+         browser.link.open_newwindow.restriction then, double-click on it
+         and change the value to 0 (zero)
+
+         click OK. 
+
+         Do the same with the :
+         browser.link.open_newwindow
+         and change the value to 1 (one) 
+       #+end_example
+
+
 *** ediff
     #+begin_src emacs-lisp
       (use-package ediff

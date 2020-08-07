@@ -43,6 +43,7 @@ in
         use-package
         haskell-mode
         elm-mode
+        exwm
         evil
         evil-magit
         evil-collection
