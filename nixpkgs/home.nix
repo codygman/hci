@@ -3,8 +3,9 @@
 let
   sources = import ./nix/sources.nix;
   emacs-overlay = sources.emacs-overlay {};
-  # mylorri = sources.lorri;
+  mylorripkg = sources.lorri;
   pkgs = import sources.nixpkgs { overlays = [ (import sources.emacs-overlay) ];};
+  mylorri = pkgs.callPackage mylorripkg {};
   home-manager = import sources.home-manager {};
   myEnv = builtins.getEnv "MYENV";
   lib = pkgs.lib;
@@ -34,20 +35,41 @@ in
       # package = if builtins.getEnv "TRAVIS_OS_NAME" == "" then emacs-overlay.emacs else pkgs.emacs-nox;
       package = pkgs.emacsGit;
       extraPackages = epkgs: with epkgs; [
+        async
         buttercup
+        counsel
         company
         company-lsp
         use-package
         haskell-mode
+        elm-mode
         evil
         evil-magit
         evil-collection
+        ( forge.override (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            src = pkgs.fetchFromGitHub {
+              owner = "magit";
+              repo = "forge";
+              rev = "2c487465d0b78ffe34252b47fcc06e27039330c4";
+              sha256 = "08c44ljvni2rr8d8ph3rzw7qrj7czx94m50bx455d8vv0snx0sv6";
+            };
+          });
+        }) )
         helm
         helm-projectile
-        helm-rg
+        ( helm-rg.override (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            src = pkgs.fetchFromGitHub {
+              owner = "cosmicexplorer";
+              repo = "helm-rg";
+              rev = "ee0a3c09da0c843715344919400ab0a0190cc9dc";
+              sha256 = "0m4l894345n0zkbgl0ar4c93v8pyrhblk9zbrjrdr9cfz40bx2kd";
+            };
+          });
+        }) )
         helm-swoop
-        helm-flx
-        helm-fuzzier
+        ivy
         ( lsp-mode.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {
             src = pkgs.fetchFromGitHub {
@@ -58,18 +80,41 @@ in
             };
           });
         }) )
-        lsp-haskell
-        lsp-ui
+        ( lsp-haskell.override (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            src = pkgs.fetchFromGitHub {
+              owner = "emacs-lsp";
+              repo = "lsp-haskell";
+              rev = "17d7d4c6615b5e6c7442828720730bfeda644af8";
+              sha256 = "1kkp63ppmi3p0p6qkfpkr8p5cx8qggmsj73dwphv90mdq0nrfsx8";
+            };
+          });
+        }) )
+        ( lsp-ui.override (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            src = pkgs.fetchFromGitHub {
+              owner = "emacs-lsp";
+              repo = "lsp-ui";
+              rev = "7d5326430eb88a58e111cb22ffa42c7d131e5052";
+              sha256 = "1f2dxxajckwqvpl8cxsp019404sncllib5z2af0gzs7y0fs7b2dq";
+            };
+          });
+        }) )
         magit
         nix-mode
+        ob-restclient
+        ox-gfm
         direnv
         doom-themes
         flycheck
         flycheck-haskell
         general
+        olivetti
         projectile
+        ts
         with-simulated-input
         which-key
+        yasnippet
       ];
     };
 
@@ -78,6 +123,11 @@ in
       enable = true;
       userName = "codygman";
       userEmail = lib.mkDefault "cody@codygman.dev";
+      extraConfig = {
+        github = {
+          user = "codygman";
+        };
+      };
     };
     direnv = {
       enable = true;
@@ -111,7 +161,8 @@ in
     packages = with pkgs; [
       # cachix # not sure what was wrong here
       # ghcide # having this by default would be nice for the ghc I'm using most at the time
-      # mylorri # TODO
+      # home-manager.home-manager
+      mylorri # TODO
       # niv # not defined?
       # will need to ensure cachix by ci and cachix version here match
       cmake
@@ -131,12 +182,16 @@ in
       sqlite
       sqlite
       stack
+      xvfb_run
     ];
   };
 
   services = {
     lorri = {
-      # package = mylorri;
+      package = mylorri;
+      enable = true;
+    };
+    syncthing = {
       enable = true;
     };
     redshift = {
@@ -144,16 +199,14 @@ in
       latitude = "32.7767";
       longitude = "96.7970";
       brightness = {
-        # Day and night mixed up, lol
         day = "0.4";
-        night = "0.8";
+        night = "0.4";
       };
       tray = false;
       provider = "manual";
       temperature = {
-        # Day and night mixed up, lol
-        night = 5501;
         day = 3501;
+        night = 3501;
       };
       extraOptions = ["-v"];
     };

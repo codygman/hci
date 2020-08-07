@@ -131,9 +131,10 @@
   (goto-char (point-max))
   (evil-append-line 1)
   (insert "1")
-  (haskell-interactive-mode-return)
   (log (format "max timeout for %s is %d" action max-ghci-wait))
-  (with-timeout (max-ghci-wait (error "action '%s' took more than %.1f seconds in ghci '%s'" action max-ghci-wait (buffer-name)))
+  (haskell-interactive-mode-return)
+  (with-timeout ( max-ghci-wait
+		 (error "action '%s' took more than %.1f seconds in ghci '%s'" action max-ghci-wait (buffer-name)))
     (while (not (re-search-backward expected-output-rgx nil t))
       (goto-char (point-max))
       (sit-for 0.1)
@@ -145,51 +146,12 @@
   
   )
 
-(ert-deftest ghci-has-locals-in-scope ()
-  (interactive)
-  (find-file (emacs-d-directory-for "testdata/simple-haskell-project/Main.hs"))
-  ;; (my-append-string-to-file "START load-file\n" "debug")
-  (haskell-process-load-file)
-  (with-current-buffer "*simple-haskell-project*"
-    (wait-for-ghci "initial load" "^1$" 10)
-    (evil-append-line 1)
-    (insert ":t functionWeWantInScope")
-    (haskell-interactive-mode-return)
-    (wait-for-ghci ":t functionWeWantInScope" "^func.+)$" 5)
-    (evil-previous-line 1)
-    (copy-line 1))
-  (should (string-equal
-           (string-trim (substring-no-properties (nth 0 kill-ring)))
-           "functionWeWantInScope :: ()")))
-
 ;; evil
 (ert-deftest ctrl-u-scrolls-up ()
   (find-file (emacs-d-directory-for "testdata/loremipsum.txt"))
   (execute-kbd-macro (kbd "G"))
   (execute-kbd-macro (kbd "C-u"))
   (log "ctrl-u-scrolls-up passed"))
-
-
-;; helm
-;;; helm projectile
-;;;; TODO can add known projects with helm
-;; TODO for some reason after adding haskell-flycheck-squiggly-appears-underneath-misspelled-function it caused this one to fail
-
-(ert-deftest projectile-switch-projects-to-magit-works ()
-  ;; find our own git project to test projectile on since we know we'll have it both locally and in CI always
-  (projectile-clear-known-projects)
-  (projectile-add-known-project (emacs-d-directory-for ""))
-  ;; ensure that we can successfully switch to magit for a given project
-  (should (string-equal
-	   "magit: hci"
-	   (save-excursion
-	     (with-simulated-input
-		 '("hci"
-		   (wsi-simulate-idle-time 0.5)
-		   "M-g")
-	       (helm-projectile-switch-project))
-	     (buffer-name))))
-  (log "projectile-switch-projects-to-magit-works passed"))
 
 
 (require 'cl) ;; TODO necessary?
@@ -241,52 +203,79 @@
 
   (log "haskell-flycheck-squiggly-appears-underneath-misspelled-function passed"))
 
+(ert-deftest indent-region-fixes-old-wrong-indentation-when-called-in-org ()
+  (find-file (emacs-d-directory-for "testdata/test-indent.org"))
+  (outline-show-all)
+  (execute-kbd-macro (kbd "gg")) ;; top of file
+  (execute-kbd-macro (kbd "j")) ;; move down to text
+  (evil-indent (line-beginning-position) (line-end-position))
+  (let ((file-contents
+	 (buffer-substring-no-properties (point-min) (point-max)))
+	(correctly-indented-file-contents "
+***** TODO The text above isn't aligned properly! 
+      Aggressive indent mode or something fixes this I think?
+")
+	)
+    (should (string-equal
+	     (string-trim correctly-indented-file-contents)
+	     (string-trim file-contents))))
+  )
+
+
+(ert-deftest dont-create-autosave-file-in-same-directory ()
+  (find-file (emacs-d-directory-for "testdata/loremipsum.txt"))
+  (goto-char (point-max))
+  (insert "foobarhahahahhaha")
+  (sit-for 3) ;; TODO come back and lower me
+  (let ((litter-file1-exists (file-exists-p (emacs-d-directory-for "testdata/#loremipsum.txt#"))))
+    (should (not litter-file1-exists))
+    ))
 
 ;; (ert-deftest haskell-nix-stack-workflow-isolated-flycheck-works () )
-  ;; (kill-all-buffers-except-ert)
-  ;; (cd (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/"))
-  ;; TODO bust lorri cache and try this... it won't work. There always needs ot be a cached build or things will fail at the project discovery and configuration level. Any way around this?
-  ;; (direnv-allow);; TODO this doesn't actually work if you direnv deny this project :/
-  ;; (find-file (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/app/Main.hs"))
-  ;; (sit-for 2)
-  ;; (should (executable-find "hpack"))
-  ;; (direnv-update-directory-environment (emacs-d-directory-for "testdata/simple-haskell-project/"))
-  ;; (trace-function 'direnv-update-directory-environment)
-  ;; (message "exec-path: %s\n" exec-path)
+;; (kill-all-buffers-except-ert)
+;; (cd (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/"))
+;; TODO bust lorri cache and try this... it won't work. There always needs ot be a cached build or things will fail at the project discovery and configuration level. Any way around this?
+;; (direnv-allow);; TODO this doesn't actually work if you direnv deny this project :/
+;; (find-file (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/app/Main.hs"))
+;; (sit-for 2)
+;; (should (executable-find "hpack"))
+;; (direnv-update-directory-environment (emacs-d-directory-for "testdata/simple-haskell-project/"))
+;; (trace-function 'direnv-update-directory-environment)
+;; (message "exec-path: %s\n" exec-path)
 
-  ;; (when (not flycheck-ghc-args)
-  ;;   (log "no flycheck ghc args set, killing and re-opening buffer")
-  ;;   (set-buffer-modified-p nil)
-  ;;   (kill-this-buffer)
-  ;;   (flycheck-haskell-clear-config-cache)
-  ;;   (flycheck-haskell-configure)
-  ;;   (sit-for 1)
-  ;;   (find-file (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/app/Main.hs")))
+;; (when (not flycheck-ghc-args)
+;;   (log "no flycheck ghc args set, killing and re-opening buffer")
+;;   (set-buffer-modified-p nil)
+;;   (kill-this-buffer)
+;;   (flycheck-haskell-clear-config-cache)
+;;   (flycheck-haskell-configure)
+;;   (sit-for 1)
+;;   (find-file (emacs-d-directory-for "testdata/haskell-nix-stack-workflow/app/Main.hs")))
 
-  ;; (flycheck-mode nil)
-  ;; (flycheck-haskell-clear-config-cache)
-  ;; (funcall-interactively (flycheck-haskell-configure))
-  ;; (flycheck-mode 1)
+;; (flycheck-mode nil)
+;; (flycheck-haskell-clear-config-cache)
+;; (funcall-interactively (flycheck-haskell-configure))
+;; (flycheck-mode 1)
 
-  ;; (replace-string "someFunc" "someFuncooooo")
-  ;; (execute-kbd-macro (kbd "4h"))
-  ;; ;; sit for long enough for a flycheck syntax check to start
-  ;; (sit-for .5)
-  ;; (with-timeout (2 (message "5 seconds passed, skipping haskell-flycheck-squiggly-appears-underneath-misspelled-function"))
-  ;;   (while flycheck-current-syntax-check
-  ;;     (sit-for 1)
-  ;;     )
-  ;;   )
-  ;; (sit-for 5)
+;; (replace-string "someFunc" "someFuncooooo")
+;; (execute-kbd-macro (kbd "4h"))
+;; ;; sit for long enough for a flycheck syntax check to start
+;; (sit-for .5)
+;; (with-timeout (2 (message "5 seconds passed, skipping haskell-flycheck-squiggly-appears-underneath-misspelled-function"))
+;;   (while flycheck-current-syntax-check
+;;     (sit-for 1)
+;;     )
+;;   )
+;; (sit-for 5)
 
-  ;; (should (eq 'flycheck-error (get-char-property (point) 'face)))
-  ;; ;; NOTE keeping this buffer open somehow made projectile-switch-projects-to-magit-works fail
-  ;; ;; TODO can we make this local?
-  ;; (set-buffer-modified-p nil)
+;; (should (eq 'flycheck-error (get-char-property (point) 'face)))
+;; ;; NOTE keeping this buffer open somehow made projectile-switch-projects-to-magit-works fail
+;; ;; TODO can we make this local?
+;; (set-buffer-modified-p nil)
 
-  ;; (kill-this-buffer)
+;; (kill-this-buffer)
 
-  ;; (log "haskell-nix-stack-workflow-isolated-flycheck-works passed"))
+;; (log "haskell-nix-stack-workflow-isolated-flycheck-works passed"))
 
 ;; (ert-deftest nix-highlighting-works-in-nix-file ()
 ;;   (find-file (emacs-d-directory-for "testdata/sample.nix"))

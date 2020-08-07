@@ -9,8 +9,12 @@
       # NOTE maybe see if https://github.com/ryantm/home-manager-template has anything I can use or if I should switch to it if applicable
     ];
 
+  nixpkgs.config.allowUnfree = true;
+
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    # kernelPackages = pkgs.linuxPackages_latest;
+    kernelModules = [ "nvidia" ];
+    extraModulePackages = [ config.boot.kernelPackages.exfat-nofuse ];
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -18,15 +22,20 @@
   };
 
   networking = {
-    hostName = "razer"; # Define your hostname.
+    hostName = "hci"; # I should make this machine specific.. maybe.. but while it's not why not call it hci :)
     networkmanager.enable = true;
     # The global useDHCP flag is deprecated, therefore explicitly set to false here.
     useDHCP = false;
-    interfaces.wlp2s0.useDHCP = true;
+
+    # TODO I think these might be machine specific!
+    # at least... when I used the one from my laptop on my desktop... I always failed to nixos-rebuild switch on some wireless error about ncsd
+    interfaces.enp24s0.useDHCP = true;
+    interfaces.wlp26s0.useDHCP = true;
+
     # Open ports in the firewall.
     firewall = {
-      # allowedTCPPorts = [ ... ];
-      # allowedUDPPorts = [ ... ];
+      allowedTCPPorts = [ 22000 ];
+      allowedUDPPorts = [ 21027 ];
     };
     # unused, but potentially useful later
     # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -61,11 +70,25 @@
       # Enable the KDE Desktop Environment.
       displayManager.sddm.enable = true;
       desktopManager.plasma5.enable = true;
+      videoDrivers = [ "nvidia" ];
     };
     # Enable the OpenSSH daemon.
     # openssh.enable = true;
     # Enable CUPS to print documents.
     # printing.enable = true;
+
+    openssh = {
+      enable = false;
+      ports = [22];
+      permitRootLogin = "yes";
+      passwordAuthentication = false;
+    };
+
+    duplicati = {
+      enable = true;
+      user = "cody";
+    };
+
   };
 
   # Enable sound.
@@ -75,6 +98,12 @@
 
   hardware = {
     pulseaudio.enable = true;
+    opengl = {
+      extraPackages = [
+            pkgs.libGL_driver
+            pkgs.linuxPackages.nvidia_x11.out
+      ];
+    };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -83,6 +112,8 @@
     extraGroups = [ "wheel" "network-manager" "networkmanager" ]; # Enable ‘sudo’ for the user.
   };
   home-manager.users.cody = import ./home.nix;
+
+  # virtualisation.virtualbox.host.enable = true;  
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

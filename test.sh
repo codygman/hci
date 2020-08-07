@@ -15,9 +15,10 @@ fi
 
 # if this is github actions, we want to run this in it's own block for more granular timing info
 # if not, we're running it locally and just want to run it
-if [ -z "$GITHUB_ACTIONS" ]; then
-    echo "We are running locally, running ert tests..."
-    bash run-ert-tests.sh
-else 
-    echo "in github action, ert tests will be run directly"
-fi
+# if [ -z "$GITHUB_ACTIONS" ]; then
+#     echo "We are running locally, running ert tests..."
+#     bash run-ert-tests.sh
+# else 
+#     echo "in github action, ert tests will be run directly"
+# fi
+bash run-ert-tests.sh

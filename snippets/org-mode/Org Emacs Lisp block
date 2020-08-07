@@ -1,0 +1,7 @@
+# key: elisp
+# name: Org Emacs Lisp block
+# --
+#+begin_src emacs-lisp$1
+$2
+#+end_src
+$0
