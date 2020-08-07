@@ -37,11 +37,13 @@ in
       extraPackages = epkgs: with epkgs; [
         async
         buttercup
+        counsel
         company
         company-lsp
         use-package
         haskell-mode
         elm-mode
+        exwm
         evil
         evil-magit
         evil-org
@@ -56,12 +58,20 @@ in
             };
           });
         }) )
+        helm
+        helm-projectile
+        ( helm-rg.override (args: {
+          melpaBuild = drv: args.melpaBuild (drv // {
+            src = pkgs.fetchFromGitHub {
+              owner = "cosmicexplorer";
+              repo = "helm-rg";
+              rev = "ee0a3c09da0c843715344919400ab0a0190cc9dc";
+              sha256 = "0m4l894345n0zkbgl0ar4c93v8pyrhblk9zbrjrdr9cfz40bx2kd";
+            };
+          });
+        }) )
+        helm-swoop
         ivy
-        ivy-posframe
-        ivy-rich
-        counsel
-        swiper
-        counsel-projectile
         ( lsp-mode.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {
             src = pkgs.fetchFromGitHub {
@@ -181,6 +191,9 @@ in
   services = {
     lorri = {
       package = mylorri;
+      enable = true;
+    };
+    syncthing = {
       enable = true;
     };
     redshift = {
