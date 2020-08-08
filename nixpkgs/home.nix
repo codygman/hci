@@ -28,6 +28,10 @@ in
       path = "${home-manager.path}";
     };
 
+    gpg = {
+      enable = true;
+    };
+
     vim.enable = true;
 
     emacs = {
@@ -178,6 +182,7 @@ in
       graphviz
       libnotify
       nox
+      pinentry
       ripgrep
       signal-desktop
       source-code-pro
@@ -211,6 +216,15 @@ in
         night = 3501;
       };
       extraOptions = ["-v"];
+    };
+    gpg-agent = {
+      enable = true;
+      # pinentryFlavor = "curses";
+      extraConfig = ''
+        pinentry-program ${pkgs.pinentry_qt5}/bin/pinentry";
+        allow-emacs-pinentry
+        allow-loopback-pinentry
+      '';
     };
   };
 
