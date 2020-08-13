@@ -5,10 +5,10 @@
         "homepage": "",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "ae94baffd2d403c96f9a5fcfcfe814f296ccd51c",
-        "sha256": "1ww02ar1k9b7ls376hylfh1yr2lg0lkky42yccc9vfz0sdwacqx8",
+        "rev": "b9e017b0d91c18f404f3e62cce1329b34d75778c",
+        "sha256": "1kih2x5ji4985yqkz1vnl34y5aq5q93061z80b9wjj9ha3hsdc0f",
         "type": "tarball",
-        "url": "https://github.com/nix-community/emacs-overlay/archive/ae94baffd2d403c96f9a5fcfcfe814f296ccd51c.tar.gz",
+        "url": "https://github.com/nix-community/emacs-overlay/archive/b9e017b0d91c18f404f3e62cce1329b34d75778c.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "home-manager": {
@@ -17,10 +17,10 @@
         "homepage": "https://rycee.gitlab.io/home-manager/",
         "owner": "rycee",
         "repo": "home-manager",
-        "rev": "7f7348b47049e8d25fb5b98db1d6215f8f643f0d",
-        "sha256": "1s8j8h42k354xzwlqizbzxlqvsagx7yrxl20qfxgxmx522ajw63p",
+        "rev": "f4f9f1a618eb7c19b765b02c235e13657b5aa150",
+        "sha256": "0bja41nbps39y25r673yy8k2dywajzamp1nh2idyfn8sqc0scrk5",
         "type": "tarball",
-        "url": "https://github.com/rycee/home-manager/archive/7f7348b47049e8d25fb5b98db1d6215f8f643f0d.tar.gz",
+        "url": "https://github.com/rycee/home-manager/archive/f4f9f1a618eb7c19b765b02c235e13657b5aa150.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "lorri": {
@@ -29,10 +29,10 @@
         "homepage": "",
         "owner": "target",
         "repo": "lorri",
-        "rev": "11693cfd38e7a8d1bf5c16c4e7f6c24c4f8b0479",
-        "sha256": "0i6zxsccb1ldc7qbwy9jpikcvd01bfj36y63by8js0927wqx2bpx",
+        "rev": "fff30c05a3d538177bbac442e9ade4bb279ef2a7",
+        "sha256": "1x8zdzkl8yx49xa9c1hid2hy464mlr0jqq6ngphr4d4wdxs03bin",
         "type": "tarball",
-        "url": "https://github.com/target/lorri/archive/11693cfd38e7a8d1bf5c16c4e7f6c24c4f8b0479.tar.gz",
+        "url": "https://github.com/target/lorri/archive/fff30c05a3d538177bbac442e9ade4bb279ef2a7.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "niv": {
@@ -41,22 +41,22 @@
         "homepage": "https://github.com/nmattia/niv",
         "owner": "nmattia",
         "repo": "niv",
-        "rev": "f73bf8d584148677b01859677a63191c31911eae",
-        "sha256": "0jlmrx633jvqrqlyhlzpvdrnim128gc81q5psz2lpp2af8p8q9qs",
+        "rev": "84827485e2eff1681b9a2834ef10b8eba6bf341c",
+        "sha256": "0qjrf0bqr1lis0kl2vnwvr745qiy9dbm7kdj0i2rhq4r9bngqnrl",
         "type": "tarball",
-        "url": "https://github.com/nmattia/niv/archive/f73bf8d584148677b01859677a63191c31911eae.tar.gz",
+        "url": "https://github.com/nmattia/niv/archive/84827485e2eff1681b9a2834ef10b8eba6bf341c.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
-        "branch": "nixos-19.09",
+        "branch": "nixos-unstable",
         "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",
         "homepage": "https://github.com/NixOS/nixpkgs",
         "owner": "NixOS",
         "repo": "nixpkgs-channels",
-        "rev": "289466dd6a11c65a7de4a954d6ebf66c1ad07652",
-        "sha256": "0r5ja052s86fr54fm1zlhld3fwawz2w1d1gd6vbvpjrpjfyajibn",
+        "rev": "32b46dd897ab2143a609988a04d87452f0bbef59",
+        "sha256": "1gzfrpjnr1bz9zljsyg3a4zrhk8r927sz761mrgcg56dwinkhpjk",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs-channels/archive/289466dd6a11c65a7de4a954d6ebf66c1ad07652.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs-channels/archive/32b46dd897ab2143a609988a04d87452f0bbef59.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
