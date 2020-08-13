@@ -83,18 +83,6 @@
       # Enable the X11 windowing system.
       enable = true;
 
-
-      # Enable the KDE Desktop Environment.
-      displayManager.sddm.enable = true;
-      desktopManager.plasma5.enable = true;
-      windowManager = {
-        exwm = {
-          enable = true;
-          enableDefaultConfig = false;
-        };
-      };
-
-
       libinput = {
         enable = true;
         tapping = true;
