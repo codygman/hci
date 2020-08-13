@@ -122,7 +122,7 @@ in
       enable = true;
     };
     redshift = {
-      enable = true;
+      enable = false;
       latitude = "32.7767";
       longitude = "96.7970";
       brightness = {
