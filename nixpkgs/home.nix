@@ -22,6 +22,13 @@ in
     ];
   };
 
+  xsession = {
+    enable = true;
+    windowManager.command = ''
+      ${myemacs}/bin/emacs --eval '(progn (server-start) (exwm-enable))'
+    '';
+  };
+
   programs = {
     home-manager = {
       enable = true;
