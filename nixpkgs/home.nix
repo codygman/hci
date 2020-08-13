@@ -111,6 +111,9 @@ in
   };
 
   services = {
+    picom = {
+      enable = true;
+    };
     lorri = {
       package = mylorri;
       enable = true;

@@ -94,11 +94,6 @@
       xkbOptions = "ctrl:swapcaps";
     };
 
-    compton = {
-      enable = false;
-      shadow = true;
-      inactiveOpacity = "0.8";
-    };
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
