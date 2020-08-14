@@ -526,6 +526,7 @@
 	      `(([?\s-r] . exwm-reset)
 		([?\s-i] . exwm-input-release-keyboard)
 		;; convenience keybinding, meant to mimic `esc' in Vim bindings
+		([?\s-\ ] . helm-run-external-command)
 		([?\s-\[] . exwm-reset)))
 	(defun exwm-rename-buffer ()
 	  (interactive)
