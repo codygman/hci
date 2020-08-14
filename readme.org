@@ -539,7 +539,8 @@
 	(add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
 	(add-hook 'exwm-update-title-hook 'exwm-rename-buffer)	:config
 	(require 'exwm)
-
+     (require 'exwm-systemtray)
+     (exwm-systemtray-enable)
 	(exwm-enable)
 	;; stop exwm from catching SPC leader key.
 	;; the double whitespace is intentional
