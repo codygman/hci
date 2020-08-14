@@ -122,7 +122,7 @@ in
       enable = true;
     };
     redshift = {
-      enable = false;
+      enable = true;
       latitude = "32.7767";
       longitude = "96.7970";
       brightness = {
@@ -132,8 +132,8 @@ in
       tray = false;
       provider = "manual";
       temperature = {
-        day = 3501;
-        night = 3501;
+        day = 4501;
+        night = 4501;
       };
       extraOptions = ["-v"];
     };
