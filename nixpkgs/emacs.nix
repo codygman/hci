@@ -79,6 +79,7 @@
     flycheck-haskell
     general
     olivetti
+    org-reverse-datetree
     projectile
     ts
     with-simulated-input
