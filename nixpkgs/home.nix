@@ -99,6 +99,7 @@ in
       gnumake
       graphviz
       libnotify
+      (let neuronSrc = builtins.fetchTarball "https://github.com/srid/neuron/archive/8894f9449d04b05d58f41c9b71472333eaaa4471.tar.gz"; in import neuronSrc {})
       nox
       ripgrep
       signal-desktop
