@@ -454,48 +454,53 @@
     #+end_src
 *** org
     #+begin_src emacs-lisp
-    (use-package org-capture
-    :after org
-    :hook
-    (org-capture-mode . evil-insert-state))
-      (use-package org
-        :init 
-        (defun my-day-org-agenda ()
-          (interactive)
-          (let ((org-agenda-span 'day))
-            (org-agenda nil "a")
-            (progn (switch-to-buffer "*Org Agenda*") (delete-other-windows))
+      (use-package org-capture
+      :after org
+      :hook
+      (org-capture-mode . evil-insert-state))
+        (use-package org
+          :init 
+          (defun my-day-org-agenda ()
+            (interactive)
+            (let ((org-agenda-span 'day))
+              (org-agenda nil "a")
+              (progn (switch-to-buffer "*Org Agenda*") (delete-other-windows))
+              ))
+          :config
+          (setq
+           org-agenda-files '("~/org/")
+           org-directory "~/org"
+           org-capture-templates
+                '(("t" "Todo" entry (file+headline "~/org/inbox.org" "Inbox")
+                   "* TODO %?\n  %i\n  %a")
+                  ("j" "Journal" entry (file+datetree "~/org/journal.org")
+                   "* %?\nEntered on %U\n  %i\n  %a")
+                  ("bu" "org reverse datetree test" entry
+                   (file+function "/tmp/foo.org"
+                                  org-reverse-datetree-goto-date-in-file)
+                   "* [[%^{URL}][%^{Description}]] %^g %?")
+                  ))
+          :general
+          (my-leader-def
+            :states '(normal visual emacs motion)
+            :prefix "SPC"
+            :keymaps 'override
+            :non-normal-prefix "M-SPC"
+            :prefix "SPC"
+            "oc"  '(counsel-org-capture :which-key "counsel org capture")
+            "oa"  '(my-day-org-agenda :which-key "org-agenda")
+            "oA"  '(org-agenda :which-key "org-agenda")
             ))
-        :config
-        (setq
-         org-agenda-files '("~/org/")
-         org-directory "~/org"
-         org-capture-templates
-              '(("t" "Todo" entry (file+headline "~/org/inbox.org" "Inbox")
-                 "* TODO %?\n  %i\n  %a")
-                ("j" "Journal" entry (file+datetree "~/org/journal.org")
-                 "* %?\nEntered on %U\n  %i\n  %a")))
-        :general
-        (my-leader-def
-          :states '(normal visual emacs motion)
-          :prefix "SPC"
-          :keymaps 'override
-          :non-normal-prefix "M-SPC"
-          :prefix "SPC"
-          "oc"  '(counsel-org-capture :which-key "counsel org capture")
-          "oa"  '(my-day-org-agenda :which-key "org-agenda")
-          "oA"  '(org-agenda :which-key "org-agenda")
-          ))
 
-      (use-package evil-org
-        :after org
-        :config
-        (add-hook 'org-mode-hook 'evil-org-mode)
-        (add-hook 'evil-org-mode-hook
-                  (lambda ()
-                    (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
-        (require 'evil-org-agenda)
-        (evil-org-agenda-set-keys))
+        (use-package evil-org
+          :after org
+          :config
+          (add-hook 'org-mode-hook 'evil-org-mode)
+          (add-hook 'evil-org-mode-hook
+                    (lambda ()
+                      (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
+          (require 'evil-org-agenda)
+          (evil-org-agenda-set-keys))
     #+end_src
 **** org babel
     #+begin_src emacs-lisp
@@ -517,6 +522,17 @@
     #+begin_src emacs-lisp
       (use-package ob-restclient)
     #+end_src
+**** org reverse datetree 
+     
+     I think I like these options
+     
+     #+begin_example 
+#+REVERSE_DATETREE_USE_WEEK_TREE: nil
+#+REVERSE_DATETREE_DATE_FORMAT: %Y-%m-%d %A
+#+REVERSE_DATETREE_MONTH_FORMAT: %Y-%m %B
+#+REVERSE_DATETREE_YEAR_FORMAT: %Y
+     #+end_example
+
 *** exwm
 **** config
     #+begin_src emacs-lisp
