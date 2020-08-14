@@ -522,7 +522,11 @@
     #+begin_src emacs-lisp
       (use-package ob-restclient)
     #+end_src
-**** org reverse datetree 
+**** org reverse datetree  for archiving
+     #+begin_src emacs-lisp
+(setq org-archive-location (concat org-directory "/archived.org::"))
+     #+end_src
+
      
      I think I like these options
      
