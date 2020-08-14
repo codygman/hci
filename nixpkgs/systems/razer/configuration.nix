@@ -83,6 +83,10 @@
       # Enable the X11 windowing system.
       enable = true;
 
+      # Enable the KDE Desktop Environment.
+      displayManager.sddm.enable = true;
+      desktopManager.plasma5.enable = true;
+
       libinput = {
         enable = true;
         tapping = true;
@@ -90,7 +94,7 @@
       };
 
       layout = "us";
-      videoDrivers = [ "nvidia" "modesetting" ];
+      # videoDrivers = [ "nvidia" "modesetting" ];
       xkbOptions = "ctrl:swapcaps";
     };
 
