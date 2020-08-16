@@ -524,8 +524,15 @@
       (use-package ob-restclient)
     #+end_src
 **** org reverse datetree  for archiving
+*****  set archive location and default reverse datetree formats
      #+begin_src emacs-lisp
 (setq org-archive-location (concat org-directory "/archived.org::"))
+(setq-default org-reverse-datetree-level-formats
+              '("%Y"                    ; year
+                (lambda (time) (format-time-string "%Y-%m %B" (org-reverse-datetree-monday time))) ; month
+                "%Y W%W"                ; week
+                "%Y-%m-%d %A"           ; date
+                ))
      #+end_src
 
      
@@ -537,6 +544,106 @@
 #+REVERSE_DATETREE_MONTH_FORMAT: %Y-%m %B
 #+REVERSE_DATETREE_YEAR_FORMAT: %Y
      #+end_example
+***** (ehh kinda difficult to integrate) unpackaged function for archiving based on earliest/latest timestamp
+      #+begin_src emacs-lisp
+        (defun unpackaged/org-refile-to-datetree-using-ts-in-entry (which-ts file &optional subtree-p)
+          "Refile current entry to datetree in FILE using timestamp found in entry.
+        WHICH should be `earliest' or `latest'. If SUBTREE-P is non-nil,
+        search whole subtree."
+          (interactive (list (intern (completing-read "Which timestamp? " '(earliest latest)))
+                             (read-file-name "File: " (concat org-directory "/") nil 'mustmatch nil
+                                             (lambda (filename)
+                                               (string-suffix-p ".org" filename)))
+                             current-prefix-arg))
+          (require 'ts)
+          (let* ((sorter (pcase which-ts
+                           ('earliest #'ts<)
+                           ('latest #'ts>)))
+                 (tss (unpackaged/org-timestamps-in-entry subtree-p))
+                 (ts (car (sort tss sorter)))
+                 (date (list (ts-month ts) (ts-day ts) (ts-year ts))))
+            (unpackaged/org-refile-to-datetree file :date date)))
+
+        ;;;###autoload
+        (defun unpackaged/org-timestamps-in-entry (&optional subtree-p)
+          "Return timestamp objects for all Org timestamps in entry.
+         If SUBTREE-P is non-nil (interactively, with prefix), search
+         whole subtree."
+          (interactive (list current-prefix-arg))
+          (save-excursion
+            (let* ((beg (org-entry-beginning-position))
+                   (end (if subtree-p
+                            (org-end-of-subtree)
+                          (org-entry-end-position))))
+              (goto-char beg)
+              (cl-loop while (re-search-forward org-tsr-regexp-both end t)
+                       collect (ts-parse-org (match-string 0))))))
+
+        ;;;###autoload
+        (cl-defun unpackaged/org-refile-to-datetree (file &key (date (calendar-current-date)) entry)
+          "Refile ENTRY or current node to entry for DATE in datetree in FILE."
+          (interactive (list (read-file-name "File: " (concat org-directory "/") nil 'mustmatch nil
+                                             (lambda (filename)
+                                               (string-suffix-p ".org" filename)))))
+          ;; If org-datetree isn't loaded, it will cut the tree but not file
+          ;; it anywhere, losing data. I don't know why
+          ;; org-datetree-file-entry-under is in a separate package, not
+          ;; loaded with the rest of org-mode.
+          (require 'org-datetree)
+          (unless entry
+            (org-cut-subtree))
+          ;; Using a condition-case to be extra careful. In case the refile
+          ;; fails in any way, put cut subtree back.
+          (condition-case err
+              (with-current-buffer (or (org-find-base-buffer-visiting file)
+                                       (find-file-noselect file))
+                (org-datetree-file-entry-under (or entry (car kill-ring)) date)
+                (save-buffer))
+            (error (unless entry
+                     (org-paste-subtree))
+                   (message "Unable to refile! %s" err))))
+      #+end_src
+
+      #+RESULTS:
+      : unpackaged/org-refile-to-datetree
+***** start from org-reverse-datetree function
+****** simple just wrap =org-reverse-datetree-refile-to-file= attempt
+       #+begin_src emacs-lisp :tangle no
+       (defun test1 () (interactive) (org-reverse-datetree-refile-to-file "~/org/archived.org"))
+       #+end_src
+
+       #+RESULTS:
+       : test1
+****** try saying to prefer closed time only and see if that gives right behavior
+       #+begin_src emacs-lisp :tangle no
+       (defun test2 (arg) (interactive "P") (org-reverse-datetree-refile-to-file "~/org/archived.org"
+nil :ask-always arg :prefer '("CREATED_TIME" "CREATED_AT" "CLOSED")))
+       #+end_src
+
+       #+RESULTS:
+       : test2
+****** test2 seems correct
+***** replace default archiving function with our new one
+****** give it a better name
+
+       #+begin_src emacs-lisp
+             (defun archive-to-reverse-datetree (arg)
+               (interactive "P")
+               (org-reverse-datetree-refile-to-file
+                "~/org/archived.org"
+                nil
+                :ask-always arg
+                :prefer '("CREATED_TIME" "CREATED_AT" "CLOSED")))
+       #+end_src
+
+       #+RESULTS:
+       : archive-to-reverse-datetree
+
+****** set the default archiving command
+       #+begin_src emacs-lisp
+       (setq org-archive-default-command 'archive-to-reverse-datetree)
+
+       #+end_src
 
 *** exwm
 **** config
