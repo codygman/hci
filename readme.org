@@ -460,6 +460,7 @@
       (org-capture-mode . evil-insert-state))
         (use-package org
           :init 
+               (setq org-log-done 'time)
           (defun my-day-org-agenda ()
             (interactive)
             (let ((org-agenda-span 'day))
