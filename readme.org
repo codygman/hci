@@ -457,28 +457,19 @@
       (use-package org-capture
         :after org
         :init
-        ;; TODO remove resources.org
-  
-        (let ((filtered-files (-filter (lambda (x) (not (s-contains? "resources.org" x))) (org-agenda-files)))
-              )
-          ;; (type-of filtered-files)
-          ;; (setq org-refile-targets '((filtered-files :maxlevel . 3))
-          ;; 	  )
-          ;; )
 
-          ;; works
-          (setq org-refile-targets '( ("~/org/inbox.org" :maxlevel . 3) )  )
+        ;; TODO figure out how to do this
+        ;; (let ((filtered-files (-filter (lambda (x) (not (s-contains? "resources.org" x))) (org-agenda-files)))
+        ;;       )
+        ;;   (setq org-refile-targets '((filtered-files :maxlevel . 3))
+        ;; 	  )
+        ;;   )
+        ;; works
+        ;; (setq org-refile-targets '( ("~/org/inbox.org" :maxlevel . 3) )  )
 
-
-          ;; doesn't work
-          ;; (setq org-refile-targets '( '("~/org/inbox.org")  :maxlevel . 3 )  )
+        (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
 
 
-          (setq org-refile-targets '( ("~/org/inbox.org" :maxlevel . 3))  )
-
-          ;; (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
-
-  
         (setq org-outline-path-complete-in-steps nil)
         :hook
         (org-capture-mode . evil-insert-state))
