@@ -188,6 +188,7 @@
                           (variable-pitch-mode 1)))
 
               (defun org-mode-visuals ()
+                (setq-default olivetti-body-width 90)
                 (setq org-indent-mode-turns-off-org-adapt-indentation nil)
                 (org-indent-mode 1)
                 (olivetti-mode 1)
