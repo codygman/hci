@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: Org Example Babel
-# key: exb
+# name: Example
+# key: ex
 # --
 #+begin_example
 $1
