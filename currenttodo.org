@@ -1,0 +1,52 @@
+** TODO allow specifying packages in src blocks installed with nix
+*** example
+**** not working, but would after the change
+***** code
+   #+begin_src haskell :haskellPackages lens
+   import Control.Lens
+   :t view
+   #+end_src
+
+   #+RESULTS:
+   : <interactive>:1:1-4: error: Variable not in scope: view
+***** underlying nix command
+**** (different ghc version) not working, but would after change 
+   #+begin_src haskell :ghc 865 :haskellPackages lens
+   import Control.Lens
+   :t view
+   #+end_src
+***** underlying nix command
+      #+begin_src sh
+nix-shell -p "haskellPackages.ghcWithPackages (pkgs: [pkgs.lens])" --run ghci
+      #+end_src
+
+**** (native package dep) not working, but would after change 
+   #+begin_src haskell :haskellPackages lens :packages postgres
+   import Control.Lens
+   :t view
+   #+end_src
+***** underlying nix command
+      #+begin_src sh
+nix-shell -p "haskellPackages.ghcWithPackages (pkgs: [pkgs.lens])" --run ghci
+      #+end_src
+*** inf-haskell.el is the place where this is handled
+    [[file:/nix/store/g4rg24ha1qw5i1v4y70nh5p0bpyijywa-emacs-packages-deps/share/emacs/site-lisp/elpa/haskell-mode-20200531.2255/inf-haskell.el::(defun inferior-haskell-start-process ()]]
+*** a very brute force implemenetation would be replacing inferior-haskell-start-process and hardcoding it to first use nix
+*** is it possible to customize [[file:/nix/store/g4rg24ha1qw5i1v4y70nh5p0bpyijywa-emacs-packages-deps/share/emacs/site-lisp/elpa/haskell-mode-20200531.2255/inf-haskell.el::(defun haskell-program-name-with-args ()][haskell-program-name-with-args]] to do something here though?
+**** it has haskell-process-args-ghci in scope
+**** if we run it somewhere standalone we get
+     #+begin_src emacs-lisp
+(haskell-program-name-with-args)
+     #+end_src
+
+     #+RESULTS:
+     | ghci | -ferror-spans |
+**** so if we want to thread parameters from org all the way through
+**** actually... this is elisp... let's just make a new variable
+     #+begin_src emacs-lisp
+     (defvar org-babel-haskell-nix-packages nil)
+     #+end_src
+**** then we need to customize [[file:/nix/store/g4rg24ha1qw5i1v4y70nh5p0bpyijywa-emacs-packages-deps/share/emacs/site-lisp/elpa/haskell-mode-20200531.2255/inf-haskell.el::(defun haskell-program-name-with-args ()][haskell-program-name-with-args ]]to check if org-babel-haskell-nix-packages is non-nil, and if so
+***** take the results of ghci as normal, but before returning wrap it in the appropriate nix-shell invocation
+***** 
+      
