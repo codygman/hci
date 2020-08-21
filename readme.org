@@ -458,16 +458,16 @@
         :after org
         :init
         ;; TODO remove resources.org
-  
-        (let ((filtered-files (-filter (lambda (x) (not (s-contains? "resources.org" x))) (org-agenda-files)))
-              )
+
+        ;; (let ((filtered-files (-filter (lambda (x) (not (s-contains? "resources.org" x))) (org-agenda-files)))
+        ;;      )
           ;; (type-of filtered-files)
           ;; (setq org-refile-targets '((filtered-files :maxlevel . 3))
           ;; 	  )
           ;; )
 
           ;; works
-          (setq org-refile-targets '( ("~/org/inbox.org" :maxlevel . 3) )  )
+          ;; (setq org-refile-targets '( ("~/org/inbox.org" :maxlevel . 3) )  )
 
 
           ;; doesn't work
