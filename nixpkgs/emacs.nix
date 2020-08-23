@@ -6,6 +6,7 @@
     buttercup
     counsel
     company
+    company-box
     company-lsp
     use-package
     haskell-mode

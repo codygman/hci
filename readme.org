@@ -988,6 +988,9 @@ browser.link.open_newwindow.restriction
         :config	
         (push 'company-lsp company-backends))
 
+      (use-package company-box
+        :hook (company-mode . company-box-mode))
+
       ;; TODO move company to own block
       (use-package company
         :init
@@ -1063,7 +1066,8 @@ https://github.com/tumashu/helm-posframe
     whether in helm or ivy... need to take advantage of history
 
     otherwise the right result is nearly never there...
-*** TODO fix company autocomplete jagged rendering
+*** DONE fix company autocomplete jagged rendering
+    CLOSED: [2020-08-23 Sun 00:59]
     It seems to come up when I type things like =to=
 
     Or maybe it's based upon length... =up= had 4 or 5 suggestions
@@ -1071,6 +1075,15 @@ https://github.com/tumashu/helm-posframe
     When I have 3 it doesn't seem to do quite what I want
     
     =re= seems to have a ton of completions.... so it's a good test
+    
+    possible solutions that have other niceities:
+
+    company-box
+    company-posframe
+
+    unclear if either of these might cause an issue with exwm like opening a new window or soemthing
+    
+    looks like company-box fixes it up, gives me nice little symbols, and seems faster? wow!
 *** TODO investigate aggressive indent mode again for more handsfree whitespace
 *** TODO analyze whether org buffers too narrow for literate programming
     I had a few Haskell code blocks I was looking at and a couple were longer
