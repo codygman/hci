@@ -511,6 +511,13 @@
           :prefix "SPC"
           :keymaps 'override
           :non-normal-prefix "M-SPC"
+            (use-package org-roam
+              :hook
+              (after-init . org-roam-mode)
+              :custom
+              (org-roam-directory "~/org-roam/")
+              )
+
           :prefix "SPC"
           "oc"  '(counsel-org-capture :which-key "counsel org capture")
           "oa"  '(my-day-org-agenda :which-key "org-agenda")

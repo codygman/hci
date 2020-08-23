@@ -80,6 +80,7 @@
     flycheck-haskell
     general
     olivetti
+    org-roam
     org-reverse-datetree
     projectile
     ts
