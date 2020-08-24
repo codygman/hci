@@ -454,89 +454,89 @@
     #+end_src
 *** org
     #+begin_src emacs-lisp
-            (use-package org-capture
-              :after org
-              :init
-              ;; TODO remove resources.org
+      (use-package org-capture
+        :after org
+        :init
+        ;; TODO remove resources.org
 
-              ;; (let ((filtered-files (-filter (lambda (x) (not (s-contains? "resources.org" x))) (org-agenda-files)))
-              ;;      )
-                ;; (type-of filtered-files)
-                ;; (setq org-refile-targets '((filtered-files :maxlevel . 3))
-                ;; 	  )
-                ;; )
+        ;; (let ((filtered-files (-filter (lambda (x) (not (s-contains? "resources.org" x))) (org-agenda-files)))
+        ;;      )
+        ;; (type-of filtered-files)
+        ;; (setq org-refile-targets '((filtered-files :maxlevel . 3))
+        ;; 	  )
+        ;; )
 
-                ;; works
-                ;; (setq org-refile-targets '( ("~/org/inbox.org" :maxlevel . 3) )  )
-
-
-                ;; doesn't work
-                ;; (setq org-refile-targets '( '("~/org/inbox.org")  :maxlevel . 3 )  )
+        ;; works
+        ;; (setq org-refile-targets '( ("~/org/inbox.org" :maxlevel . 3) )  )
 
 
-                (setq org-refile-targets '( ("~/org/inbox.org" :maxlevel . 3))  )
+        ;; doesn't work
+        ;; (setq org-refile-targets '( '("~/org/inbox.org")  :maxlevel . 3 )  )
 
-                ;; (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
 
-  
-              (setq org-outline-path-complete-in-steps nil)
-              :hook
-              (org-capture-mode . evil-insert-state))
-            (use-package org
-              :init 
-              (setq org-log-done 'time)
-              (defun my-day-org-agenda ()
-                (interactive)
-                (let ((org-agenda-span 'day))
-                  (org-agenda nil "a")
-                  (progn (switch-to-buffer "*Org Agenda*") (delete-other-windows))
-                  ))
-              :config
-              (setq
-               org-agenda-files '("~/org/")
-               org-directory "~/org"
-               org-capture-templates
-               '(("t" "Todo" entry (file+headline "~/org/inbox.org" "Inbox")
-                  "* TODO %?\n  %i\n  %a")
-                 ("j" "Journal" entry (file+datetree "~/org/journal.org")
-                  "* %?\nEntered on %U\n  %i\n  %a")
-                 ("bu" "org reverse datetree test" entry
-                  (file+function "/tmp/foo.org"
-                                 org-reverse-datetree-goto-date-in-file)
-                  "* [[%^{URL}][%^{Description}]] %^g %?")
-                 ))
-              :general
-              (my-leader-def
-                :states '(normal visual emacs motion)
-                :prefix "SPC"
-                :keymaps 'override
-                :non-normal-prefix "M-SPC"
+        (setq org-refile-targets '( ("~/org/inbox.org" :maxlevel . 3))  )
+
+        ;; (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+
+
+        (setq org-outline-path-complete-in-steps nil)
+        :hook
+        (org-capture-mode . evil-insert-state))
+      (use-package org
+        :init 
+        (setq org-log-done 'time)
+        (defun my-day-org-agenda ()
+          (interactive)
+          (let ((org-agenda-span 'day))
+            (org-agenda nil "a")
+            (progn (switch-to-buffer "*Org Agenda*") (delete-other-windows))
+            ))
+        :config
+        (setq
+         org-agenda-files '("~/org/")
+         org-directory "~/org"
+         org-capture-templates
+         '(("t" "Todo" entry (file+headline "~/org/inbox.org" "Inbox")
+            "* TODO %?\n  %i\n  %a")
+           ("j" "Journal" entry (file+datetree "~/org/journal.org")
+            "* %?\nEntered on %U\n  %i\n  %a")
+           ("bu" "org reverse datetree test" entry
+            (file+function "/tmp/foo.org"
+                           org-reverse-datetree-goto-date-in-file)
+            "* [[%^{URL}][%^{Description}]] %^g %?")
+           ))
+        :general
+        (my-leader-def
+          :states '(normal visual emacs motion)
+          :prefix "SPC"
+          :keymaps 'override
+          :non-normal-prefix "M-SPC"
+          :prefix "SPC"
+          "oc"  '(counsel-org-capture :which-key "counsel org capture")
+          "oa"  '(my-day-org-agenda :which-key "org-agenda")
+          "oA"  '(org-agenda :which-key "org-agenda")
+          ))
+
       (use-package company-org-roam
         :config
         (push 'company-org-roam company-backends))
 
-                :prefix "SPC"
-                "oc"  '(counsel-org-capture :which-key "counsel org capture")
-                "oa"  '(my-day-org-agenda :which-key "org-agenda")
-                "oA"  '(org-agenda :which-key "org-agenda")
-                ))
-          
-            (use-package org-roam
-              :hook
-              (after-init . org-roam-mode)
-              :custom
-              (org-roam-directory "~/org-roam/")
-              )
+      (use-package org-roam
+        :hook
+        (after-init . org-roam-mode)
+        :custom
+        (org-roam-directory "~/org-roam/")
+        )
 
-            (use-package evil-org
-              :after org
-              :config
-              (add-hook 'org-mode-hook 'evil-org-mode)
-              (add-hook 'evil-org-mode-hook
-                        (lambda ()
-                          (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
-              (require 'evil-org-agenda)
-              (evil-org-agenda-set-keys))
+      (use-package evil-org
+        :after org
+        :config
+        (add-hook 'org-mode-hook 'evil-org-mode)
+        (add-hook 'evil-org-mode-hook
+                  (lambda ()
+                    (evil-org-set-key-theme '(textobjects insert navigation additional shift todo heading))))
+        (require 'evil-org-agenda)
+        (evil-org-agenda-set-keys))
     #+end_src
 **** org babel
     #+begin_src emacs-lisp
