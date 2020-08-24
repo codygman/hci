@@ -25,7 +25,8 @@ in
   xsession = {
     enable = true;
     windowManager.command = ''
-      ${myemacs}/bin/emacs --eval '(progn (server-start) (exwm-enable))'
+                           ${myemacs}/bin/emacs --daemon -f exwm-enable
+                           exec ${myemacs}/bin/emacsclient -c
     '';
   };
 
