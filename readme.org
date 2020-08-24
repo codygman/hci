@@ -999,8 +999,10 @@ browser.link.open_newwindow.restriction
       ;; TODO move company to own block
       (use-package company
         :config
-        (setq company-minimum-prefix-length 2
-              company-idle-delay 0.25)
+        (setq company-minimum-prefix-length 1
+              company-idle-delay 0.01
+              company-selection-wrap-around t
+              )
         (global-company-mode)
         )
 
