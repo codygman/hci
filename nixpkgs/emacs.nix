@@ -8,6 +8,7 @@
     company
     company-box
     company-lsp
+    company-org-roam
     use-package
     haskell-mode
     elm-mode
