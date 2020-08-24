@@ -1067,6 +1067,22 @@ browser.link.open_newwindow.restriction
 ** Random Things TODO
 *** BIG NOTE: crib from [[file:~/code/minimal-emacs-literate-workflow/init.el::;; prevent gc during startup][minimal-emacs-literate-workflow config]]
     also https://git.sr.ht/~codygman/emacs-config/tree/master
+*** TODO improve shell interaction in emacs
+**** TODO open shell in same window
+**** TODO improve shell completion
+     https://coredumped.dev/2020/01/04/native-shell-completion-in-emacs/
+**** TODO tryout vterm again
+     https://www.reddit.com/r/emacs/comments/hj5lz5/is_it_me_or_are_emacs_shell_term_and_ansiterm/
+**** TODO see if I can get used to the shell pop workflow
+     http://pragmaticemacs.com/emacs/pop-up-a-quick-shell-with-shell-pop/
+     
+*** TODO get ideas from emacs conf 2019 videos
+    
+    https://www.reddit.com/r/emacs/comments/hj5lz5/is_it_me_or_are_emacs_shell_term_and_ansiterm/
+    
+*** TODO setup pdf reading/annotation in emacs
+    http://pragmaticemacs.com/emacs/view-and-annotate-pdfs-in-emacs-with-pdf-tools/
+    
 *** TODO setup chatting programs with matterbridge
     - irc (just use rcirc, erc, or something)
     
