@@ -783,6 +783,7 @@ browser.link.open_newwindow.restriction
 		"pa" '(projectile-add-known-project :wk "Projectile add known project")
 		)
 	      :config
+        (setq projectile-require-project-root nil) 
 	      (projectile-mode +1))
     #+end_src
 *** haskell-mode
