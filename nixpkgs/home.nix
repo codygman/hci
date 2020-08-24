@@ -84,6 +84,7 @@ in
     };
 
     packages = with pkgs; [
+      alacritty
       # cachix # not sure what was wrong here
       # ghcide # having this by default would be nice for the ghc I'm using most at the time
       # home-manager.home-manager
