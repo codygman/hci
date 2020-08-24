@@ -999,9 +999,6 @@ browser.link.open_newwindow.restriction
         :config	
         (push 'company-lsp company-backends))
 
-      (use-package company-box
-        :hook (company-mode . company-box-mode))
-
       ;; TODO move company to own block
       (use-package company
         :init
@@ -1010,8 +1007,7 @@ browser.link.open_newwindow.restriction
         (setq company-minimum-prefix-length 2
               company-idle-delay 0.25)
         (global-company-mode)
-        :bind (:map haskell-mode-map
-                    ("TAB" . company-indent-or-complete-common)))
+        )
 
 
     #+end_src
