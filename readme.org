@@ -592,38 +592,41 @@
 **** config
     #+begin_src emacs-lisp
       (use-package exwm
-	:init
-	(setq exwm-input-global-keys
-	      `(([?\s-r] . exwm-reset)
-		([?\s-i] . exwm-input-release-keyboard)
-		;; convenience keybinding, meant to mimic `esc' in Vim bindings
-		([?\s-\ ] . helm-run-external-command)
-		([?\s-\[] . exwm-reset)))
-	(defun exwm-rename-buffer ()
-	  (interactive)
-	  (exwm-workspace-rename-buffer
-	   (concat exwm-class-name ": "
-		   (if (<= (length exwm-title) 75) exwm-title
-		     (concat (substring exwm-title 0 74) "...")))))
+        :init
+        (setq exwm-input-global-keys
+              `(([?\s-r] . exwm-reset)
+                ([?\s-i] . exwm-input-release-keyboard)
+                ;; convenience keybinding, meant to mimic `esc' in Vim bindings
+                ([?\s-\ ] . helm-run-external-command)
+                ([?\s-\[] . exwm-reset)))
+        (defun exwm-rename-buffer ()
+          (interactive)
+          (exwm-workspace-rename-buffer
+           (concat exwm-class-name ": "
+                   (if (<= (length exwm-title) 75) exwm-title
+                     (concat (substring exwm-title 0 74) "...")))))
 
-	;; Add these hooks in a suitable place (e.g., as done in exwm-config-default)
-	(add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
-	(add-hook 'exwm-update-title-hook 'exwm-rename-buffer)	:config
-	(require 'exwm)
-     (require 'exwm-systemtray)
-     (exwm-systemtray-enable)
-	(exwm-enable)
-	;; stop exwm from catching SPC leader key.
-	;; the double whitespace is intentional
-	;; credit https://github.com/matthuszagh/emacs/blob/5827a8d2ca4e97bf37cfa71dabf9346043573798/layers/exwm-layer.el#L112
-	(add-to-list 'exwm-input-prefix-keys ?\  )
-	)
+        ;; Add these hooks in a suitable place (e.g., as done in exwm-config-default)
+        (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
+        (add-hook 'exwm-update-title-hook 'exwm-rename-buffer)
+        :config
+        (require 'exwm)
+
+        ;; TODO fix this
+        (require 'exwm-systemtray)
+        (exwm-systemtray-enable)
+        (exwm-enable)
+        ;; stop exwm from catching SPC leader key.
+        ;; the double whitespace is intentional
+        ;; credit https://github.com/matthuszagh/emacs/blob/5827a8d2ca4e97bf37cfa71dabf9346043573798/layers/exwm-layer.el#L112
+        (add-to-list 'exwm-input-prefix-keys ?\  )
+        )
 
       (use-package exwm-edit
         :config
         ;; TODO do I have an equivalent of this?
         (defun ag-exwm/on-exwm-edit-compose ()
-          ;; (spacemacs/toggle-visual-line-navigation-on) 
+          ;; (spacemacs/toggle-visual-line-navigation-on)
           (funcall 'markdown-mode))
         (add-hook 'exwm-edit-compose-hook 'ag-exwm/on-exwm-edit-compose))
     #+end_src
