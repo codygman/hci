@@ -491,6 +491,7 @@
         :config
         (setq
          org-agenda-files '("~/org/")
+         org-return-follows-link t
          org-directory "~/org"
          org-capture-templates
          '(("t" "Todo" entry (file+headline "~/org/inbox.org" "Inbox")
