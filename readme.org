@@ -1086,6 +1086,8 @@ https://github.com/tumashu/helm-posframe
     
     =re= seems to have a ton of completions.... so it's a good test
     
+    It seems to come up when I type long words like company posframe. I'm not sure if this is some
+
     possible solutions that have other niceities:
 
     company-box
@@ -1094,6 +1096,9 @@ https://github.com/tumashu/helm-posframe
     unclear if either of these might cause an issue with exwm like opening a new window or soemthing
     
     looks like company-box fixes it up, gives me nice little symbols, and seems faster? wow!
+
+    The only problem is that exwm seems to have some problems with posframe support. I posted a comment, but can't find it atm... so you'll have to search for it if you need it.
+    
 *** TODO investigate aggressive indent mode again for more handsfree whitespace
 *** TODO analyze whether org buffers too narrow for literate programming
     I had a few Haskell code blocks I was looking at and a couple were longer
