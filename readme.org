@@ -183,9 +183,6 @@
 **** Org mode
      #+begin_src emacs-lisp
               (setq-default line-spacing 0.1)
-              (add-hook 'text-mode-hook
-                        (lambda ()
-                          (variable-pitch-mode 1)))
 
               (defun org-mode-visuals ()
                 (setq org-indent-mode-turns-off-org-adapt-indentation nil)
