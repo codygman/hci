@@ -13,6 +13,7 @@
     haskell-mode
     elm-mode
     exwm
+    exwm-edit
     evil
     evil-magit
     evil-org

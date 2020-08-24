@@ -618,6 +618,14 @@
 	;; credit https://github.com/matthuszagh/emacs/blob/5827a8d2ca4e97bf37cfa71dabf9346043573798/layers/exwm-layer.el#L112
 	(add-to-list 'exwm-input-prefix-keys ?\  )
 	)
+
+      (use-package exwm-edit
+        :config
+        ;; TODO do I have an equivalent of this?
+        (defun ag-exwm/on-exwm-edit-compose ()
+          ;; (spacemacs/toggle-visual-line-navigation-on) 
+          (funcall 'markdown-mode))
+        (add-hook 'exwm-edit-compose-hook 'ag-exwm/on-exwm-edit-compose))
     #+end_src
 **** notes
 ***** make sure by default clicking links opens in same tab, or when I use =f= in firefox to highlight/select a link using vimium or saka
