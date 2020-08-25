@@ -327,20 +327,34 @@
       (display-time-mode 1)
       (setq display-time-24hr-format t)
 
+      (require 'subr-x)
+
+      (setq-default
+       mode-line-buffer-identification
+
+       (with-eval-after-load 'subr-x
+         '(:eval (format-mode-line
+                  (propertized-buffer-identification
+                   (or (when-let* ((buffer-file-truename buffer-file-truename)
+                                   (prj (cdr-safe (project-current)))
+                                   (prj-parent (file-name-directory (directory-file-name (expand-file-name prj)))))
+                         (concat (file-relative-name (file-name-directory buffer-file-truename) prj-parent) (file-name-nondirectory buffer-file-truename))))))))
+
+       )
+
       (setq-default mode-line-format
-		    (list
-		     mode-line-front-space
-		     "%* "
-		     '(:eval (propertize "%b " 'face 'font-lock-keyword-face
-					 'help-echo (buffer-file-name)))
-		     (flycheck-mode flycheck-mode-line)
-		     '(:eval (format "%s" most-recent-lorri-status))
-		     " "
-		     '(:propertize ("" mode-name))
-		     " "
-		     global-mode-string
-		     mode-line-end-spaces
-		     ))
+                    (list
+                     mode-line-front-space
+                     "%* "
+                     mode-line-buffer-identification
+                     (flycheck-mode flycheck-mode-line)
+                     '(:eval (format "%s" most-recent-lorri-status))
+                     " "
+                     '(:propertize ("" mode-name))
+                     " "
+                     global-mode-string
+                     mode-line-end-spaces
+                     ))
     #+end_src
 *** Font stuff
     #+begin_src emacs-lisp
