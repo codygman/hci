@@ -704,6 +704,9 @@ browser.link.open_newwindow.restriction
       (use-package evil
         :after general
 	:config
+  (define-key evil-motion-state-map (kbd "SPC") nil) ;; TODO necessary? break things?
+  (define-key evil-motion-state-map (kbd "RET") nil)
+  (define-key evil-motion-state-map (kbd "TAB") nil)
 	(evil-mode 1)
 	:general
 	;; NOTE For some reason general binding is broken in the evil block
