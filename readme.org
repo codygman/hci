@@ -948,7 +948,7 @@ browser.link.open_newwindow.restriction
         "hr" 'helm-resume
         "pr" 'helm-show-kill-ring
         ":" '(helm-M-x :which-key "M-x")
-        "bb" '(switch-to-buffer :which-key "Switch to buffer")
+        "bb" '(helm-mini :which-key "helm mini")
         "bd" '(my/kill-this-buffer :which-key "Kill Buffer")
         "sp" '(helm-projectile-rg :which-key "Search Projectile Project")
         )
