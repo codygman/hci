@@ -991,7 +991,8 @@ browser.link.open_newwindow.restriction
 *** lsp
     #+begin_src emacs-lisp
       (use-package lsp-mode
-        :hook ((haskell-mode . lsp-deferred)
+              :hook (
+                     ;; (haskell-mode . lsp-deferred)
                (lsp-mode . lsp-enable-which-key-integration))
         :commands (lsp lsp-deferred)
         :config 
