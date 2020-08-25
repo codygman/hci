@@ -499,6 +499,9 @@
         (org-capture-mode . evil-insert-state))
       (use-package org
         :init 
+        (custom-theme-set-faces
+         'user
+         '(org-link ((t (:underline t)))))
         (setq org-log-done 'time)
         (defun my-day-org-agenda ()
           (interactive)
