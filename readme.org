@@ -182,58 +182,62 @@
 *** Visuals
 **** Org mode
      #+begin_src emacs-lisp
-              (setq-default line-spacing 0.1)
+       (setq-default line-spacing 0.1)
 
-              (defun org-mode-visuals ()
-                (setq org-indent-mode-turns-off-org-adapt-indentation nil)
-                (org-indent-mode 1)
-                (olivetti-mode 1)
-                (setq org-startup-indented t
-                      org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
-                      org-ellipsis "  " ;; folding symbol
-                      org-pretty-entities t
-                      org-hide-emphasis-markers t
-                      ;; show actually italicized text instead of /italicized text/
-                      org-agenda-block-separator ""
-                      org-fontify-whole-heading-line t
-                      org-fontify-done-headline t
-                      org-fontify-quote-and-verse-blocks t)
-                (setq header-line-format " ")
-                ;; want to keep ivy fixed width
-                ;; https://github.com/abo-abo/swiper/issues/1549
-                (setq ivy-switch-buffer-faces-alist '((dired-mode . ivy-subdir)))
-                (lambda () (progn
-                             (set-face-attribute 'header-line nil  :height 400)
-                             (setq left-margin-width 4)
-                             (setq right-margin-width 4)
-                             (set-window-buffer nil (current-buffer)))) 
+       (defun org-mode-visuals ()
+         (setq org-indent-mode-turns-off-org-adapt-indentation nil)
+         (org-indent-mode 1)
+         (olivetti-mode 1)
+         (setq org-startup-indented t
+               org-bullets-bullet-list '(" ") ;; no bullets, needs org-bullets package
+               org-ellipsis "  " ;; folding symbol
+               org-pretty-entities t
+               org-hide-emphasis-markers t
+               ;; show actually italicized text instead of /italicized text/
+               org-agenda-block-separator ""
+               org-fontify-whole-heading-line t
+               org-fontify-done-headline t
+               org-fontify-quote-and-verse-blocks t)
+         (setq header-line-format " ")
+         ;; want to keep ivy fixed width
+         ;; https://github.com/abo-abo/swiper/issues/1549
+         (setq ivy-switch-buffer-faces-alist '((dired-mode . ivy-subdir)))
+         (lambda () (progn
+                      (set-face-attribute 'header-line nil  :height 700)
+                      (setq left-margin-width 4)
+                      (setq right-margin-width 4)
+                      (set-window-buffer nil (current-buffer)))) 
 
-                (dolist (face '(org-block-begin-line 
-                                org-block-end-line 
-                                org-verbatim 
-                                org-block 
-                                org-code
-                                org-link
-                                org-block
-                                org-table
-                                org-property-value
-                                org-formula
-                                org-tag
-                                org-verbatim
-                                org-date
-                                company-tooltip
-                                org-special-keyword
-                                org-block-begin-line
-                                org-block-end-line
-                                org-meta-line
-                                org-document-info-keyword
-                                ))
+         (dolist (face '(org-block-begin-line 
+                         org-block-end-line 
+                         org-verbatim 
+                         org-block 
+                         org-code
+                         org-link
+                         org-block
+                         org-table
+                         org-property-value
+                         org-formula
+                         org-tag
+                         org-verbatim
+                         org-date
+                         company-tooltip
+                         org-special-keyword
+                         org-block-begin-line
+                         org-block-end-line
+                         org-meta-line
+                         org-document-info-keyword
+                         ))
 
-                  (set-face-attribute face nil :inherit 'fixed-pitch)
+           (set-face-attribute face nil :inherit 'fixed-pitch)
 
-                  ))
-                (add-hook 'org-mode-hook 'org-mode-visuals)
+           ))
+         (add-hook 'org-mode-hook 'org-mode-visuals)
      #+end_src
+
+     #+RESULTS:
+     | evil-org-mode | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | org-mode-visuals | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-show-all append local] 5] | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes |
+
 **** Hide annoying things
     #+begin_src emacs-lisp
       (tool-bar-mode -1)
