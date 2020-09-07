@@ -76,6 +76,7 @@
     nix-mode
     ob-restclient
     ox-gfm
+    pdf-tools
     direnv
     doom-themes
     flycheck

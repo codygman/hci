@@ -1048,6 +1048,19 @@ browser.link.open_newwindow.restriction
 
 
     #+end_src
+*** pdf-tools
+    #+begin_src emacs-lisp
+      (use-package pdf-tools
+        :pin manual ;; manually update
+        :config
+        ;; initialise
+        (pdf-tools-install)
+        ;; open pdfs scaled to fit page
+        (setq-default pdf-view-display-size 'fit-page)
+        ;; automatically annotate highlights
+        (setq pdf-annot-activate-created-annotations t))
+    #+end_src
+
 *** yasnippet
     #+begin_src emacs-lisp
       (use-package yasnippet
@@ -1085,6 +1098,7 @@ browser.link.open_newwindow.restriction
 	  (kill-buffer-and-window)
 	(kill-buffer))))
      #+end_src
+     
 * NOTE 
   :PROPERTIES:
   :header-args:    :tangle no
