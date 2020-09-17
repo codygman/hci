@@ -90,7 +90,7 @@ in
       firefox
       gcc
       gcc
-      ghc
+      (haskellPackages.ghcWithPackages (pkgs: [pkgs.lens pkgs.generic-lens]))
       gnumake
       graphviz
       libnotify
