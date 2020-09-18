@@ -425,47 +425,47 @@
 *** general
     #+begin_src emacs-lisp
       (use-package general
-	:init
-	(setq evil-want-keybinding nil
-	      evil-want-C-d-scroll t
-	      evil-want-C-u-scroll t
-	      evil-want-integration t
-	      )
-	:config
-	(general-auto-unbind-keys) ;; NOTE not sure this works?
-	(general-evil-setup t)
-	(general-imap "j"
-	  (general-key-dispatch 'self-insert-command
-	    :timeout 0.25
-	    ;; TODO make this work so jf writes the file when I enter normal mode
-	    ;; "j" '(my-write-then-normal-state)
-	    "f" 'evil-normal-state))
-	(general-create-definer my-leader-def
-	  :prefix "C")
-	(my-leader-def
-	  :states '(normal visual emacs motion)
-	  :prefix "SPC"
-	  :keymaps 'override
-	  :non-normal-prefix "M-SPC"
-	  "u"   '(universal-argument :which-key "Universal Argument")
-	  "tf" '(toggle-frame-fullscreen :which-key "Toggle Fullscreen")
-	  "wd" '(delete-window :which-key "Delete Window")
-	  "qq" '(save-buffers-kill-terminal :which-key "Quit Emacs")
+        :init
+        (setq evil-want-keybinding nil
+              evil-want-C-d-scroll t
+              evil-want-C-u-scroll t
+              evil-want-integration t
+              )
+        :config
+        (general-auto-unbind-keys) ;; NOTE not sure this works?
+        (general-evil-setup t)
+        (general-imap "j"
+          (general-key-dispatch 'self-insert-command
+            :timeout 0.25
+            ;; TODO make this work so jf writes the file when I enter normal mode
+            ;; "j" '(my-write-then-normal-state)
+            "f" 'evil-normal-state))
+        (general-create-definer my-leader-def
+          :prefix "C")
+        (my-leader-def
+          :states '(normal visual emacs motion)
+          :prefix "SPC"
+          :keymaps 'override
+          :non-normal-prefix "M-SPC"
+          "u"   '(universal-argument :which-key "Universal Argument")
+          "tf" '(toggle-frame-fullscreen :which-key "Toggle Fullscreen")
+          "wd" '(delete-window :which-key "Delete Window")
+          "qq" '(save-buffers-kill-terminal :which-key "Quit Emacs")
 
-	  "hf" '(describe-function :which-key "Describe Function")
-	  "hk" '(describe-key :which-key "Describe Key")
-	  "ha" '(apropos-command :which-key "Apropos Command")
+          "hf" '(describe-function :which-key "Describe Function")
+          "hk" '(describe-key :which-key "Describe Key")
+          "ha" '(apropos-command :which-key "Apropos Command")
 
-	  ;; window
-	  "wm"  '(toggle-maximize-buffer :which-key "maximize buffer")
-	  "wh"  '(evil-window-left :which-key "move left")
-	  "wj"  '(evil-window-down :which-key "move down a window")
-	  "wk"  '(evil-window-up :which-key "move up a window")
-	  "wl"  '(evil-window-right :which-key "move right a window")
-	  "wv"  '(split-window-right :which-key "split right a window")
-	  "ws"  '(split-window-below :which-key "split bottom")
-	  )
-	)
+          ;; window
+          "wm"  '(toggle-maximize-buffer :which-key "maximize buffer")
+          "wh"  '(evil-window-left :which-key "move left")
+          "wj"  '(evil-window-down :which-key "move down a window")
+          "wk"  '(evil-window-up :which-key "move up a window")
+          "wl"  '(evil-window-right :which-key "move right a window")
+          "wv"  '(split-window-right :which-key "split right a window")
+          "ws"  '(split-window-below :which-key "split bottom")
+          )
+        )
     #+end_src
 *** org
     #+begin_src emacs-lisp
@@ -703,19 +703,19 @@ browser.link.open_newwindow.restriction
     #+begin_src emacs-lisp
       (use-package evil
         :after general
-	:config
-  (define-key evil-motion-state-map (kbd "SPC") nil) ;; TODO necessary? break things?
-  (define-key evil-motion-state-map (kbd "RET") nil)
-  (define-key evil-motion-state-map (kbd "TAB") nil)
-	(evil-mode 1)
-	:general
-	;; NOTE For some reason general binding is broken in the evil block
-	)
+        :config
+        (define-key evil-motion-state-map (kbd "SPC") nil) ;; TODO necessary? break things?
+        (define-key evil-motion-state-map (kbd "RET") nil)
+        (define-key evil-motion-state-map (kbd "TAB") nil)
+        (evil-mode 1)
+        :general
+        ;; NOTE For some reason general binding is broken in the evil block
+        )
 
       (use-package evil-collection
-	:after evil
-	:config
-	(evil-collection-init))
+        :after evil
+        :config
+        (evil-collection-init))
     #+end_src
 *** evil-magit
     #+begin_src emacs-lisp
@@ -813,11 +813,11 @@ browser.link.open_newwindow.restriction
 *** haskell-mode
     #+begin_src emacs-lisp
       (use-package haskell-mode
-	:mode ("\\.hs\\'" . haskell-mode)
-	:init
-	(message "personal haskell-mode loading")
-	(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-	(add-hook 'haskell-mode-hook 'haskell-indentation-mode))
+        :mode ("\\.hs\\'" . haskell-mode)
+        :init
+        (message "personal haskell-mode loading")
+        (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+        (add-hook 'haskell-mode-hook 'haskell-indentation-mode))
     #+end_src
 *** flycheck
     #+begin_src emacs-lisp
