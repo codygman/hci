@@ -707,6 +707,12 @@ browser.link.open_newwindow.restriction
         (define-key evil-motion-state-map (kbd "SPC") nil) ;; TODO necessary? break things?
         (define-key evil-motion-state-map (kbd "RET") nil)
         (define-key evil-motion-state-map (kbd "TAB") nil)
+        ;; Make evil-mode up/down operate in screen lines instead of logical lines
+        (define-key evil-motion-state-map "j" 'evil-next-visual-line)
+        (define-key evil-motion-state-map "k" 'evil-previous-visual-line)
+        ;; Also in visual mode
+        (define-key evil-visual-state-map "j" 'evil-next-visual-line)
+        (define-key evil-visual-state-map "k" 'evil-previous-visual-line)
         (evil-mode 1)
         :general
         ;; NOTE For some reason general binding is broken in the evil block
