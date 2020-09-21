@@ -909,80 +909,80 @@ browser.link.open_newwindow.restriction
           helm-swoop-split-window-function 'helm-default-display-buffer
           helm-swoop-pre-input-function (lambda () ""))
     :general
-        (my-leader-def
-          :states '(normal visual emacs motion)
-          :prefix "SPC"
-          :keymaps 'override
-          :non-normal-prefix "M-SPC"
-          :prefix "SPC"
-        :prefix "SPC"
-        "ss" '(helm-swoop :which-key "helm swoop")
-        )
+    (my-leader-def
+      :states '(normal visual emacs motion)
+      :prefix "SPC"
+      :keymaps 'override
+      :non-normal-prefix "M-SPC"
+      :prefix "SPC"
+      :prefix "SPC"
+      "ss" '(helm-swoop :which-key "helm swoop")
+      )
     )
 
-    (use-package helm
-      :init
-      (setq helm-M-x-fuzzy-match t
-            helm-mode-fuzzy-match t
-            helm-buffers-fuzzy-matching t
-            helm-recentf-fuzzy-match t
-            helm-locate-fuzzy-match t
-            helm-semantic-fuzzy-match t
-            helm-imenu-fuzzy-match t
-            helm-completion-in-region-fuzzy-match t
-            helm-candidate-number-list 80
-            ;; helm-split-window-in-side-p t
-            helm-move-to-line-cycle-in-source t
-            helm-echo-input-in-header-line t
-            helm-autoresize-max-height 0
-            helm-autoresize-min-height 20
-            helm-always-two-windows t
-            )
-      :general
-      ;; TODO change rest of general def's to use this instead of nmap?
-      (my-leader-def
-          :states '(normal visual emacs motion)
-          :prefix "SPC"
-          :keymaps 'override
-          :non-normal-prefix "M-SPC"
-        "ff" 'helm-find-files
-        "fr" 'helm-recentf
-        "hr" 'helm-resume
-        "pr" 'helm-show-kill-ring
-        ":" '(helm-M-x :which-key "M-x")
-        "bb" '(helm-mini :which-key "helm mini")
-        "bd" '(my/kill-this-buffer :which-key "Kill Buffer")
-        "sp" '(helm-projectile-rg :which-key "Search Projectile Project")
-        )
-      :config
-      ;; (use-package helm-flx)
-      ;; (use-package helm-fuzzier)
-      (use-package helm-rg)
-      (helm-mode 1)
-      ;; (helm-flx-mode 1)
-      ;; (helm-fuzzier-mode 1)
-      :bind (:map helm-map
-                  ("<tab>" . helm-execute-persistent-action)
-                  ("C-h" . helm-find-files-up-one-level)
-                  ("<backtab>" . helm-find-files-up-one-level)
-                  ("C-z" . helm-select-action)
-                  )
+  (use-package helm
+    :init
+    (setq helm-M-x-fuzzy-match t
+          helm-mode-fuzzy-match t
+          helm-buffers-fuzzy-matching t
+          helm-recentf-fuzzy-match t
+          helm-locate-fuzzy-match t
+          helm-semantic-fuzzy-match t
+          helm-imenu-fuzzy-match t
+          helm-completion-in-region-fuzzy-match t
+          helm-candidate-number-list 80
+          ;; helm-split-window-in-side-p t
+          helm-move-to-line-cycle-in-source t
+          helm-echo-input-in-header-line t
+          helm-autoresize-max-height 0
+          helm-autoresize-min-height 20
+          helm-always-two-windows t
+          )
+    :general
+    ;; TODO change rest of general def's to use this instead of nmap?
+    (my-leader-def
+      :states '(normal visual emacs motion)
+      :prefix "SPC"
+      :keymaps 'override
+      :non-normal-prefix "M-SPC"
+      "ff" 'helm-find-files
+      "fr" 'helm-recentf
+      "hr" 'helm-resume
+      "pr" 'helm-show-kill-ring
+      ":" '(helm-M-x :which-key "M-x")
+      "bb" '(helm-mini :which-key "helm mini")
+      "bd" '(my/kill-this-buffer :which-key "Kill Buffer")
+      "sp" '(helm-projectile-rg :which-key "Search Projectile Project")
       )
+    :config
+    ;; (use-package helm-flx)
+    ;; (use-package helm-fuzzier)
+    (use-package helm-rg)
+    (helm-mode 1)
+    ;; (helm-flx-mode 1)
+    ;; (helm-fuzzier-mode 1)
+    :bind (:map helm-map
+                ("<tab>" . helm-execute-persistent-action)
+                ("C-h" . helm-find-files-up-one-level)
+                ("<backtab>" . helm-find-files-up-one-level)
+                ("C-z" . helm-select-action)
+                )
+    )
 
-    (use-package helm-projectile
-      :general
-        (my-leader-def
-          :states '(normal visual emacs motion)
-          :prefix "SPC"
-          :keymaps 'override
-          :non-normal-prefix "M-SPC"
-          :prefix "SPC"
-        "pp"  '(helm-projectile-switch-project :which-key "switch project")
-        "pb"  '(helm-projectile-switch-to-buffer :which-key "switch buffer")
-        "pf" 'helm-projectile-find-file
-        "SPC" 'helm-projectile-find-file
-        )
+  (use-package helm-projectile
+    :general
+    (my-leader-def
+      :states '(normal visual emacs motion)
+      :prefix "SPC"
+      :keymaps 'override
+      :non-normal-prefix "M-SPC"
+      :prefix "SPC"
+      "pp"  '(helm-projectile-switch-project :which-key "switch project")
+      "pb"  '(helm-projectile-switch-to-buffer :which-key "switch buffer")
+      "pf" 'helm-projectile-find-file
+      "SPC" 'helm-projectile-find-file
       )
+    )
 #+end_src
 *** nix-mode
     #+begin_src emacs-lisp
