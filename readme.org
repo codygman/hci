@@ -923,6 +923,8 @@ browser.link.open_newwindow.restriction
   (use-package helm
     :init
     (setq helm-M-x-fuzzy-match t
+          history-delete-duplicates t
+          history-length t ;; no length
           helm-mode-fuzzy-match t
           helm-buffers-fuzzy-matching t
           helm-recentf-fuzzy-match t
