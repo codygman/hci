@@ -625,8 +625,8 @@
           (interactive)
           (exwm-workspace-rename-buffer
            (concat exwm-class-name ": "
-                   (if (<= (length exwm-title) 75) exwm-title
-                     (concat (substring exwm-title 0 74) "...")))))
+                   (if (<= (length exwm-title) 150) exwm-title
+                     (concat (substring exwm-title 0 149) "...")))))
 
         ;; Add these hooks in a suitable place (e.g., as done in exwm-config-default)
         (add-hook 'exwm-update-class-hook 'exwm-rename-buffer)
@@ -925,6 +925,8 @@ browser.link.open_newwindow.restriction
     (setq helm-M-x-fuzzy-match t
           history-delete-duplicates t
           history-length t ;; no length
+          helm-display-buffer-width 150
+          helm-buffer-max-length 150
           helm-mode-fuzzy-match t
           helm-buffers-fuzzy-matching t
           helm-recentf-fuzzy-match t
