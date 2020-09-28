@@ -274,6 +274,7 @@
          (if x (zerop (mod x 2)) nil))
 
        (defun maybe-last-lorri-event (&optional skip-debounces)
+         ;; TODO guard direnv actually being allowed here, can probably use something from direnv-allow function source to do this
          (if (and (file-exists-p "shell.nix") (file-exists-p ".envrc"))
              (most-recent-lorri-event-for-project skip-debounces)
            nil
