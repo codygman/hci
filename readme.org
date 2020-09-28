@@ -327,6 +327,14 @@
      #+end_src
 **** actual mode line format
     #+begin_src emacs-lisp
+      (defun get-buffer-project-name-or-buffer-name ()
+        (if buffer-file-truename
+            (or (when-let* ((prj (cdr-safe (project-current)))
+                            (prj-parent (file-name-directory
+                                         (directory-file-name
+                                          (expand-file-name prj)))))
+                  (concat (file-relative-name (file-name-directory buffer-file-truename) prj-parent) (file-name-nondirectory buffer-file-truename))))
+          (buffer-name)))
       (require 'lsp-mode)
       (display-time-mode 1)
       (setq display-time-24hr-format t)
@@ -339,12 +347,7 @@
        (with-eval-after-load 'subr-x
          '(:eval (format-mode-line
                   (propertized-buffer-identification
-                   (or (when-let* ((buffer-file-truename buffer-file-truename)
-                                   (prj (cdr-safe (project-current)))
-                                   (prj-parent (file-name-directory (directory-file-name (expand-file-name prj)))))
-                         (concat (file-relative-name (file-name-directory buffer-file-truename) prj-parent) (file-name-nondirectory buffer-file-truename))))))))
-
-       )
+                   (get-buffer-project-name-or-buffer-name))))))
 
       (setq-default mode-line-format
                     (list
