@@ -274,7 +274,7 @@
          (if x (zerop (mod x 2)) nil))
 
        (defun maybe-last-lorri-event (&optional skip-debounces)
-         (if (file-exists-p "shell.nix")
+         (if (and (file-exists-p "shell.nix") (file-exists-p ".envrc"))
              (most-recent-lorri-event-for-project skip-debounces)
            nil
            ))
