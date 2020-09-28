@@ -242,6 +242,11 @@
     #+begin_src emacs-lisp
       (tool-bar-mode -1)
       (toggle-scroll-bar -1)
+      ;; above isn't enough for new frames such as the first one that opens when exwm starts up
+      (add-to-list 'default-frame-alist
+                   '((vertical-scroll-bars . nil)
+                     (horizontal-scroll-bars . nil))
+                   )
       (menu-bar-mode -1)
     #+end_src
 **** Transparency
