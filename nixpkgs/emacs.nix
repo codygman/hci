@@ -86,6 +86,11 @@
     org-roam
     org-reverse-datetree
     projectile
+
+    prescient
+    selectrum
+    # embark -- not in nixpkgs
+
     ts
     with-simulated-input
     which-key
