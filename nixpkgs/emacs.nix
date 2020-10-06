@@ -18,6 +18,16 @@
     evil-magit
     evil-org
     evil-collection
+    ( keyfreq.override (args: {
+      melpaBuild = drv: args.melpaBuild (drv // {
+        src = pkgs.fetchFromGitHub {
+          owner = "dacap";
+          repo = "keyfreq";
+          rev = "e5fe9d585ce882f1ba9afa5d894eaa82c79be4f4";
+          sha256 = "12m1jy8m8i39b809qbxx9g3r066jxhqwfyf5mqbd1lzlaw63b1i7";
+        };
+      });
+    }) )
     ( forge.override (args: {
       melpaBuild = drv: args.melpaBuild (drv // {
         src = pkgs.fetchFromGitHub {

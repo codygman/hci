@@ -1000,6 +1000,26 @@ browser.link.open_newwindow.restriction
         :defer nil
         :mode ("\\.nix\\'" . nix-mode))
     #+end_src
+
+*** keyfreq
+    #+begin_src emacs-lisp
+      (use-package keyfreq
+        :pin manual ;; manually update
+        :config
+        (setq keyfreq-excluded-commands
+              '(self-insert-command
+                ;; I think I want to include below so
+                ;; I can know if I'm not using other forms
+                ;; of superior navigation enough
+                ;; forward-char
+                ;; backward-char
+                ;; previous-line
+                ;; next-line
+                ))
+        (keyfreq-mode 1)
+        (keyfreq-autosave-mode 1))
+
+    #+end_src
 *** lsp
     #+begin_src emacs-lisp
       (use-package lsp-mode
