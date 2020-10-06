@@ -12,15 +12,21 @@
     use-package
     haskell-mode
     elm-mode
-    # this isn't quite right
-    # epkgs.melpaBuild ({
-    #   pname = "explain-pause-mode";
-    #   version = "1.4";
-    #   src = fetchGit {
-    #     url = "https://github.com/lastquestion/explain-pause-mode.git";
-    #     rev = "2356c8c3639cbeeb9751744dbe737267849b4b51";
-    #   };
-    # })
+    (epkgs.melpaBuild {
+      pname = "explain-pause-mode";
+      version = "0.1";
+
+      src = fetchGit {
+        url = "https://github.com/lastquestion/explain-pause-mode.git";
+        rev = "2356c8c3639cbeeb9751744dbe737267849b4b51";
+      };
+
+      recipe = pkgs.writeText "explain-pause-mode-recipe" ''
+      (explain-pause-mode :fetcher git
+                  :url "https://github.com/lastquestion/explain-pause-mode.git"
+                  :files (:defaults))
+    '';
+    })
     exwm
     exwm-edit
     evil

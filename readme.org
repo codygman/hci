@@ -696,6 +696,12 @@ browser.link.open_newwindow.restriction
          and change the value to 1 (one) 
        #+end_example
 
+*** explain-pause-mode
+#+begin_src emacs-lisp
+(use-package explain-pause-mode
+  :config
+  (explain-pause-mode))
+#+end_src
 
 *** ediff
     #+begin_src emacs-lisp
