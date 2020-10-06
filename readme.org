@@ -1096,14 +1096,6 @@ browser.link.open_newwindow.restriction
               lsp-ui-doc-enable nil)
         )
 
-      (use-package company-lsp
-        :config	
-        (setq company-lsp-cache-candidates 'auto
-              company-lsp-async t
-              company-lsp-enable-snippet nil
-              company-lsp-enable-recompletion t)
-        (push 'company-lsp company-backends))
-
       ;; TODO move company to own block
       (use-package company
         :config
