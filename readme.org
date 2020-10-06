@@ -698,9 +698,9 @@ browser.link.open_newwindow.restriction
 
 *** explain-pause-mode
 #+begin_src emacs-lisp
-(use-package explain-pause-mode
-  :config
-  (explain-pause-mode))
+  (use-package explain-pause-mode
+    :config
+    (explain-pause-mode))
 #+end_src
 
 *** ediff
