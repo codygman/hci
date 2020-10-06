@@ -103,6 +103,7 @@ in
       sqlite
       stack
       xvfb_run
+      zoom-us
     ];
   };
 
