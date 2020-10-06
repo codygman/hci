@@ -1046,7 +1046,9 @@ browser.link.open_newwindow.restriction
       (use-package lsp-mode
         :hook (
                ;; (haskell-mode . lsp-deferred)
-               (lsp-mode . lsp-enable-which-key-integration))
+               (lsp-mode . lsp-enable-which-key-integration)
+               ((js2-mode rjsx-mode) . lsp)
+               )
         :commands (lsp lsp-deferred)
         :config 
         :general
@@ -1083,10 +1085,23 @@ browser.link.open_newwindow.restriction
         ;; (setq lsp-ui-sideline-enable nil)
         ;; (setq lsp-ui-doc-enable nil)
         ;; (setq lsp-ui-sideline-show-diagnostics nil)
+        (setq lsp-ui-sideline-enable t
+              ;; disable flycheck setup so default linter isn't trampled
+              lsp-ui-flycheck-enable nil
+              lsp-ui-sideline-show-symbol nil
+              lsp-ui-sideline-show-hover nil
+              lsp-ui-sideline-show-code-actions nil
+              lsp-ui-peek-enable nil
+              lsp-ui-imenu-enable nil
+              lsp-ui-doc-enable nil)
         )
 
       (use-package company-lsp
         :config	
+        (setq company-lsp-cache-candidates 'auto
+              company-lsp-async t
+              company-lsp-enable-snippet nil
+              company-lsp-enable-recompletion t)
         (push 'company-lsp company-backends))
 
       ;; TODO move company to own block
@@ -1101,6 +1116,43 @@ browser.link.open_newwindow.restriction
 
 
     #+end_src
+*** javascript
+    A lot of this is in [[*lsp][lsp]] FYI
+
+    #+begin_src emacs-lisp
+      (use-package rjsx-mode
+        :mode ("\\.js\\'"
+               "\\.jsx\\'")
+        :config
+        (setq js2-mode-show-parse-errors nil
+              js2-mode-show-strict-warnings nil
+              js2-basic-offset 2
+              js-indent-level 2)
+        (setq-local flycheck-disabled-checkers (cl-union flycheck-disabled-checkers
+                                                         '(javascript-jshint))) ; jshint doesn't work for JSX
+        (electric-pair-mode 1)
+        (evil-leader/set-key-for-mode 'rjsx-mode
+          "fu"  #'lsp-find-references          ; (f)ind (u)sages
+          "fp" 'prettier-js-mode))             ; (f)ormat (p)rettier
+
+      (use-package add-node-modules-path
+        :defer t
+        :hook (((js2-mode rjsx-mode) . add-node-modules-path)))
+
+      (use-package prettier-js
+        :defer t
+        :diminish prettier-js-mode
+        :hook (((js2-mode rjsx-mode) . prettier-js-mode))
+        :init
+        (evil-leader/set-key-for-mode 'rjsx-mode
+          "fp" 'prettier-js-mode)) ; (f)ormat (p)rettier
+
+      ;; (use-package js2-mode)
+    #+end_src
+
+    #+RESULTS:
+    | prettier-js-mode | add-node-modules-path |
+
 *** pdf-tools
     #+begin_src emacs-lisp
       (use-package pdf-tools

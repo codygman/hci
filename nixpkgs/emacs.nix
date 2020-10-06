@@ -111,6 +111,12 @@
     org-roam
     org-reverse-datetree
     projectile
+
+    rjsx-mode
+    add-node-modules-path
+    prettier-js
+
+
     ts
     with-simulated-input
     which-key
