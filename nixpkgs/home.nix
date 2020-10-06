@@ -87,6 +87,10 @@ in
       cmake
       coreutils
       dbeaver
+      jq
+      awscli
+      teams
+      discord
       fd
       firefox
       gcc
