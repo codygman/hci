@@ -1123,9 +1123,10 @@ browser.link.open_newwindow.restriction
         (setq-local flycheck-disabled-checkers (cl-union flycheck-disabled-checkers
                                                          '(javascript-jshint))) ; jshint doesn't work for JSX
         (electric-pair-mode 1)
-        (evil-leader/set-key-for-mode 'rjsx-mode
-          "fu"  #'lsp-find-references          ; (f)ind (u)sages
-          "fp" 'prettier-js-mode))             ; (f)ormat (p)rettier
+        ;; (evil-leader/set-key-for-mode 'rjsx-mode
+        ;;   "fu"  #'lsp-find-references          ; (f)ind (u)sages
+        ;;   "fp" 'prettier-js-mode)
+        )             ; (f)ormat (p)rettier
 
       (use-package add-node-modules-path
         :defer t
@@ -1136,8 +1137,9 @@ browser.link.open_newwindow.restriction
         :diminish prettier-js-mode
         :hook (((js2-mode rjsx-mode) . prettier-js-mode))
         :init
-        (evil-leader/set-key-for-mode 'rjsx-mode
-          "fp" 'prettier-js-mode)) ; (f)ormat (p)rettier
+        ;; (evil-leader/set-key-for-mode 'rjsx-mode
+        ;; 				"fp" 'prettier-js-mode)
+        ) ; (f)ormat (p)rettier
 
       ;; (use-package js2-mode)
     #+end_src
