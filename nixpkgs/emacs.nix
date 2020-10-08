@@ -9,8 +9,11 @@
     company-box
     company-lsp
     company-org-roam
+    docker
+    docker-tramp
     use-package
     haskell-mode
+    helm-tramp
     elm-mode
     (epkgs.melpaBuild {
       pname = "explain-pause-mode";
@@ -99,6 +102,7 @@
     }) )
     magit
     nix-mode
+    ob-async
     ob-restclient
     ox-gfm
     pdf-tools
