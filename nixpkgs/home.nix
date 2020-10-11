@@ -13,6 +13,10 @@ let
   myemacs = import ./emacs.nix {pkgs = pkgs;};
 in
 {
+  nixpkgs.config.allowUnfree = true;
+  home.file.".config/nixpkgs/config.nix".text = ''
+    { allowUnfree = true; }
+  '';
   imports = mylib.loadPrivatePersonalOrWorkEnv ;
 
   xsession = {
