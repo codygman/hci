@@ -267,7 +267,7 @@
 #+end_src
 *** mode line
 **** helper functions, set initial state, add hooks
-     #+begin_src emacs-lisp
+     #+begin_src emacs-lisp :tangle no
        (require 'ts)
 
        (defun even-second-p (x)
