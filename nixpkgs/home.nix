@@ -89,7 +89,6 @@ in
       dbeaver
       jq
       awscli
-      teams
       discord
       fd
       firefox
