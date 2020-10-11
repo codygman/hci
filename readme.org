@@ -343,11 +343,19 @@
       (setq display-time-24hr-format t)
 
       ;; truncate buffer identification to 80 chars
-      (setq-default mode-line-buffer-identification (list -80 (propertized-buffer-identification "%12b")))
+      (setq-default mode-line-buffer-identification (list -40 (propertized-buffer-identification "%12b")))
+
+
+      ;; (with-eval-after-load 'subr-x
+      ;;   (setq-default mode-line-buffer-identification
+      ;;                 '(:eval (format-mode-line (propertized-buffer-identification (or (when-let* ((buffer-file-truename buffer-file-truename)
+      ;;                                                                                              (prj (cdr-safe (project-current)))
+      ;;                                                                                              (prj-parent (file-name-directory (directory-file-name (expand-file-name prj))))))))))))
 
       (setq-default mode-line-format
                     (list
                      mode-line-front-space
+
                      "%* "
                      mode-line-buffer-identification
                      (flycheck-mode flycheck-mode-line)
