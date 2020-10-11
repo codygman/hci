@@ -93,7 +93,6 @@ in
       fd
       firefox
       gcc
-      gcc
       (haskellPackages.ghcWithPackages (pkgs: [pkgs.lens pkgs.generic-lens]))
       gnumake
       graphviz
@@ -104,10 +103,8 @@ in
       signal-desktop
       source-code-pro
       sqlite
-      sqlite
       stack
       xvfb_run
-      zoom-us
     ];
   };
 
