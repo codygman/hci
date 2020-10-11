@@ -906,6 +906,8 @@ browser.link.open_newwindow.restriction
 	)
     #+end_src
 *** selectrum
+**** main config
+     
     #+begin_src emacs-lisp
 
       (use-package prescient
@@ -925,13 +927,44 @@ browser.link.open_newwindow.restriction
           :prefix "SPC"
 
           "bb" '(switch-to-buffer :which-key "switch to buffer")
+          ":" '(execute-extended-command :which-key "M-x")
 
           )
         )
 
     #+end_src
+**** an attempt at reproducing =helm-show-kill-ring=
+     
 
-    #+RESULTS:
+At least in terminal... this looks pretty horrible for some reason though :S
+     #+begin_src emacs-lisp
+       (defun yank-pop+ (&optional arg)
+         "Call `yank-pop' with ARG when appropriate, or offer completion."
+         (interactive "*P")
+         (if arg (yank-pop arg)
+           (let* ((old-last-command last-command)
+                  (selectrum-should-sort-p nil)
+                  (enable-recursive-minibuffers t)
+                  (text (completing-read
+                         "Yank: "
+                         (cl-remove-duplicates
+                          kill-ring :test #'string= :from-end t)
+                         nil t nil nil))
+                  ;; Find `text' in `kill-ring'.
+                  (pos (cl-position text kill-ring :test #'string=))
+                  ;; Translate relative to `kill-ring-yank-pointer'.
+                  (n (+ pos (length kill-ring-yank-pointer))))
+             (unless (string= text (current-kill n t))
+               (error "Could not setup for `current-kill'"))
+             ;; Restore `last-command' over Selectrum commands.
+             (setq last-command old-last-command)
+             ;; Delegate to `yank-pop' if appropriate or just insert.
+             (if (eq last-command 'yank)
+                          (yank-pop n) (insert-for-yank text)))))
+     #+end_src
+
+     #+RESULTS:
+     : yank-pop+
 
 *** Helm                                                         :noexport:
 #+begin_src emacs-lisp :eval no
