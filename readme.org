@@ -169,6 +169,13 @@
     #+begin_src emacs-lisp
       (setq package-archives nil)
     #+end_src
+
+** Make terminal nicer to use in emacs
+    #+begin_src emacs-lisp
+      ;; use emacs as a pager
+      (setenv "PAGER" "cat")
+    #+end_src
+
 ** Core Emacs Configuration
 *** Keep emacs from littering
 #+begin_src emacs-lisp
