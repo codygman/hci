@@ -722,6 +722,7 @@ browser.link.open_newwindow.restriction
       (use-package evil
         :after general
         :config
+        (setq evil-undo-system 'undo-redo)
         (define-key evil-motion-state-map (kbd "SPC") nil) ;; TODO necessary? break things?
         (define-key evil-motion-state-map (kbd "RET") nil)
         (define-key evil-motion-state-map (kbd "TAB") nil)
