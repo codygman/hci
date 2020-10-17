@@ -1108,6 +1108,7 @@ browser.link.open_newwindow.restriction
         (setq company-minimum-prefix-length 1
               company-idle-delay 0.01
               company-selection-wrap-around t
+              company-dabbrev-downcase nil
               )
         (global-company-mode)
         )
