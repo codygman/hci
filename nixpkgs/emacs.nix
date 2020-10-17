@@ -11,6 +11,7 @@
     company-org-roam
     docker
     docker-tramp
+    eshell-syntax-highlighting
     use-package
     haskell-mode
     helm-tramp
