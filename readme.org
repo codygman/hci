@@ -768,9 +768,10 @@ browser.link.open_newwindow.restriction
 	  :keymaps 'override
 	  :non-normal-prefix "M-SPC"
 	  :prefix "SPC"
-	  "o-" 'dired
+	  "o-" 'dired-jump
 	  ))
     #+end_src
+
 *** save-hist-mode           :built-in:
     #+begin_src emacs-lisp
       (use-package savehist
