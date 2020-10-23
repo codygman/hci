@@ -888,32 +888,189 @@ browser.link.open_newwindow.restriction
     #+end_src
 
 *** compilation mode
-    #+begin_src emacs-lisp
+**** helpers
+***** save on evil escape to normal mode
+      #+begin_src emacs-lisp
+        ;; save when I enter normal mode
+(defun save-buffer-no-confirm-when-prog-mode ()
+  ;; TODO make this work more generally if possible?
+  (when (and
+	 (buffer-file-name) ;; file has already been saved somewhere
+	 (not (minibufferp (current-buffer))) ;; don't try and save minibuffers
+	 (or ;; only saves prog-mode or org-mode derived buffers
+	  (derived-mode-p 'prog-mode)
+	  (derived-mode-p 'org-mode)))
+    ;;(message "saving buffer after entering normal mode for prog file")
+    (let ((buffer-save-without-query t))
+      (save-buffer))))
+        (add-hook 'evil-normal-state-entry-hook 'save-buffer-no-confirm-when-prog-mode)
+        ;; (remove-hook 'evil-normal-state-entry-hook 'save-buffer-no-confirm-when-prog-mode)
+
+      #+end_src
+***** add extra compilation mode matchers
+****** haskell errorrs with span information
+       #+begin_src emacs-lisp
+         (require 'compile)
+         (add-to-list 'compilation-error-regexp-alist '("^  \\(/.+.hs\\):\\([0-9]+\\):\\([0-9]+\\):" 1 2 3))
+       #+end_src
+****** tried testing these with [[file:~/test-proj2][file:~/test-proj2]] but the test doesn't print out line locaitons
+****** TODO test that hspec expectation matcher still works
+****** tested syntax errors do work
+****** haskell hspec test errors
+      #+begin_src emacs-lisp
+         (require 'compile)
+        (add-to-list 'compilation-error-regexp-alist '("^\\(/.+.hs\\):(\\([0-9]+\\),\\([0-9]+\\).+-(" 1 2 3))
+      #+end_src
+***** helpers to bind next-error/prev-error that wrap around
+      #+begin_src emacs-lisp :name prev-next-error-helpers
+        (defvar my-modeline-flash-color "#551a8b")
+
+        (defun my-indicate-error-nav-wrapped (direction)
+          "Display a message in minibuffer indicating that we wrapped
+        also flash the mode-line"
+        (message "Wrapped %s error" (symbol-name direction))
+        ;; TODO something about this causes errors like
+        ;; Invalid face reference: 1368
+        ;; Invalid face reference: 1
+
+          ;; (let ((mode-line-color (face-background 'mode-line)))
+          ;;   (message "Wrapped %s error" (symbol-name direction))
+          ;;   (set-face-background 'mode-line my-modeline-flash-color)
+          ;;   (sit-for 0.3)
+          ;;   (set-face-background 'mode-line mode-line-color))
+          )
+
+        ;; TODO make my-next-error-wrapped and my-previouse-error-wrapped use stale information in the case of `user-error: No more errors yet`
+        ;; that way while ghcid loads for instance I can keep cycling through the previous results
+        (defun my-next-error-wrapped (&optional arg reset)
+          "Jumps to previous error if at first error jump to last error instead.
+        Prefix argument ARG says how many error messages to move forwards (or
+        backwards, if negative). With just C-u as prefix moves to first error"
+          (interactive "P")
+          (condition-case nil
+              (call-interactively 'next-error)
+            ('user-error (progn (next-error 1 t)
+                                (my-indicate-error-nav-wrapped 'next)))))
+
+        (defun my-jump-to-last-error (buffer)
+          "Jump to last error in the BUFFER, this assumes that
+        the error is at last but third line"
+          (save-selected-window
+            (select-window (get-buffer-window buffer))
+            (goto-char (point-max))
+            (forward-line -3)
+            (call-interactively 'compile-goto-error)))
+
+        (defun my-previous-error-wrapped (&optional arg)
+          "Jumps to previous error if at first error jump to last error instead.
+        Prefix argument ARG says how many error messages to move backwards (or
+        forwards, if negative)."
+          (interactive "P")
+          (condition-case nil
+              (if (compilation-buffer-p (current-buffer))
+                  (compilation-previous-error 1)
+                (call-interactively 'previous-error))
+            ('user-error (progn
+                           (let ((error-buffer (next-error-find-buffer)))
+                             ;; If the buffer has an associated error buffer use it to
+                             ;; to move to last error
+                             (if (and (not (eq (current-buffer) error-buffer))
+                                      (compilation-buffer-p error-buffer))
+                                 (my-jump-to-last-error error-buffer)
+                               ;; Otherwise move to last point and invoke previous error
+                               (goto-char (point-max))
+                               (call-interactively 'previous-error))
+                             (my-indicate-error-nav-wrapped 'previous))))))
+      #+end_src
+
+**** use package
+    #+begin_src emacs-lisp :noweb yes
+      ;; TODO move these helpers back into helper subheading after I figure out why they aren't evaluating
+        (defvar my-modeline-flash-color "#551a8b")
+
+        (defun my-indicate-error-nav-wrapped (direction)
+          "Display a message in minibuffer indicating that we wrapped
+        also flash the mode-line"
+        (message "Wrapped %s error" (symbol-name direction))
+        ;; TODO something about this causes errors like
+        ;; Invalid face reference: 1368
+        ;; Invalid face reference: 1
+
+          ;; (let ((mode-line-color (face-background 'mode-line)))
+          ;;   (message "Wrapped %s error" (symbol-name direction))
+          ;;   (set-face-background 'mode-line my-modeline-flash-color)
+          ;;   (sit-for 0.3)
+          ;;   (set-face-background 'mode-line mode-line-color))
+          )
+
+        ;; TODO make my-next-error-wrapped and my-previouse-error-wrapped use stale information in the case of `user-error: No more errors yet`
+        ;; that way while ghcid loads for instance I can keep cycling through the previous results
+        (defun my-next-error-wrapped (&optional arg reset)
+          "Jumps to previous error if at first error jump to last error instead.
+        Prefix argument ARG says how many error messages to move forwards (or
+        backwards, if negative). With just C-u as prefix moves to first error"
+          (interactive "P")
+          (condition-case nil
+              (call-interactively 'next-error)
+            ('user-error (progn (next-error 1 t)
+                                (my-indicate-error-nav-wrapped 'next)))))
+
+        (defun my-jump-to-last-error (buffer)
+          "Jump to last error in the BUFFER, this assumes that
+        the error is at last but third line"
+          (save-selected-window
+            (select-window (get-buffer-window buffer))
+            (goto-char (point-max))
+            (forward-line -3)
+            (call-interactively 'compile-goto-error)))
+
+        (defun my-previous-error-wrapped (&optional arg)
+          "Jumps to previous error if at first error jump to last error instead.
+        Prefix argument ARG says how many error messages to move backwards (or
+        forwards, if negative)."
+          (interactive "P")
+          (condition-case nil
+              (if (compilation-buffer-p (current-buffer))
+                  (compilation-previous-error 1)
+                (call-interactively 'previous-error))
+            ('user-error (progn
+                           (let ((error-buffer (next-error-find-buffer)))
+                             ;; If the buffer has an associated error buffer use it to
+                             ;; to move to last error
+                             (if (and (not (eq (current-buffer) error-buffer))
+                                      (compilation-buffer-p error-buffer))
+                                 (my-jump-to-last-error error-buffer)
+                               ;; Otherwise move to last point and invoke previous error
+                               (goto-char (point-max))
+                               (call-interactively 'previous-error))
+                             (my-indicate-error-nav-wrapped 'previous))))))
       (use-package compile
-	:init
-	(setq compilation-scroll-output t) ;; TODO test
+        :init
+        (setq compilation-scroll-output t) ;; TODO test
 
-	(require 'ansi-color)
-	(defun endless/colorize-compilation ()
-	  "Colorize from `compilation-filter-start' to `point'."
-	  (let ((inhibit-read-only t))
-	    (ansi-color-apply-on-region
-	     compilation-filter-start (point))))
-	(add-hook 'compilation-filter-hook
-		  #'endless/colorize-compilation)
+        (require 'ansi-color)
+        (defun endless/colorize-compilation ()
+          "Colorize from `compilation-filter-start' to `point'."
+          (let ((inhibit-read-only t))
+            (ansi-color-apply-on-region
+             compilation-filter-start (point))))
+        (add-hook 'compilation-filter-hook
+                  #'endless/colorize-compilation)
 
-	;; :hook (compilation-filter-hook  endless/colorize-compilation)
-	:general
-	(my-leader-def
-	  :states '(normal visual emacs motion)
-	  :prefix "SPC"
-	  :keymaps 'override
-	  :non-normal-prefix "M-SPC"
-	  :prefix "SPC"
-	  "cc" '(counsel-compile :which-key "Counsel Compile")
-	  "cC" '(recompile :which-key "M-x recompile")
-	  )
-	)
+        ;; :hook (compilation-filter-hook  endless/colorize-compilation)
+        :general
+        (my-leader-def
+          :states '(normal visual emacs motion)
+          :prefix "SPC"
+          :keymaps 'override
+          :non-normal-prefix "M-SPC"
+          :prefix "SPC"
+          "cc" '(counsel-compile :which-key "Counsel Compile")
+          "cC" '(recompile :which-key "M-x recompile")
+          "en" '(my-next-error-wrapped :which-key "next error")
+          "ep" '(my-prev-error-wrapped :which-key "prev error")
+          )
+        )
 
     #+end_src
 *** winner mode
