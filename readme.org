@@ -856,6 +856,10 @@ browser.link.open_newwindow.restriction
         (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
         (add-hook 'haskell-mode-hook 'haskell-indentation-mode))
     #+end_src
+*** ghcid-mode
+    #+begin_src emacs-lisp
+      (load-file "ghcid.el") 
+    #+end_src
 *** flycheck
     #+begin_src emacs-lisp
 	    (use-package flycheck
