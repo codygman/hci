@@ -266,7 +266,8 @@
 **** color theme
     #+begin_src emacs-lisp
       ;; TODO figure out why use-package doesn't work here
-      (load-theme 'doom-one t)
+      ;; (load-theme 'doom-one t)
+      (load-theme 'modus-vivendi t) ;; not sure I like this on laptop
     #+end_src
 *** auth source
 #+begin_src emacs-lisp
