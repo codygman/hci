@@ -2,23 +2,30 @@
   #+begin_src emacs-lisp :tangle yes :noweb yes
     (use-package compile
       :config
-      (add-to-list
-        'compilation-error-regexp-alist
-        '(
-          <<extra-matchers>>
-        )
-      )
+      <<add-extra-compilation-regexp-matchers>>
       )
   #+end_src
-** extra compilation matchers
+** add-extra-compilation-regexp-matchers
     :PROPERTIES:
-    :header-args: :noweb-ref extra-matchers
+    :header-args: :noweb-ref add-extra-compilation-regexp-matchers
     :END:
+*** begin
+#+begin_src emacs-lisp
+  (add-to-list
+   'compilation-error-regexp-alist
+   '(
+#+end_src
+
 *** matcher 1 
 #+begin_src emacs-lisp
-  ("^  \\(/.+.hs\\):\\([0-9]+\\):\\([0-9]+\\):" 1 2 3)
+      ("^  \\(/.+.hs\\):\\([0-9]+\\):\\([0-9]+\\):" 1 2 3)
 #+end_src
 *** matcher 2
 #+begin_src emacs-lisp
-  ("^\\(/.+.hs\\):(\\([0-9]+\\),\\([0-9]+\\).+-(" 1 2 3)
+      ("^\\(/.+.hs\\):(\\([0-9]+\\),\\([0-9]+\\).+-(" 1 2 3)
+#+end_src
+*** end
+#+begin_src emacs-lisp
+    )
+  )
 #+end_src
