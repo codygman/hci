@@ -1,0 +1,24 @@
+* compilation mode
+  #+begin_src emacs-lisp :tangle yes :noweb yes
+    (use-package compile
+      :config
+      (add-to-list
+        'compilation-error-regexp-alist
+        '(
+          <<extra-matchers>>
+        )
+      )
+      )
+  #+end_src
+** extra compilation matchers
+    :PROPERTIES:
+    :header-args: :noweb-ref extra-matchers
+    :END:
+*** matcher 1 
+#+begin_src emacs-lisp
+  ("^  \\(/.+.hs\\):\\([0-9]+\\):\\([0-9]+\\):" 1 2 3)
+#+end_src
+*** matcher 2
+#+begin_src emacs-lisp
+  ("^\\(/.+.hs\\):(\\([0-9]+\\),\\([0-9]+\\).+-(" 1 2 3)
+#+end_src
