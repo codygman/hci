@@ -31,6 +31,24 @@
                   :files (:defaults))
     '';
     })
+
+    # TODO My package is incorrect somehow...
+    # (epkgs.melpaBuild {
+    #   pname = "helm-clubhouse";
+    #   version = "0.1";
+
+    #   src = fetchGit {
+    #     url = "https://git.sr.ht/~codygman/helm-clubhouse";
+    #     rev = "94d0845ec61716639f890b333429d6b8b7e62e5a";
+    #   };
+
+    #   recipe = pkgs.writeText "helm-clubhouse-recipe" ''
+    #   (helm-clubhouse :fetcher git
+    #               :url "https://git.sr.ht/~codygman/helm-clubhouse"
+    #               :files (:defaults))
+    # '';
+    # })
+
     exwm
     exwm-edit
     evil
