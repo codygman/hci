@@ -856,7 +856,7 @@ browser.link.open_newwindow.restriction
     #+end_src
 *** ghcid-mode
     #+begin_src emacs-lisp
-      (load-file "ghcid.el") 
+      (load-file "~/hci/ghcid.el")
     #+end_src
 *** flycheck
     #+begin_src emacs-lisp
