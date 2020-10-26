@@ -1194,7 +1194,6 @@ browser.link.open_newwindow.restriction
 *** keyfreq
     #+begin_src emacs-lisp
       (use-package keyfreq
-        :pin manual ;; manually update
         :config
         (setq keyfreq-excluded-commands
               '(self-insert-command
@@ -1320,7 +1319,6 @@ browser.link.open_newwindow.restriction
 *** pdf-tools
     #+begin_src emacs-lisp
       (use-package pdf-tools
-        :pin manual ;; manually update
         :config
         ;; initialise
         (pdf-tools-install)
