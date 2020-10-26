@@ -18,6 +18,7 @@
 ;;; Code:
 
 (require 'term)
+(require 'compile)
 
 ;; Set ghcid-target to change the stack target
 (setq ghcid-target "")
