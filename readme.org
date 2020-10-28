@@ -463,6 +463,8 @@
           "wd" '(delete-window :which-key "Delete Window")
           "qq" '(save-buffers-kill-terminal :which-key "Quit Emacs")
 
+          "cl" '(comment-line :which-key "comment line")
+
           "hf" '(describe-function :which-key "Describe Function")
           "hk" '(describe-key :which-key "Describe Key")
           "ha" '(apropos-command :which-key "Apropos Command")
