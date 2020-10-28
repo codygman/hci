@@ -141,6 +141,8 @@
 
 
     ts
+    wgrep
+    wgrep-helm
     with-simulated-input
     which-key
     yasnippet
