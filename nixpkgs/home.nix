@@ -19,6 +19,7 @@ in
   '';
   imports = mylib.loadPrivatePersonalOrWorkEnv ;
 
+  fonts.fontconfig.enable = true;
   xsession = {
     enable = true;
     windowManager.command = ''

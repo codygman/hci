@@ -9,6 +9,7 @@
     company-box
     company-lsp
     company-org-roam
+    dashboard
     docker
     docker-tramp
     eshell-syntax-highlighting
@@ -140,6 +141,7 @@
     prettier-js
 
 
+    unicode-fonts
     ts
     wgrep
     wgrep-helm
