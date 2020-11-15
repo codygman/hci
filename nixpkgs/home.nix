@@ -88,6 +88,7 @@ in
       cmake
       coreutils
       dbeaver
+      emacs-all-the-icons-fonts
       jq
       awscli
       discord
