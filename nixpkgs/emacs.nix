@@ -8,7 +8,6 @@
     company
     company-box
     company-lsp
-    company-org-roam
     dashboard
     docker
     docker-tramp

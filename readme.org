@@ -554,6 +554,8 @@
         (push 'company-org-roam company-backends))
 
       (use-package org-roam
+        :init
+        (push 'company-capf company-backends)
         :hook
         (after-init . org-roam-mode)
         :custom
