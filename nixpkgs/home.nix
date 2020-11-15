@@ -4,7 +4,7 @@ let
   sources = import ./nix/sources.nix;
   emacs-overlay = sources.emacs-overlay {};
   mylorripkg = sources.lorri;
-  pkgs = import sources.nixpkgs { overlays = [ (import sources.emacs-overlay) ];};
+  pkgs = import sources.nixpkgs { overlays = [ (import sources.emacs-overlay) ]; config = { allowUnfree = true; }; };
   mylorri = pkgs.callPackage mylorripkg {};
   home-manager = import sources.home-manager {};
   myEnv = builtins.getEnv "MYENV";
@@ -13,10 +13,6 @@ let
   myemacs = import ./emacs.nix {pkgs = pkgs;};
 in
 {
-  nixpkgs.config.allowUnfree = true;
-  home.file.".config/nixpkgs/config.nix".text = ''
-    { allowUnfree = true; }
-  '';
   imports = mylib.loadPrivatePersonalOrWorkEnv ;
 
   fonts.fontconfig.enable = true;
