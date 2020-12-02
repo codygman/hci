@@ -1366,6 +1366,17 @@ browser.link.open_newwindow.restriction
 	(kill-buffer))))
      #+end_src
      
+* post package config startup
+** start up a haskell repl
+    #+begin_src emacs-lisp
+      (let ((default-directory (getenv "HOME")))
+        (haskell-interactive-bring)
+        )
+    #+end_src
+
+    #+RESULTS:
+    : /home/cody
+
 * NOTE 
   :PROPERTIES:
   :header-args:    :tangle no

@@ -72,6 +72,21 @@ in
 
   home = {
 
+    file = {
+      ".ghci".text = ''
+import Control.Lens
+import Data.Aeson
+import Data.Csv
+import qualified Data.Map as M
+import qualified Data.Vector as V
+import qualified Data.ByteString as BS
+import qualified Data.ByteString.IO as BS
+import qualified Data.ByteString.Lazy as LBS
+import qualified Data.ByteString.Lazy.IO as LBS
+-- import qualified Hreq.Client as Hreq
+'';
+    };
+
     keyboard = {
       layout = "us";
       options = [ "ctrl:nocaps" ];
@@ -95,7 +110,7 @@ in
       fd
       firefox
       gcc
-      (haskellPackages.ghcWithPackages (pkgs: [pkgs.lens pkgs.generic-lens]))
+      (haskellPackages.ghcWithPackages (h: [h.lens h.generic-lens h.aeson h.cassava h.megaparsec h.turtle h.conduit h.lens h.req h.servant])) # hreq-client broken
       gnumake
       graphviz
       libnotify
