@@ -185,7 +185,10 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 #+end_src
-
+*** Auto revert changed buffers
+#+begin_src emacs-lisp
+(global-auto-revert-mode)
+#+end_src
 *** Visuals
 **** Org mode
      #+begin_src emacs-lisp
