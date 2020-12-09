@@ -794,6 +794,7 @@ browser.link.open_newwindow.restriction
 		 read-expression-history
 		 helm-history
 		 counsel-compile-history
+		 recentf-list
 		 ))
 	(setq savehist-file "~/.emacs.d/savehist")
 	:config
@@ -1137,6 +1138,7 @@ browser.link.open_newwindow.restriction
           helm-autoresize-max-height 0
           helm-autoresize-min-height 20
           helm-always-two-windows t
+          helm-ff-file-name-history-use-recentf t
           )
     :general
     ;; TODO change rest of general def's to use this instead of nmap?
