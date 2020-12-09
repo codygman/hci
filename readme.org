@@ -1293,7 +1293,7 @@ browser.link.open_newwindow.restriction
       (use-package company
         :config
         (setq company-minimum-prefix-length 1
-              company-idle-delay 0.01
+              company-idle-delay 0.4
               company-selection-wrap-around t
               company-dabbrev-downcase nil
               )
