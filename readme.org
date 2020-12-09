@@ -438,6 +438,19 @@
     #+begin_src emacs-lisp
       (require 'use-package)
     #+end_src
+*** TODO desktop-save-mode                                       :built:in:
+    #+begin_src emacs-lisp
+      (use-package desktop
+        :config
+        (setq desktop-save 1
+              desktop-load-locked-desktop t
+              desktop-dirname user-emacs-directory
+              desktop-restore-frames t ;; https://github.com/ch11ng/exwm/issues/216#issuecomment-269993391
+              ;; Don't save remote files and/or *gpg files.
+              desktop-files-not-to-save "\\(^/[^/:]*:\\|(ftp)$\\)\\|\\(\\.gpg$\\)")
+        (desktop-save-mode 1)
+        )
+    #+end_src
 *** general
     #+begin_src emacs-lisp
       (use-package general
