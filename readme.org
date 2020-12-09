@@ -780,6 +780,26 @@ browser.link.open_newwindow.restriction
 	  ))
     #+end_src
 
+*** recentf-mode                                                :built-in:
+   #+begin_src emacs-lisp
+     (defmacro with-suppressed-message (&rest body)
+       "Suppress new messages temporarily in the echo area and the `*Messages*' buffer while BODY is evaluated."
+       (declare (indent 0))
+       (let ((message-log-max nil))
+         `(with-temp-message (or (current-message) "") ,@body)))
+
+     (use-package recentf
+       :config
+       (setq recentf-max-saved-items 1000)
+       (setq recentf-exclude '(".recentf" "/TAGS$" "/var/tmp"))
+       (setq recentf-keep '(file-remote-p file-readable-p))
+       (setq recentf-auto-save-timer
+             (run-with-idle-timer 30 t #'(lambda ()
+                                           (with-suppressed-message (recentf-save-list)))))
+       (setq recentf-auto-cleanup 'never)
+       (recentf-mode 1))
+   #+end_src
+
 *** save-hist-mode           :built-in:
     #+begin_src emacs-lisp
       (use-package savehist
