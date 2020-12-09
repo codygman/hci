@@ -440,6 +440,7 @@
     #+end_src
 *** TODO desktop-save-mode                                       :built:in:
     #+begin_src emacs-lisp
+;; TODO figure out how to save tab-bar-mode tabs
       (use-package desktop
         :config
         (setq desktop-save 1
