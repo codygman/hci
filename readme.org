@@ -601,6 +601,8 @@
       (use-package org-roam
         :init
         (push 'company-capf company-backends)
+        :config
+        (setq org-roam-completion-everywhere t)
         :hook
         (after-init . org-roam-mode)
         :custom
