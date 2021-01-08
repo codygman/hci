@@ -452,39 +452,6 @@
         (desktop-save-mode 1)
         )
     #+end_src
-*** tab bar mode
-    #+begin_src emacs-lisp
-      (use-package tab-bar
-        :config
-        (setq tab-bar-close-button-show nil)
-        (setq tab-bar-close-last-tab-choice 'tab-bar-mode-disable)
-        (setq tab-bar-close-tab-select 'recent)
-        (setq tab-bar-new-tab-choice t)
-        (setq tab-bar-new-tab-to 'right)
-        (setq tab-bar-position nil)
-        (setq tab-bar-show t)
-        (setq tab-bar-tab-hints nil)
-        (setq tab-bar-tab-name-function 'tab-bar-tab-name-all) ;; 'tab-bar-tab-name-current) ;; 
-
-        (tab-bar-mode 1)
-        (tab-bar-history-mode -1)
-        :general
-        (my-leader-def
-          :states '(normal visual emacs motion)
-          :prefix "SPC"
-          :keymaps 'override
-          :non-normal-prefix "M-SPC"
-          :prefix "SPC"
-          "tl"  'tab-bar-select-tab-by-name
-          "tr"  'tab-bar-rename-tab
-          "tt"  'tab-bar-new-tab
-          "tc"  'tab-bar-close-tab
-          "tn"  'tab-bar-next-tab ;; error autoloading and defining this func?
-          "tp"  'tab-bar-previous-tab ;; error autoloading and defining this func?
-          ))
-    #+end_src
-
-
 *** general
     #+begin_src emacs-lisp
       (use-package general
@@ -530,6 +497,38 @@
           )
         )
     #+end_src
+*** tab bar mode
+    #+begin_src emacs-lisp
+      (use-package tab-bar
+        :config
+        (setq tab-bar-close-button-show nil)
+        (setq tab-bar-close-last-tab-choice 'tab-bar-mode-disable)
+        (setq tab-bar-close-tab-select 'recent)
+        (setq tab-bar-new-tab-choice t)
+        (setq tab-bar-new-tab-to 'right)
+        (setq tab-bar-position nil)
+        (setq tab-bar-show t)
+        (setq tab-bar-tab-hints nil)
+        (setq tab-bar-tab-name-function 'tab-bar-tab-name-all) ;; 'tab-bar-tab-name-current) ;; 
+
+        (tab-bar-mode 1)
+        (tab-bar-history-mode -1)
+        :general
+        (my-leader-def
+          :states '(normal visual emacs motion)
+          :prefix "SPC"
+          :keymaps 'override
+          :non-normal-prefix "M-SPC"
+          :prefix "SPC"
+          "tl"  'tab-bar-select-tab-by-name
+          "tr"  'tab-bar-rename-tab
+          "tt"  'tab-bar-new-tab
+          "tc"  'tab-bar-close-tab
+          "tn"  'tab-bar-next-tab ;; error autoloading and defining this func?
+          "tp"  'tab-bar-previous-tab ;; error autoloading and defining this func?
+          ))
+    #+end_src
+
 *** org
     #+begin_src emacs-lisp
       (use-package org-capture
