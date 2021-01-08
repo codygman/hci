@@ -600,7 +600,7 @@
 
       (use-package org-roam
         :init
-        (push 'company-capf company-backends)
+        ;; TODO verify auto-complete works or add it back
         :config
         (setq org-roam-completion-everywhere t)
         :hook
