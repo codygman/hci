@@ -1444,6 +1444,7 @@ browser.link.open_newwindow.restriction
     #+begin_src emacs-lisp
       (let ((default-directory (getenv "HOME")))
         (haskell-interactive-bring)
+        (evil-append-line 1)
         )
     #+end_src
 

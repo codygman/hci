@@ -79,6 +79,8 @@ import Data.Aeson
 import Data.Csv
 import qualified Data.Map as M
 import qualified Data.Vector as V
+import qualified Data.Text as T
+import qualified Data.Text.IO as T
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.IO as BS
 import qualified Data.ByteString.Lazy as LBS
