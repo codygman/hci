@@ -51,7 +51,23 @@
 
     exwm
     exwm-edit
-    evil
+    # https://github.com/emacs-evil/evil/pull/1404
+    (epkgs.melpaBuild {
+      pname = "evil";
+      version = "0.1";
+
+      src = fetchGit {
+        url = "https://github.com/codygman/evil.git";
+        ref = "fix-obsolete-function-alias";
+        rev = "f009995ba1494581ff44831086e0a8d190ca24ed";
+      };
+
+      recipe = pkgs.writeText "evil-recipe" ''
+      (evil :fetcher git
+                  :url "https://github.com/codygman/evil.git"
+                  :files (:defaults))
+    '';
+    })
     evil-magit
     evil-org
     evil-collection
