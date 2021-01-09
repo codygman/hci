@@ -113,6 +113,7 @@ import qualified Data.ByteString.Lazy.IO as LBS
       firefox
       gcc
       (haskellPackages.ghcWithPackages (h: [h.lens h.generic-lens h.aeson h.cassava h.megaparsec h.turtle h.conduit h.lens h.req h.servant])) # hreq-client broken
+      haskellPackages.haskell-language-server
       gnumake
       graphviz
       libnotify

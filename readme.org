@@ -262,8 +262,8 @@
 **** Transparency
 
 #+begin_src emacs-lisp :results silent
- (set-frame-parameter (selected-frame) 'alpha '(95 . 50))
- (add-to-list 'default-frame-alist '(alpha . (95 . 50)))
+ (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
+ (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
 #+end_src
 
 **** color theme
@@ -1286,7 +1286,7 @@ browser.link.open_newwindow.restriction
     #+begin_src emacs-lisp
       (use-package lsp-mode
         :hook (
-               ;; (haskell-mode . lsp-deferred)
+               (haskell-mode . lsp-deferred)
                (lsp-mode . lsp-enable-which-key-integration)
                ((js2-mode rjsx-mode) . lsp)
                )
@@ -1350,6 +1350,10 @@ browser.link.open_newwindow.restriction
 
 
     #+end_src
+
+    #+RESULTS:
+    : t
+
 *** javascript
     A lot of this is in [[*lsp][lsp]] FYI
 
@@ -1460,147 +1464,168 @@ browser.link.open_newwindow.restriction
 ** Random Things TODO
 *** BIG NOTE: crib from [[file:~/code/minimal-emacs-literate-workflow/init.el::;; prevent gc during startup][minimal-emacs-literate-workflow config]]
     also https://git.sr.ht/~codygman/emacs-config/tree/master
-*** TODO improve shell interaction in emacs
-**** TODO open shell in same window
-**** TODO improve shell completion
-     https://coredumped.dev/2020/01/04/native-shell-completion-in-emacs/
-**** TODO tryout vterm again
-     https://www.reddit.com/r/emacs/comments/hj5lz5/is_it_me_or_are_emacs_shell_term_and_ansiterm/
-**** TODO see if I can get used to the shell pop workflow
-     http://pragmaticemacs.com/emacs/pop-up-a-quick-shell-with-shell-pop/
+*** current
+    
+**** TODO fix ghcid.el and next-error / previous-error not working sometimes
      
-*** TODO get ideas from emacs conf 2019 videos
-    
-    https://www.reddit.com/r/emacs/comments/hj5lz5/is_it_me_or_are_emacs_shell_term_and_ansiterm/
-    
-*** TODO setup pdf reading/annotation in emacs
-    http://pragmaticemacs.com/emacs/view-and-annotate-pdfs-in-emacs-with-pdf-tools/
-    
-*** TODO setup chatting programs with matterbridge
-    - irc (just use rcirc, erc, or something)
-    
-      Then within that same client I should be able to access:
+maybe just work specific? Can I reproduce on personal?
 
-    - Discord 
-    - functional programming slack
-    - teams
+**** TODO setup haskell language server
 
-*** TODO try helm again and see if helm-rg is fixed
-https://www.reddit.com/r/emacs/comments/htbjeb/helmprojectilerg_is_not_working_as_expected_not/
-https://github.com/cosmicexplorer/helm-rg/pull/25 (it's merged into master)
+*** someday
+**** TODO improve shell interaction in emacs
+***** TODO open shell in same window
+***** TODO improve shell completion
+      https://coredumped.dev/2020/01/04/native-shell-completion-in-emacs/
+***** TODO tryout vterm again
+      https://www.reddit.com/r/emacs/comments/hj5lz5/is_it_me_or_are_emacs_shell_term_and_ansiterm/
+***** TODO see if I can get used to the shell pop workflow
+      http://pragmaticemacs.com/emacs/pop-up-a-quick-shell-with-shell-pop/
+**** TODO evaluate replacing helm with selectrum/prescient/etc
+     
+It seems like something easier to understand, hack on, extend, etc.
 
-Hm, need to fix =SPC b b= not working because I guess helm isn't loaded yet.. it works after doing any other helm related thing
+Would something like my pie in the sky github navigation work with selectrum though?
 
-seems to be working pretty well... what about helm posframe?
+**** TODO implement your code as a crime scene in emacs
+***** TODO package [[https://github.com/adamtornhill/code-maat][code-maat]] as nix expression
+     
+ https://discourse.nixos.org/t/nix-and-clojure/7104/5
 
-https://github.com/tumashu/helm-posframe
-*** TODO recency based narrowing suggestions
-    whether in helm or ivy... need to take advantage of history
-
-    otherwise the right result is nearly never there...
-*** DONE fix company autocomplete jagged rendering
-    CLOSED: [2020-08-23 Sun 00:59]
-    It seems to come up when I type things like =to=
+ https://fzakaria.com/2020/07/20/packaging-a-maven-application-with-nix.html
+***** TODO install [[https://github.com/ag91/code-compass][code-compass]]
+**** TODO get ideas from emacs conf 2019 videos
     
-    Or maybe it's based upon length... =up= had 4 or 5 suggestions
+     https://www.reddit.com/r/emacs/comments/hj5lz5/is_it_me_or_are_emacs_shell_term_and_ansiterm/
     
-    When I have 3 it doesn't seem to do quite what I want
+**** TODO setup pdf reading/annotation in emacs
+     http://pragmaticemacs.com/emacs/view-and-annotate-pdfs-in-emacs-with-pdf-tools/
     
-    =re= seems to have a ton of completions.... so it's a good test
+**** TODO setup chatting programs with matterbridge
+     - irc (just use rcirc, erc, or something)
     
-    It seems to come up when I type long words like company posframe. I'm not sure if this is some
+       Then within that same client I should be able to access:
 
-    possible solutions that have other niceities:
+     - Discord 
+     - functional programming slack
+     - teams
 
-    company-box
-    company-posframe
+**** TODO try helm again and see if helm-rg is fixed
+ https://www.reddit.com/r/emacs/comments/htbjeb/helmprojectilerg_is_not_working_as_expected_not/
+ https://github.com/cosmicexplorer/helm-rg/pull/25 (it's merged into master)
 
-    unclear if either of these might cause an issue with exwm like opening a new window or soemthing
-    
-    looks like company-box fixes it up, gives me nice little symbols, and seems faster? wow!
+ Hm, need to fix =SPC b b= not working because I guess helm isn't loaded yet.. it works after doing any other helm related thing
 
-    The only problem is that exwm seems to have some problems with posframe support. I posted a comment, but can't find it atm... so you'll have to search for it if you need it.
-    
-*** TODO investigate aggressive indent mode again for more handsfree whitespace
-*** TODO analyze whether org buffers too narrow for literate programming
-    I had a few Haskell code blocks I was looking at and a couple were longer
-    
-    Maybe 100-120 characters wide
-    
-    They didn't show up nicely at all
-    
-    I turned off visual line mode and they showed up nicely.. maybe I could do that within org src blocks
-*** TODO revisit automagic org source blocks
-    
-    I have this on github somewhere... the idea is based on yasnippet and executing blocks on yasnippet tab out
+ seems to be working pretty well... what about helm posframe?
 
-    The motivation is to be able to be as close to running commands in a terminal with the benefit of having a log of outputs.
+ https://github.com/tumashu/helm-posframe
+**** TODO recency based narrowing suggestions
+     whether in helm or ivy... need to take advantage of history
+
+     otherwise the right result is nearly never there...
+**** DONE fix company autocomplete jagged rendering
+     CLOSED: [2020-08-23 Sun 00:59]
+     It seems to come up when I type things like =to=
     
-    Perhaps add in autonaming of blocks (and easy renaming), then using noweb effortlessly could be very very good
-
-*** TODO toggle for transparency?
-*** TODO journalctl mode and binds?
-    maybe a hydra for frequent journalctls I look at?
-*** TODO =SPC '= search project last thing (or skip this one and use SPC s p all time?)
-    huh... =projectile-ripgrep= couldn't find rg? But:
-*** TODO look at more extended yasnippet config
-    - indent for completion for instance
-*** TODO extended flycheck
-**** TODO error navigation using =]e= and =[e=
-**** TODO hlint
-*** TODO checkout potentially alternate helm grep methods
-https://www.manueluberti.eu/emacs/2020/02/22/ripgrepping-with-helm/
-*** TODO improve dired
+     Or maybe it's based upon length... =up= had 4 or 5 suggestions
     
-    - copy file when there are two dired buffers should select the other!
-    - dired-plus mode or w/e?
-    - maybe all the icons dired? Test if the bug in editable mode is still there
-    - incorporate doom things?
+     When I have 3 it doesn't seem to do quite what I want
+    
+     =re= seems to have a ton of completions.... so it's a good test
+    
+     It seems to come up when I type long words like company posframe. I'm not sure if this is some
 
-*** TODO right align time in modeline
-**** resouces
-https://emacs.stackexchange.com/questions/5529/how-to-right-align-some-items-in-the-modeline
+     possible solutions that have other niceities:
 
-https://seagle0128.github.io/doom-modeline/
-https://github.com/seagle0128/doom-modeline/issues/363#issuecomment-656423259
-*** TODO get niv powered emacs package versions working
-    should base this off of =hci-core= branch
-*** TODO test out hyperbole after seeing that emacs NYC talk and see how it could be useful
-I think instant contextually relevant buttons and the like that are super extensible could have a larger affect than I might currently realize
-*** TODO enable using buttercup tests for everything
-**** end result could look like
-     #+begin_src emacs-lisp :tangle no
-       ;; simple tests that don't require anything extra remain the same
-       (it "emacs version should be 28.0.50"
-	   (expect emacs-version :to-equal "28.0.50"))
+     company-box
+     company-posframe
 
-       ;; more complex tests will use the daemon instance of emacs started with invisible frame
-       ;; TODO later make a macro to make this even more painless
-       (it "emacs version should be 28.0.50"
-	   (expect
-	    (server-eval-at "foo"
-			    (emacs-version :to-equal "28.0.50")))
-     #+end_src
-     idea from https://github.com/jorgenschaefer/emacs-buttercup/issues/174#issuecomment-625508845
-*** TODO make =M-{h,l}= in org insert mode also promote/demote subtree
-*** TODO =alt+{l,r}= demote/promote subheading
-*** TODO =SPC n l= org store link
-*** TODO turn on key statistics thing
-*** TODO =SPC w w= maybe to switch buffers more quickly?
-*** TODO save file on evil escape
-*** TODO eval form at point... current form... or something
-C-x C-e is annoying sometimes... I think spacemacs had something for this
-*** TODO =RET= should follow org links and not go to next line (evil collection doing this??)
-*** TODO switch to help buffer by default after doing =SPC h <somekey>=
-   that way I can scroll through it and quit out when I'm done (though maybe I could get used to the "scroll other buffer" workflow that aims to let you keep doing what you were doing
-*** TODO maybe make =fj= work as evil escape too since I quickly smash them in the wrong order sometimes
-*** TODO hoogle/stackage search in helm
-*** TODO github fuzzy search !!! (copy paste code examples from search OoOOOOOO)
-*** TODO make helm less obtrusive (helm-swoop in an org src buffer for instance)
-*** TODO hyperbole buttons to clock into org TODOs
-    Less for me, more for people who are just using org mode I might suggest it to
-*** TODO fix olivetti auto-autocompletion shifting text to the left
-   Submitted bug report at https://github.com/rnkn/olivetti/issues/53 
+     unclear if either of these might cause an issue with exwm like opening a new window or soemthing
+    
+     looks like company-box fixes it up, gives me nice little symbols, and seems faster? wow!
+
+     The only problem is that exwm seems to have some problems with posframe support. I posted a comment, but can't find it atm... so you'll have to search for it if you need it.
+    
+**** TODO investigate aggressive indent mode again for more handsfree whitespace
+**** TODO analyze whether org buffers too narrow for literate programming
+     I had a few Haskell code blocks I was looking at and a couple were longer
+    
+     Maybe 100-120 characters wide
+    
+     They didn't show up nicely at all
+    
+     I turned off visual line mode and they showed up nicely.. maybe I could do that within org src blocks
+**** TODO revisit automagic org source blocks
+    
+     I have this on github somewhere... the idea is based on yasnippet and executing blocks on yasnippet tab out
+
+     The motivation is to be able to be as close to running commands in a terminal with the benefit of having a log of outputs.
+    
+     Perhaps add in autonaming of blocks (and easy renaming), then using noweb effortlessly could be very very good
+
+**** TODO toggle for transparency?
+**** TODO journalctl mode and binds?
+     maybe a hydra for frequent journalctls I look at?
+**** TODO =SPC '= search project last thing (or skip this one and use SPC s p all time?)
+     huh... =projectile-ripgrep= couldn't find rg? But:
+**** TODO look at more extended yasnippet config
+     - indent for completion for instance
+**** TODO extended flycheck
+***** TODO error navigation using =]e= and =[e=
+***** TODO hlint
+**** TODO checkout potentially alternate helm grep methods
+ https://www.manueluberti.eu/emacs/2020/02/22/ripgrepping-with-helm/
+**** TODO improve dired
+    
+     - copy file when there are two dired buffers should select the other!
+     - dired-plus mode or w/e?
+     - maybe all the icons dired? Test if the bug in editable mode is still there
+     - incorporate doom things?
+
+**** TODO right align time in modeline
+***** resouces
+ https://emacs.stackexchange.com/questions/5529/how-to-right-align-some-items-in-the-modeline
+
+ https://seagle0128.github.io/doom-modeline/
+ https://github.com/seagle0128/doom-modeline/issues/363#issuecomment-656423259
+**** TODO get niv powered emacs package versions working
+     should base this off of =hci-core= branch
+**** TODO test out hyperbole after seeing that emacs NYC talk and see how it could be useful
+ I think instant contextually relevant buttons and the like that are super extensible could have a larger affect than I might currently realize
+**** TODO enable using buttercup tests for everything
+***** end result could look like
+      #+begin_src emacs-lisp :tangle no
+        ;; simple tests that don't require anything extra remain the same
+        (it "emacs version should be 28.0.50"
+	    (expect emacs-version :to-equal "28.0.50"))
+
+        ;; more complex tests will use the daemon instance of emacs started with invisible frame
+        ;; TODO later make a macro to make this even more painless
+        (it "emacs version should be 28.0.50"
+	    (expect
+	     (server-eval-at "foo"
+			     (emacs-version :to-equal "28.0.50")))
+      #+end_src
+      idea from https://github.com/jorgenschaefer/emacs-buttercup/issues/174#issuecomment-625508845
+**** TODO make =M-{h,l}= in org insert mode also promote/demote subtree
+**** TODO =alt+{l,r}= demote/promote subheading
+**** TODO =SPC n l= org store link
+**** TODO turn on key statistics thing
+**** TODO =SPC w w= maybe to switch buffers more quickly?
+**** TODO save file on evil escape
+**** TODO eval form at point... current form... or something
+ C-x C-e is annoying sometimes... I think spacemacs had something for this
+**** TODO =RET= should follow org links and not go to next line (evil collection doing this??)
+**** TODO switch to help buffer by default after doing =SPC h <somekey>=
+    that way I can scroll through it and quit out when I'm done (though maybe I could get used to the "scroll other buffer" workflow that aims to let you keep doing what you were doing
+**** TODO maybe make =fj= work as evil escape too since I quickly smash them in the wrong order sometimes
+**** TODO hoogle/stackage search in helm
+**** TODO github fuzzy search !!! (copy paste code examples from search OoOOOOOO)
+**** TODO make helm less obtrusive (helm-swoop in an org src buffer for instance)
+**** TODO hyperbole buttons to clock into org TODOs
+     Less for me, more for people who are just using org mode I might suggest it to
+**** TODO fix olivetti auto-autocompletion shifting text to the left
+    Submitted bug report at https://github.com/rnkn/olivetti/issues/53 
 *** Finished
 **** DONE window management
      SPC j (up) SPC l (left) etc
